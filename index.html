@@ -2,1942 +2,324 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>منظومة التشغيل – المقارنات + أسعار بوكينج + المواسم</title>
+<title>منظومة التشغيل – VPRO Final</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-* {
-  box-sizing: border-box;
-}
-body {
-  margin:0;
-  font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background:#020617;
-  color:#e5e7eb;
-}
-#switchBar {
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  padding:12px;
-  background:#020617;
-  border-bottom:1px solid #1f2937;
-  position:sticky;
-  top:0;
-  z-index:9999;
-}
-.switchBtn {
-  padding:8px 18px;
-  border-radius:999px;
-  border:1px solid #1d4ed8;
-  background:#1d4ed8;
-  color:#e5e7eb;
-  cursor:pointer;
-  font-size:15px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  transition:background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease, color 0.15s ease;
-}
-.switchBtn span.icon {
-  font-size:16px;
-}
-.switchBtn.inactive {
-  background:#020617;
-  color:#9ca3af;
-  border-color:#1f2937;
-}
-.switchBtn:hover {
-  transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(37,99,235,0.45);
-}
-.frame-wrapper {
-  width:100%;
-  height:calc(100vh - 60px);
-}
-iframe {
-  width:100%;
-  height:100%;
-  border:none;
-}
-/* موسم/ركود صفحة المواسم */
-#frameSeasons {
-  width:100%;
-  height:100%;
-  padding:20px 12px 80px;
-  overflow:auto;
-  background:radial-gradient(circle at top left,#0f172a 0,#020617 55%,#000 100%);
-}
-.seasons-shell {
-  max-width:1100px;
-  margin:0 auto;
-  animation: fadeInUp 0.6s ease-out;
-}
-.seasons-title {
-  font-size:24px;
-  margin-bottom:8px;
-  color:#38bdf8;
-  text-align:center;
-}
-.seasons-sub {
-  font-size:13px;
-  color:#9ca3af;
-  text-align:center;
-  margin-bottom:18px;
-}
-.seasons-table {
-  width:100%;
-  border-collapse:collapse;
-  background:#020617;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 18px 45px rgba(15,23,42,0.8);
-  font-size:14px;
-}
-.seasons-table thead {
-  background:#0f172a;
-}
-.seasons-table th,
-.seasons-table td {
-  padding:10px 8px;
-  border-bottom:1px solid #111827;
-  text-align:center;
-  white-space:nowrap;
-}
-.seasons-table th {
-  color:#a5b4fc;
-  font-weight:600;
-  font-size:13px;
-}
-.seasons-table tbody tr:nth-child(even) {
-  background:#020617;
-}
-.seasons-table tbody tr:nth-child(odd) {
-  background:#020814;
-}
-.seasons-table tbody tr:hover {
-  background:#0b1220;
-}
-.seasons-table td.event-title {
-  text-align:right;
-  direction:rtl;
-  max-width:260px;
-  white-space:normal;
-}
-.badge {
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-}
-.badge-season {
-  background:rgba(22,163,74,0.12);
-  color:#4ade80;
-  border:1px solid rgba(34,197,94,0.7);
-}
-.badge-rukood {
-  background:rgba(148,163,184,0.15);
-  color:#cbd5f5;
-  border:1px solid rgba(148,163,184,0.8);
-}
-.badge-season .dot,
-.badge-rukood .dot {
-  width:8px;
-  height:8px;
-  border-radius:999px;
-}
-.badge-season .dot {
-  background:#22c55e;
-}
-.badge-rukood .dot {
-  background:#e5e7eb;
-}
-.seasons-footer-note {
-  margin-top:10px;
-  font-size:11px;
-  color:#6b7280;
-  text-align:center;
-}
-@keyframes fadeInUp {
-  from { opacity:0; transform:translateY(10px); }
-  to   { opacity:1; transform:translateY(0); }
+/* === VPRO Darker Theme === */
+:root {
+  --bg-body: #F0F2F5;       
+  --bg-card: #FFFFFF;
+  --primary-dark: #2B3674;  
+  --accent-gold: #D4AF37;
+  --text-main: #2B3674;
+  --text-sub: #8F9BBA;
+  --shadow: 0px 4px 20px rgba(43, 54, 116, 0.05);
+  --radius: 20px;
 }
 
-/* التوقيع العام */
-.sign-off {
-  text-align: center;
-  padding: 0;
-  margin: 20px auto 0; 
-  width: 100%;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Tajawal", "Cairo", sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  padding-bottom: 60px;
+}
+
+/* Navigation */
+#switchBar {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  background: var(--primary-dark);
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  box-shadow: 0 4px 15px rgba(43, 54, 116, 0.2);
+}
+
+.nav-container {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  border-radius: 50px;
+}
+
+.switchBtn {
+  padding: 10px 25px;
+  border-radius: 40px;
+  border: none;
+  background: transparent;
+  color: #E9EDF7;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.switchBtn.active {
+  background: var(--bg-card);
+  color: var(--primary-dark);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.frame-wrapper {
+  width: 95%;
   max-width: 1200px;
-  line-height: 1; 
-  font-size: 0.75rem;
+  margin: 20px auto;
+  min-height: 80vh;
 }
-.sign-off b {
-  font-size: 0.85rem; 
-  font-weight: bold;
-  color:#fff;
+
+.section-view { display: none; animation: fadeIn 0.4s ease-out; }
+.section-view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Card Style */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 30px;
+  box-shadow: var(--shadow);
+  margin-bottom: 25px;
+  border: 1px solid #fff;
 }
-.sign-off-email {
-  font-family: monospace;
-  color:#3b82f6;
+
+h1, h2 { color: var(--primary-dark); margin-top: 0; }
+.subtitle { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 20px; }
+
+/* Upload Inputs */
+.upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.upload-box {
+  border: 2px dashed #D1D9E6; border-radius: var(--radius); padding: 25px;
+  text-align: center; background: #F8F9FC; transition: 0.3s;
 }
-.sign-off.fixed-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    background: #1e293b; 
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.4);
-    padding: 6px 15px; 
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    width: 380px; 
-    max-width: 90%; 
+.upload-box:hover { border-color: var(--accent-gold); background: #FFFDF5; }
+input[type="file"] { width: 100%; }
+
+/* Action Buttons */
+.btn-action {
+  background: var(--primary-dark); color: #fff; border: none; padding: 15px 40px;
+  border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%;
+  box-shadow: 0 5px 15px rgba(43, 54, 116, 0.2); transition: 0.2s;
+}
+.btn-action:hover { transform: translateY(-2px); background: #1F2855; }
+
+.btn-download {
+    background: #fff; border: 1px solid var(--primary-dark); color: var(--primary-dark);
+    padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: 600; margin-top: 15px;
+}
+
+/* Tables */
+table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; }
+th { color: var(--text-sub); font-weight: 600; padding: 10px; font-size: 0.85rem; }
+td { background: #F4F7FE; padding: 15px; text-align: center; font-weight: 600; color: var(--primary-dark); }
+tr td:first-child { border-radius: 0 10px 10px 0; text-align: right; padding-right: 20px; }
+tr td:last-child { border-radius: 10px 0 0 10px; }
+
+/* Inputs inside tables (Calculator) */
+.calc-input {
+    width: 80px; text-align: center; border: 1px solid #D1D9E6; 
+    border-radius: 10px; padding: 8px; font-weight: 700; color: var(--primary-dark);
+    background: #fff;
+}
+.calc-input:focus { border-color: var(--accent-gold); outline: none; }
+.calc-readonly { background: #E9EDF7; border: none; color: var(--primary-dark); }
+.rate-input { width: 60px; }
+
+/* Badges */
+.badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; }
+.badge-ok { background: rgba(5, 205, 153, 0.15); color: #05CD99; }
+.badge-err { background: rgba(238, 93, 80, 0.15); color: #EE5D50; }
+.badge-warn { background: rgba(255, 181, 71, 0.15); color: #FFB547; }
+.badge-gold { background: rgba(212, 175, 55, 0.15); color: #D4AF37; }
+.badge-season { background: rgba(5, 205, 153, 0.1); color: #05CD99; border: 1px solid rgba(5, 205, 153, 0.2); }
+.badge-rukood { background: #eee; color: #888; border: 1px solid #ddd; }
+
+/* Sign-off */
+.sign-off {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg-card); padding: 10px; text-align: center;
+  font-size: 0.8rem; color: var(--text-sub); border-top: 1px solid #eee; z-index: 999;
+}
+.sign-off b { color: var(--primary-dark); }
+.sign-off-email { color: var(--accent-gold); font-family: monospace; }
+
+#errorArea {
+  background: #FFF2F2; color: #EE5D50; padding: 15px; border-radius: 15px; 
+  margin-bottom: 20px; display: none; border: 1px solid #FFD6D6;
 }
 </style>
-<script>
-function showFrame(which){
-  const fCompare = document.getElementById('frameCompare');
-  const fBooking = document.getElementById('frameBooking');
-  const fSeasons = document.getElementById('frameSeasons');
-  const bCompare = document.getElementById('btnCompare');
-  const bBooking = document.getElementById('btnBooking');
-  const bSeasons = document.getElementById('btnSeasons');
-
-  fCompare.style.display = (which === 'compare') ? 'block' : 'none';
-  fBooking.style.display = (which === 'booking') ? 'block' : 'none';
-  fSeasons.style.display = (which === 'seasons') ? 'block' : 'none';
-
-  bCompare.classList.toggle('inactive', which !== 'compare');
-  bBooking.classList.toggle('inactive', which !== 'booking');
-  bSeasons.classList.toggle('inactive', which !== 'seasons');
-}
-
-// بيانات المواسم / الإجازات / العودة
-const seasonEvents = [
-  {
-    greg: "26/06/2025",
-    hijri: "01/01/1447",
-    title: "بداية إجازة نهاية العام الدراسي للطلاب 1447",
-    type: "موسم"
-  },
-  {
-    greg: "24/08/2025",
-    hijri: "01/03/1447",
-    title: "بداية العام الدراسي 2025-2026 (1447-1448)",
-    type: "ركود"
-  },
-  {
-    greg: "23/09/2025",
-    hijri: "01/04/1447",
-    title: "إجازة اليوم الوطني 2025",
-    type: "موسم"
-  },
-  {
-    greg: "21/11/2025",
-    hijri: "30/05/1447",
-    title: "بداية إجازة الخريف 2025",
-    type: "موسم"
-  },
-  {
-    greg: "29/11/2025",
-    hijri: "08/06/1447",
-    title: "نهاية إجازة الخريف 2025",
-    type: "موسم"
-  },
-  {
-    greg: "11/12/2025",
-    hijri: "20/06/1447",
-    title: "بداية إجازة إضافية 2025",
-    type: "موسم"
-  },
-  {
-    greg: "14/12/2025",
-    hijri: "23/06/1447",
-    title: "نهاية الإجازة الإضافية 2025",
-    type: "موسم"
-  },
-  {
-    greg: "09/01/2026",
-    hijri: "20/07/1447",
-    title: "بداية إجازة منتصف العام الدراسي 2025-2026",
-    type: "موسم"
-  },
-  {
-    greg: "17/01/2026",
-    hijri: "28/07/1447",
-    title: "نهاية إجازة منتصف العام الدراسي 2025-2026",
-    type: "موسم"
-  },
-  {
-    greg: "22/02/2026",
-    hijri: "05/09/1447",
-    title: "إجازة يوم التأسيس 2026",
-    type: "موسم"
-  },
-  {
-    greg: "06/03/2026",
-    hijri: "17/09/1447",
-    title: "بداية إجازة عيد الفطر 2026",
-    type: "موسم"
-  },
-  {
-    greg: "28/03/2026",
-    hijri: "09/10/1447",
-    title: "نهاية إجازة عيد الفطر 2026",
-    type: "موسم"
-  },
-  {
-    greg: "22/05/2026",
-    hijri: "15/12/1447",
-    title: "بداية إجازة عيد الأضحى 2026",
-    type: "موسم"
-  },
-  {
-    greg: "01/06/2026",
-    hijri: "25/12/1447",
-    title: "نهاية إجازة عيد الأضحى 2026",
-    type: "موسم"
-  },
-  {
-    greg: "25/06/2026",
-    hijri: "10/01/1448",
-    title: "بداية إجازة نهاية العام الدراسي 2025-2026",
-    type: "موسم"
-  },
-  {
-    greg: "11/08/2026",
-    hijri: "28/02/1448",
-    title: "عودة المشرفين والإداريين 2026",
-    type: "ركود"
-  },
-  {
-    greg: "16/08/2026",
-    hijri: "03/03/1448",
-    title: "عودة المعلمين 2026",
-    type: "ركود"
-  },
-  {
-    greg: "23/08/2026",
-    hijri: "10/03/1448",
-    title: "بداية العام الدراسي 2026-2027 (1448-1449)",
-    type: "ركود"
-  }
-];
-
-function parseDMY(str) {
-  const parts = str.split("/");
-  const d = parseInt(parts[0], 10);
-  const m = parseInt(parts[1], 10);
-  const y = parseInt(parts[2], 10);
-  return new Date(y, m - 1, d);
-}
-
-function buildSeasonsTable() {
-  const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg));
-  const tbody = document.getElementById('seasonsBody');
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  for (const ev of sorted) {
-    const tr = document.createElement('tr');
-
-    const tdType = document.createElement('td');
-    const badge = document.createElement('span');
-    badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood');
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    const label = document.createElement('span');
-    label.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام';
-    badge.appendChild(dot);
-    badge.appendChild(label);
-    tdType.appendChild(badge);
-
-    const tdTitle = document.createElement('td');
-    tdTitle.className = 'event-title';
-    tdTitle.textContent = ev.title;
-
-    const tdHijri = document.createElement('td');
-    tdHijri.textContent = ev.hijri;
-
-    const tdGreg = document.createElement('td');
-    tdGreg.textContent = ev.greg;
-
-    tr.appendChild(tdType);
-    tr.appendChild(tdTitle);
-    tr.appendChild(tdHijri);
-    tr.appendChild(tdGreg);
-    tbody.appendChild(tr);
-  }
-}
-
-window.addEventListener('load', function() {
-  showFrame('compare'); // افتراضي: المقارنات
-  buildSeasonsTable();
-});
-</script>
 </head>
 <body>
 
 <div id="switchBar">
-  <button id="btnCompare" class="switchBtn" onclick="showFrame('compare')">
-    <span class="icon">📊</span><span>مشروع المقارنات</span>
-  </button>
-  <button id="btnBooking" class="switchBtn inactive" onclick="showFrame('booking')">
-    <span class="icon">💰</span><span>حاسبة أسعار بوكينج</span>
-  </button>
-  <button id="btnSeasons" class="switchBtn inactive" onclick="showFrame('seasons')">
-    <span class="icon">🎉</span><span>المواسم والاعياد</span>
-  </button>
+  <div class="nav-container">
+    <button class="switchBtn active" onclick="switchTab('compare')">🔍 المطابقة</button>
+    <button class="switchBtn" onclick="switchTab('booking')">💰 الأسعار</button>
+    <button class="switchBtn" onclick="switchTab('seasons')">📅 المواسم</button>
+  </div>
 </div>
 
 <div class="frame-wrapper">
-  <iframe id="frameCompare" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;ar&quot; dir=&quot;rtl&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot; /&gt;
-  &lt;title&gt;المدقق الشفاف (الإصدار النهائي المستقر)&lt;/title&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt; 
-  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js&quot;&gt;&lt;/script&gt;
-  &lt;style&gt;
-    /* === GLOBAL STYLES &amp; STABLE COLOR PALETTE (DAY THEME – كما هو) === */
-    :root { 
-      --bg-dark: #0B2447; /* Deep Navy Blue (For page background) */
-      --bg-card: #F9FAFB; /* Card Background */
-      --accent-blue: #06B6D4; /* Royal Cyan */
-      --color-success: #10B981; /* Emerald Green */
-      --color-danger: #EF4444; /* Sunset Red */
-      --text-main: #1e293b; 
-      --text-soft: #64748b;
-      --color-border: #94a3b8;
+
+  <div id="view-compare" class="section-view active">
+    <div class="card">
+      <h1>المدقق الشفاف</h1>
+      <div class="subtitle">محرك المطابقة الدقيق (Booking & Nazeel)</div>
       
-      /* Input Colors */
-      --color-vacant-bg: #E6FFFA; 
-      --color-cleaning-bg: #FFFBEB; 
-      --color-dep-bg: #EFF6FF; 
-      --color-maint-bg: #F1F5F9; 
-    }
-
-    body { 
-      font-family: system-ui, -apple-system, sans-serif; 
-      color: var(--text-main); 
-      padding: 30px 15px; 
-      margin: 0;
-      background: radial-gradient(circle at top left, #14406e 0%, var(--bg-dark) 50%, #05162a 100%);
-      transition: background 0.25s ease, color 0.25s ease;
-    }
-
-    .container { 
-      max-width: 1200px; 
-      margin: 0 auto; 
-      background: var(--bg-card); 
-      padding: 30px; 
-      border-radius: 16px; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
-      position: relative;
-      transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
-      /* زيادة المسافة السفلية لضمان ظهور الأزرار فوق التوقيع الثابت */
-      padding-bottom: 70px;
-    }
-    
-    h1 { text-align: center; margin-bottom: 5px; color: var(--text-main); }
-    .subtitle { text-align: center; font-size: 0.95rem; color: var(--text-soft); margin-bottom: 25px; line-height: 1.5; }
-
-    .note { font-size: 0.8rem; color: var(--text-soft); }
-
-    /* === THEME TOGGLE BUTTON (ICON) === */
-    .top-bar {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .theme-toggle {
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      border: 1px solid var(--color-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: #f9fafb;
-      box-shadow: 0 2px 6px rgba(15,23,42,0.2);
-      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.08s ease, border-color 0.2s ease;
-    }
-
-    .theme-toggle:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(15,23,42,0.25);
-    }
-
-    .theme-icon {
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-    
-    /* Mode Toggle Styles */
-    .mode-toggle { text-align: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
-    .mode-toggle button {
-        background: #F1F5F9;
-        color: var(--text-soft);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-        margin: 0 5px;
-        font-size: 1rem;
-    }
-    .mode-toggle button.active {
-        background: var(--accent-blue);
-        color: #fff;
-        box-shadow: 0 4px 10px rgba(6, 182, 212, 0.4);
-    }
-
-    /* Controls and Buttons */
-    .upload-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: end; background: var(--color-maint-bg); padding: 20px; border-radius: 12px; }
-    input[type=&quot;file&quot;] { width: 100%; font-size: 0.9rem; }
-    
-    .action-button { 
-        background: var(--color-success); 
-        color: white; 
-        border: none; 
-        padding: 12px 24px; 
-        border-radius: 8px; 
-        cursor: pointer; 
-        margin-top: 20px; 
-        display: block; 
-        width: 100%; 
-        font-size: 1.1rem; 
-        font-weight: bold;
-        transition: background 0.2s;
-    }
-    .action-button:hover { background: #0c9c6f; }
-
-    /* === Sign-off Styles (التوقيع) - سطر واحد وارتفاع 1 سم === */
-    .sign-off {
-      text-align: center;
-      padding: 0; /* إلغاء التباعد في الوضع العادي */
-      margin: 20px auto 0; 
-      width: 100%;
-      max-width: 1200px;
-      line-height: 1; 
-      font-size: 0.75rem; /* تصغير حجم الخط الأساسي */
-    }
-    
-    .sign-off-item {
-        display: inline-block;
-        padding: 0 5px;
-        color: var(--text-soft); /* تعيين اللون الافتراضي للبنود */
-    }
-    
-    /* القاعدة الجديدة لتثبيت التوقيع في الأسفل (10 سم عرض، 1 سم ارتفاع تقريبي) */
-    .sign-off.fixed-bottom {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 100;
-        background: var(--bg-card); 
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        padding: 8px 15px; /* تباعد داخلي قليل جداً لتحقيق ارتفاع 1 سم */
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        width: 380px; /* تعيين عرض تقريبي لـ 10 سم */
-        max-width: 90%; 
-        margin: 0; 
-        height: auto; 
-    }
-
-    /* إلغاء العناصر التي لم تعد موجودة */
-    .sign-off-hr { display: none; }
-    
-    .sign-off b {
-      color: var(--text-main);
-      font-size: 0.85rem; 
-      font-weight: bold;
-    }
-    .sign-off-email {
-      font-family: monospace;
-      color: var(--accent-blue);
-      font-size: 0.75rem;
-    }
-
-    /* Results and Section Titles */
-    .results-area { margin-top: 30px; display: none; }
-    .results-area.visible { display: block; animation: fadeIn 0.5s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .section-title { font-size: 1.1rem; font-weight: 800; margin: 20px 0 10px; padding-right: 10px; border-right: 4px solid var(--accent-blue); }
-    
-    /* Tables and Inputs Structure */
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.85rem; background: #fff; border: 1px solid #e2e8f0; }
-    th, td { border: 1px solid #e2e8f0; padding: 10px; vertical-align: top; }
-    th { background: #f8fafc; font-weight: 700; text-align: center; color: #334155; }
-    td { text-align: center; }
-
-    /* Manual Input Styles */
-    .mode-content.hidden { display: none; }
-    .manual-section { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    
-    /* Input Table Styling (Color) */
-    .th-vacant { background: var(--color-vacant-bg); color: var(--color-success); }
-    .th-cleaning { background: var(--color-cleaning-bg); color: #a16207; } 
-    .th-dep { background: var(--color-dep-bg); color: var(--accent-blue); }
-    .th-maint { background: var(--color-maint-bg); color: var(--text-soft); }
-
-    .input-table td { background: #ffffff; border: 1px solid #e2e8f0; padding: 5px; } 
-    .type-cell { font-weight: bold; text-align: right !important; padding-right: 15px !important; }
-
-    /* Enhanced Input Box Style (High Contrast) */
-    .data-input { 
-      width: 90%; padding: 10px 6px; border: 2px solid var(--color-border); border-radius: 6px; 
-      font-size: 1.1rem; font-weight: bold; text-align: center; display: block; margin: 5px auto;
-      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
-      background-color: #f7f9fb; color: var(--text-main);
-    }
-    .data-input:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 5px rgba(6, 182, 212, 0.5); background-color: #ffffff; }
-
-    /* Output Specific Styles */
-    .badge { padding: 4px 8px; border-radius: 99px; font-weight: bold; font-size: 0.75rem; }
-    .bg-green { background: var(--color-vacant-bg); color: var(--color-success); } 
-    .bg-red { background: #fee2e2; color: var(--color-danger); }   
-    .bg-gray { background: var(--color-maint-bg); color: var(--text-soft); } 
-    .bg-blue { background: var(--color-dep-bg); color: var(--accent-blue); }
-    .guest-item { display: block; text-align: right; font-size: 0.75rem; margin-bottom: 4px; border-bottom: 1px dashed #eee; padding-bottom: 2px; }
-    .pay-info { font-family: monospace; background: #eff6ff; color: #1e40af; padding: 1px 4px; border-radius: 3px; margin-right: 5px; }
-
-    .actions-row { margin-top: 15px; text-align: center; }
-    .actions-row button { 
-        padding: 8px 15px; margin: 0 5px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;
-        border: 1px solid var(--color-border);
-    }
-    .btn-export { background: #e0f2fe; color: var(--accent-blue); }
-    .btn-print { background: #f8fafc; color: var(--text-soft); }
-
-    /* Error message (كانت غير معرفة في CSS) */
-    .error-msg {
-      color: var(--color-danger);
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.85rem;
-      display: none;
-      margin-top: 10px;
-    }
-
-    /* === DARK MODE OVERRIDES === */
-    body.theme-dark {
-      background: radial-gradient(circle at top left, #020617 0%, #020617 50%, #000000 100%);
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .container {
-      background: #020617;
-      color: #e5e7eb;
-      box-shadow:
-        0 26px 60px rgba(15,23,42,0.9),
-        0 0 0 1px rgba(30,64,175,0.8);
-    }
-
-    body.theme-dark h1 {
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .subtitle {
-      color: #9ca3af;
-    }
-
-    body.theme-dark .section-title {
-      color: #e5e7eb;
-      border-right-color: #38bdf8;
-    }
-
-    body.theme-dark .mode-toggle {
-      border-bottom-color: #1f2937;
-    }
-
-    body.theme-dark .mode-toggle button {
-      background: #020617;
-      color: #9ca3af;
-      border: 1px solid #1f2937;
-    }
-
-    body.theme-dark .mode-toggle button.active {
-      background: #1d4ed8;
-      color: #e5e7eb;
-      box-shadow: 0 4px 16px rgba(37,99,235,0.6);
-      border-color: #1d4ed8;
-    }
-
-    body.theme-dark .upload-controls {
-      background: #020617;
-      border: 1px solid #1f2937;
-    }
-
-    body.theme-dark input[type=&quot;file&quot;] {
-      background: #020617;
-      color: #e5e7eb;
-      border-color: #334155;
-    }
-
-    body.theme-dark input[type=&quot;file&quot;]:hover {
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 1px rgba(37,99,235,0.7);
-      background: #020617;
-    }
-
-    body.theme-dark .manual-section {
-      background: #020617;
-      border-color: #1f2937;
-    }
-
-    body.theme-dark table {
-      background: #020617;
-      border-color: #1f2937;
-      color: #e5e7eb;
-    }
-
-    body.theme-dark th {
-      background: #111827;
-      border-color: #1f2937;
-      color: #e5e7eb;
-    }
-
-    body.theme-dark td {
-      background: #020617;
-      border-color: #1f2937;
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .input-table td {
-      background: #020617;
-    }
-
-    body.theme-dark .data-input {
-      background-color: #020617;
-      color: #e5e7eb;
-      border-color: #334155;
-    }
-
-    body.theme-dark .data-input:focus {
-      background-color: #020617;
-      box-shadow:
-        0 0 0 1px rgba(37,99,235,0.8),
-        0 0 18px rgba(37,99,235,0.7);
-    }
-
-    body.theme-dark .badge.bg-green {
-      background: rgba(22,163,74,0.15);
-      color: #bbf7d0;
-    }
-
-    body.theme-dark .badge.bg-red {
-      background: rgba(220,38,38,0.15);
-      color: #fecaca;
-    }
-
-    body.theme-dark .badge.bg-gray {
-      background: rgba(148,163,184,0.2);
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .badge.bg-blue {
-      background: rgba(37,99,235,0.18);
-      color: #bfdbfe;
-    }
-
-    body.theme-dark .guest-item {
-      border-bottom-color: #374151;
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .pay-info {
-      background: #1d4ed8;
-      color: #e5e7eb;
-    }
-
-    body.theme-dark .btn-export {
-      background: radial-gradient(circle at top left, rgba(34,197,94,0.2), #020617);
-      color: #bbf7d0;
-      border-color: #4ade80;
-    }
-
-    body.theme-dark .btn-print {
-      background: radial-gradient(circle at top left, rgba(96,165,250,0.2), #020617);
-      color: #bfdbfe;
-      border-color: #60a5fa;
-    }
-
-    body.theme-dark .action-button {
-      box-shadow:
-        0 16px 40px rgba(22,163,74,0.7),
-        0 0 0 1px rgba(15,23,42,0.9);
-    }
-
-    body.theme-dark .error-msg {
-      background: rgba(127,29,29,0.9);
-      border-color: #fecaca;
-      color: #fecaca;
-    }
-
-    body.theme-dark .theme-toggle {
-      background: #020617;
-      border-color: #334155;
-      box-shadow: 0 2px 8px rgba(15,23,42,0.9);
-    }
-
-    body.theme-dark .theme-icon {
-      color: #fde68a;
-    }
-    
-    /* === DARK MODE OVERRIDES (Sign-off) === */
-    body.theme-dark .sign-off-item {
-      color: #9ca3af;
-    }
-    body.theme-dark .sign-off b {
-      color: #e5e7eb;
-    }
-    body.theme-dark .sign-off-email {
-      color: #38bdf8;
-    }
-    body.theme-dark .sign-off.fixed-bottom {
-        background: #020617; 
-        box-shadow: 0 -2px 10px rgba(30,64,175,0.8);
-    }
-
-    /* === MEDIA QUERIES for Responsiveness / التوافق مع الشاشات === */
-    @media (max-width: 768px) {
-        body { 
-            padding: 15px; 
-        }
-        .container { 
-            padding: 20px; 
-            border-radius: 10px;
-            padding-bottom: 70px; /* مسافة سفلية للتوقيع على الموبايل */
-        }
-        .upload-controls { 
-            grid-template-columns: 1fr; 
-            gap: 10px;
-        }
-        .mode-toggle button {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-        }
-        .action-button {
-            font-size: 1rem;
-        }
-        table {
-          font-size: 0.8rem;
-        }
-        th, td {
-          padding: 8px 5px;
-        }
-        .sign-off.fixed-bottom {
-            padding: 8px 10px;
-            box-shadow: 0 -1px 5px rgba(0,0,0,0.15);
-        }
-    }
-
-
-    /* === PRINT STYLES === */
-    @media print {
-      /* تم التغيير إلى Landscape */
-      @page { size: A4 landscape; margin: 15mm; } 
-      body { background: #fff !important; margin: 0; padding: 0; }
-      .container { box-shadow: none !important; width: 100% !important; max-width: none !important; background: #fff !important; color: #000 !important; padding-bottom: 10px !important; }
-
-      .top-bar,
-      .mode-toggle,
-      .subtitle,
-      .upload-controls,
-      #errorArea, 
-      #tableBooking,
-      #tableNazeel,
-      .action-button,
-      .actions-row,
-      .sign-off.fixed-bottom, /* إخفاء التوقيع الثابت */
-      .section-title:not(:last-of-type) { 
-        display: none !important; 
-      }
-      
-      #output { display: block !important; margin-top: 0; }
-      #tableCompare { width: 100%; margin-top: 20px; }
-      .results-table th, .results-table td,
-      table th, table td {
-        border: 1px solid #333 !important; padding: 8px; background: #fff !important; color: #000 !important;
-      }
-      .results-table th, table th { background-color: #eee !important; }
-      .badge { border: 1px solid #333; color: #000; background: none !important; }
-      
-      /* إظهار التوقيع في الأسفل كجزء من محتوى الصفحة المطبوع */
-      .sign-off:not(.fixed-bottom) {
-        display: block !important;
-        position: relative !important;
-        margin-top: 20px !important; 
-        color: #000 !important;
-        padding: 0;
-        line-height: 1.2;
-        font-size: 0.75rem;
-      }
-      .sign-off-item {
-        color: #000 !important;
-        font-size: 0.75rem !important;
-      }
-    }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;container&quot;&gt;
-  &lt;div class=&quot;top-bar&quot;&gt;
-    &lt;div id=&quot;themeToggle&quot; class=&quot;theme-toggle&quot; title=&quot;تبديل الوضع&quot;&gt;
-      &lt;span id=&quot;themeIcon&quot; class=&quot;theme-icon&quot;&gt;🌙&lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;h1&gt;المدقق الشفاف (المحرك الذكي الموحد)&lt;/h1&gt;
-  &lt;div class=&quot;subtitle&quot;&gt;
-    اختر طريقة إدخال البيانات: رفع الملفات (للمحرك التلقائي) أو الإدخال اليدوي (للمراجعة السريعة).
-  &lt;/div&gt;
-
-  &lt;div class=&quot;mode-toggle&quot;&gt;
-    &lt;button id=&quot;toggleUpload&quot; class=&quot;active&quot; onclick=&quot;switchMode(&#x27;upload&#x27;)&quot;&gt;رفع الملفات&lt;/button&gt;
-    &lt;button id=&quot;toggleManual&quot; onclick=&quot;switchMode(&#x27;manual&#x27;)&quot;&gt;إدخال يدوي&lt;/button&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;errorArea&quot; class=&quot;error-msg&quot;&gt;&lt;/div&gt;
-  
-  &lt;div id=&quot;uploadMode&quot; class=&quot;mode-content visible&quot;&gt;
-    &lt;div class=&quot;upload-controls&quot;&gt;
-      &lt;div&gt;
-        &lt;label style=&quot;font-weight:bold; display:block; margin-bottom:5px&quot;&gt;ملف بوكينج (Booking)&lt;/label&gt;
-        &lt;input type=&quot;file&quot; id=&quot;fileBooking&quot; accept=&quot;.xls,.xlsx,.csv&quot;&gt;
-      &lt;/div&gt;
-      &lt;div&gt;
-        &lt;label style=&quot;font-weight:bold; display:block; margin-bottom:5px&quot;&gt;ملف نزيل (Nazeel)&lt;/label&gt;
-        &lt;input type=&quot;file&quot; id=&quot;fileNazeel&quot; accept=&quot;.xls,.xlsx,.csv&quot;&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div id=&quot;manualMode&quot; class=&quot;mode-content hidden&quot;&gt;
-    &lt;p class=&quot;note&quot; style=&quot;text-align:center;&quot;&gt;يرجى إدخال الأعداد لكل نوع وحدة مطابقة للتقرير. اضغط داخل المربع للكتابة مباشرة.&lt;/p&gt;
-    
-    &lt;div class=&quot;manual-section&quot;&gt;
-      &lt;div class=&quot;section-title&quot;&gt;📦 تحليل نزيل (المخزون)&lt;/div&gt;
-      &lt;table class=&quot;input-table&quot;&gt;
-        &lt;thead&gt;
-          &lt;tr&gt;
-            &lt;th style=&quot;width: 30%;&quot;&gt;نوع الوحدة&lt;/th&gt;
-            &lt;th class=&quot;th-vacant&quot;&gt;شاغر (أخضر)&lt;/th&gt;
-            &lt;th class=&quot;th-cleaning&quot;&gt;نظافة (أصفر)&lt;/th&gt;
-            &lt;th class=&quot;th-dep&quot;&gt;متوقع خروج اليوم (أزرق)&lt;/th&gt;
-            &lt;th class=&quot;th-maint&quot;&gt;صيانة (رمادي)&lt;/th&gt;
-          &lt;/tr&gt;
-        &lt;/thead&gt;
-        &lt;tbody id=&quot;nazeel-inputs&quot;&gt;
-          &lt;/tbody&gt;
-      &lt;/table&gt;
-    &lt;/div&gt;
-    
-    &lt;div class=&quot;manual-section&quot;&gt;
-      &lt;div class=&quot;section-title&quot;&gt; حركة الحجوزات (بوكينج)&lt;/div&gt;
-      &lt;p class=&quot;note&quot;&gt;أدخل صافي عدد الحجوزات المتوقع وصولها (تم تصفية الواصل بالفعل والملغي مسبقًا من خلال النزيل).&lt;/p&gt;
-      &lt;table class=&quot;input-table&quot;&gt;
-        &lt;thead&gt;
-          &lt;tr&gt;
-            &lt;th style=&quot;width: 70%;&quot;&gt;نوع الوحدة&lt;/th&gt;
-            &lt;th&gt;الحجوزات المتوقعة&lt;/th&gt;
-          &lt;/tr&gt;
-        &lt;/thead&gt;
-        &lt;tbody id=&quot;booking-inputs&quot;&gt;
-          &lt;/tbody&gt;
-      &lt;/table&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;button id=&quot;mainAnalyzeButton&quot; class=&quot;action-button&quot; onclick=&quot;unifiedAnalysis()&quot;&gt;📊 تحليل البيانات وتطبيق القواعد الذهبية&lt;/button&gt;
-
-  &lt;div id=&quot;output&quot; class=&quot;results-area&quot;&gt;
-    &lt;div class=&quot;section-title&quot;&gt;1. تحليل بوكينج (الحركة)&lt;/div&gt;
-    &lt;div id=&quot;tableBooking&quot;&gt;&lt;/div&gt;
-
-    &lt;div class=&quot;section-title&quot;&gt;2. تحليل نزيل (المخزون)&lt;/div&gt;
-    &lt;div id=&quot;tableNazeel&quot;&gt;&lt;/div&gt;
-
-    &lt;div class=&quot;section-title&quot;&gt;3. المقارنة والتوصية&lt;/div&gt;
-    &lt;div id=&quot;tableCompare&quot;&gt;&lt;/div&gt;
-    
-    &lt;div class=&quot;actions-row&quot;&gt;
-        &lt;button class=&quot;btn-export&quot; onclick=&quot;exportComparisonToExcel()&quot;&gt;📥 تصدير جدول المقارنة (Excel)&lt;/button&gt;
-        &lt;button class=&quot;btn-print&quot; onclick=&quot;window.print()&quot;&gt;🖨 طباعة جدول المقارنة&lt;/button&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;sign-off&quot;&gt;
-  &lt;span class=&quot;sign-off-item&quot;&gt;تم التنفيذ بواسطة&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-name&quot;&gt;| &lt;b&gt;أيمن أبو ورده&lt;/b&gt;&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-email&quot;&gt;| 77aayy@gmail.com&lt;/span&gt;
-&lt;/div&gt;
-&lt;script&gt;
-let currentMode = &#x27;upload&#x27;; 
-const CANONICAL_TYPES = [
-  &quot;شقة بغرفتي نوم&quot;, &quot;شقة مع إطلالة على البحر&quot;, &quot;ستوديو امامي&quot;, &quot;غرفة كينج مفرد&quot;, &quot;غرفة تؤم خلفية&quot;, &quot;VIP&quot;
-];
-const CANCEL_FLAGS = [&quot;cancel&quot;, &quot;cancelled&quot;, &quot;cancelled_by_guest&quot;, &quot;ملغي&quot;, &quot;كنسل&quot;];
-
-window.nazeelLastRunData = null;
-window.bookingLastRunData = null;
-
-const THEME_KEY = &#x27;auditThemeMode&#x27;;
-
-/* === THEME HANDLING === */
-function applyTheme(theme) {
-  const body = document.body;
-  const icon = document.getElementById(&#x27;themeIcon&#x27;);
-  if (!icon) return;
-  if (theme === &#x27;dark&#x27;) {
-    body.classList.add(&#x27;theme-dark&#x27;);
-    icon.textContent = &#x27;☀️&#x27;;
-  } else {
-    body.classList.remove(&#x27;theme-dark&#x27;);
-    icon.textContent = &#x27;🌙&#x27;;
-  }
-}
-
-/* =========================================================================
-   === UTILITY FUNCTIONS (UNMODIFIED LOGIC) ===
-   ========================================================================= */
-
-function getSmartRecommendation(diff) {
-    if (diff === 1) {
-        return &#x27;✅ اقترح عليك تفتح 1. ولو أجّرت استقبال اقفلها بوكينج&#x27;;
-    } else if (diff === 2) {
-        return &#x27;✅ اقترح عليك تفتح 1 على الأقل&#x27;;
-    } else if (diff === 3) {
-        return &#x27;✅ اقترح عليك تفتح 2 على الأقل&#x27;;
-    } else if (diff === 4) {
-        return &#x27;✅ اقترح عليك تفتح 4. الشاغر كتير&#x27;;
-    } else if (diff &gt; 4) {
-        const suggestedOpen = diff - 1; 
-        return `✅ اقترح عليك تفتح ${suggestedOpen} على الأقل. أنت في الأمان`;
-    }
-    return &#x27;✅ افتح المزيد من الغرف&#x27;;
-}
-
-function mapUnit(raw) {
-  if (!raw) return null;
-  const s = raw.toString().trim();
-  
-  if (s.includes(&quot;غرفتين&quot;) || s.includes(&quot;غرفتي&quot;)) return &quot;شقة بغرفتي نوم&quot;;
-  if (s.includes(&quot;صالة مطله&quot;) || s.includes(&quot;صالة مطلة&quot;) || s.includes(&quot;نوم مطلة&quot;) || s.includes(&quot;مع إطلالة&quot;) || s.includes(&quot;Sea View&quot;)) return &quot;شقة مع إطلالة على البحر&quot;;
-  if (s.includes(&quot;ستوديو&quot;) &amp;&amp; s.includes(&quot;امامي&quot;)) return &quot;ستوديو امامي&quot;;
-  if (s.toUpperCase().includes(&quot;VIP&quot;)) return &quot;VIP&quot;;
-  if ((s.includes(&quot;كينج&quot;) || s.includes(&quot;King&quot;)) &amp;&amp; !s.includes(&quot;تؤم&quot;) &amp;&amp; !s.includes(&quot;Twin&quot;)) return &quot;غرفة كينج مفرد&quot;;
-  if (s.includes(&quot;تؤم&quot;) || s.includes(&quot;Twin&quot;)) return &quot;غرفة تؤم خلفية&quot;;
-
-  return null;
-}
-
-// =========================================================================
-// === OUTPUT / DRAWING FUNCTIONS (تم إضافة كلاس التثبيت هنا) ===
-// =========================================================================
-
-function draw(b, n) {
-  const outputDiv = document.getElementById(&quot;output&quot;);
-  outputDiv.classList.remove(&quot;visible&quot;);
-  
-  // 1. Booking Output
-  let h1 = `&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;النوع&lt;/th&gt;&lt;th&gt;المتوقع (Expected)&lt;/th&gt;&lt;th&gt;وصل (Arrived)&lt;/th&gt;&lt;th&gt;No Show&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;
-  CANONICAL_TYPES.forEach(t =&gt; {
-    const d = b[t];
-    if (!d) return; 
-
-    const arrTxt = d.arrived &gt; 0 
-      ? `&lt;b&gt;${d.arrived}&lt;/b&gt;` + (d.arrDep &gt; 0 ? `&lt;span style=&quot;font-size:0.7em&quot;&gt; (منهم ${d.arrDep} عربون)&lt;/span&gt;` : &quot;&quot;) 
-      : &quot;0&quot;;
-    
-    h1 += `&lt;tr&gt;
-      &lt;td&gt;${t}&lt;/td&gt;
-      &lt;td&gt;${d.expected &gt; 0 ? `&lt;b style=&quot;color:var(--color-danger)&quot;&gt;${d.expected} (OK)&lt;/b&gt;` : &quot;0&quot;} ${d.expList ? `&lt;div&gt;${d.expList.join(&quot;&quot;)}&lt;/div&gt;` : &quot;&quot;}&lt;/td&gt;
-      &lt;td&gt;${arrTxt} ${d.arrList ? `&lt;div&gt;${d.arrList.join(&quot;&quot;)}&lt;/div&gt;` : &quot;&quot;}&lt;/td&gt;
-      &lt;td&gt;${d.noShow} ${d.nsList ? `&lt;div&gt;${d.nsList.join(&quot;&quot;)}&lt;/div&gt;` : &quot;&quot;}&lt;/td&gt;
-    &lt;/tr&gt;`;
-  });
-  h1 += &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;;
-  document.getElementById(&quot;tableBooking&quot;).innerHTML = h1;
-
-  // 2. Nazeel Output
-  let h2 = `&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;النوع&lt;/th&gt;&lt;th&gt;الشاغر الفعلي (شاغر و تحت النظافة)&lt;/th&gt;&lt;th&gt;متوقع خروج اليوم&lt;/th&gt;&lt;th&gt;متاح تاجر على الاستقبال و اون لاين&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;
-  CANONICAL_TYPES.forEach(t =&gt; {
-    const d = n[t];
-    if (!d) return;
-
-    const vacantCount = d.vac || d.vacant || 0; 
-    const depCount = d.dep || d.depToday || 0;
-    const avail = d.avail || (vacantCount + Math.round(depCount * 0.40));
-    
-    h2 += `&lt;tr&gt;
-      &lt;td&gt;${t}&lt;/td&gt;
-      &lt;td&gt;&lt;b&gt;${vacantCount}&lt;/b&gt; ${d.vacList ? `&lt;div&gt;${d.vacList.join(&quot;&quot;)}&lt;/div&gt;` : &quot;&quot;}&lt;/td&gt;
-      &lt;td&gt;${depCount} ${d.depList ? `&lt;div&gt;${d.depList.join(&quot;&quot;)}&lt;/div&gt;` : &quot;&quot;}&lt;/td&gt;
-      &lt;td&gt;&lt;span class=&quot;badge bg-blue&quot; style=&quot;font-size:0.9rem&quot;&gt;${avail}&lt;/span&gt;&lt;/td&gt;
-    &lt;/tr&gt;`;
-  });
-  h2 += &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;;
-  document.getElementById(&quot;tableNazeel&quot;).innerHTML = h2;
-
-  // 3. Compare Output
-  let h3 = `&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;النوع&lt;/th&gt;&lt;th&gt;متاح تاجر على الاستقبال و اون لاين&lt;/th&gt;&lt;th&gt;المحجوز لبوكينج&lt;/th&gt;&lt;th&gt;الفرق&lt;/th&gt;&lt;th&gt;التوصية&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;
-  CANONICAL_TYPES.forEach(t =&gt; {
-    const nData = n[t];
-    const bData = b[t];
-
-    if (!nData &amp;&amp; !bData) return;
-
-    const vacantCount = nData ? (nData.vac || nData.vacant || 0) : 0;
-    const depCount = nData ? (nData.dep || nData.depToday || 0) : 0;
-
-    const avail = nData ? (nData.avail || (vacantCount + Math.round(depCount * 0.40))) : 0;
-    const req = bData ? bData.expected : 0;
-    
-    if (avail === 0 &amp;&amp; req === 0) return;
-
-    const diff = avail - req;
-    let decision = &#x27;&#x27;;
-    let badge = &#x27;&#x27;;
-    let badgeClass = &#x27;&#x27;;
-
-    if (diff &gt; 0) {
-        decision = getSmartRecommendation(diff);
-        badge = `+${diff} فائض`;
-        badgeClass = &#x27;bg-green&#x27;;
-    } else if (diff &lt; 0) {
-        decision = &#x27;⛔ أغلق البيع فوراً&#x27;;
-        badge = `${diff} عجز`;
-        badgeClass = &#x27;bg-red&#x27;;
-    } else {
-        decision = &#x27;⏸️ حافظ على الوضع الحالي&#x27;;
-        badge = &#x27;متوازن&#x27;;
-        badgeClass = &#x27;bg-gray&#x27;;
-    }
-    
-    h3 += `&lt;tr&gt;
-      &lt;td&gt;${t}&lt;/td&gt;
-      &lt;td&gt;${avail}&lt;/td&gt;
-      &lt;td&gt;${req}&lt;/td&gt;
-      &lt;td&gt;&lt;span class=&quot;badge ${badgeClass}&quot;&gt;${badge}&lt;/span&gt;&lt;/td&gt;
-      &lt;td style=&quot;font-weight:bold; color:${diff&lt;0?&#x27;var(--color-danger)&#x27;:&#x27;var(--color-success)&#x27;}&quot;&gt;${decision}&lt;/td&gt;
-    &lt;/tr&gt;`;
-  });
-  h3 += &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;;
-  document.getElementById(&quot;tableCompare&quot;).innerHTML = h3;
-
-  outputDiv.classList.add(&quot;visible&quot;);
-  
-  // === إضافة لتثبيت التوقيع بعد ظهور النتائج ===
-  document.querySelector(&#x27;.sign-off&#x27;).classList.add(&#x27;fixed-bottom&#x27;);
-}
-
-// =========================================================================
-// === FILE EXPORT LOGIC (تم التعديل لإضافة التوقيع) ===
-// =========================================================================
-
-function exportComparisonToExcel() {
-    const wb = XLSX.utils.book_new();
-    const wsData = [];
-    
-    if (!window.nazeelLastRunData || !window.bookingLastRunData) {
-        alert(&quot;يرجى إجراء تحليل ناجح أولاً لتصدير البيانات.&quot;);
-        return;
-    }
-
-    const headers = [&quot;النوع&quot;, &quot;متاح تاجر (Avail)&quot;, &quot;المحجوز لبوكينج&quot;, &quot;الفرق&quot;, &quot;التوصية&quot;];
-    wsData.push(headers);
-
-    CANONICAL_TYPES.forEach(t =&gt; {
-        const nData = window.nazeelLastRunData[t];
-        const bData = window.bookingLastRunData[t];
-
-        const vacantCount = nData ? (nData.vac || nData.vacant || 0) : 0;
-        const depCount = nData ? (nData.dep || nData.depToday || 0) : 0;
-        const avail = nData ? (nData.avail || (vacantCount + Math.round(depCount * 0.40))) : 0;
-        const req = bData ? bData.expected : 0;
-        const diff = avail - req;
-
-        if (avail === 0 &amp;&amp; req === 0) return;
-
-        let recommendation = &#x27;&#x27;;
-        if (diff &gt; 0) {
-            recommendation = getSmartRecommendation(diff);
-        } else if (diff &lt; 0) {
-            recommendation = &#x27;⛔ أغلق البيع فوراً&#x27;;
-        } else {
-            recommendation = &#x27;⏸️ حافظ على الوضع الحالي&#x27;;
-        }
-
-        wsData.push([
-            t, 
-            avail, 
-            req, 
-            diff, 
-            recommendation.replace(/&lt;[^&gt;]*&gt;?/gm, &#x27;&#x27;)
-        ]);
-    });
-    
-    // === إضافة التوقيع إلى الإكسل ===
-    wsData.push([]);
-    wsData.push([]);
-    wsData.push([&quot;تم التنفيذ بواسطة: أيمن أبو ورده&quot;, &quot;77aayy@gmail.com&quot;]);
-    // ===================================
-
-
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    XLSX.utils.book_append_sheet(wb, ws, &quot;Final_Audit_Comparison&quot;);
-
-    const wscols = [
-        { wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 10 }, { wch: 45 }
-    ];
-    ws[&#x27;!cols&#x27;] = wscols;
-
-    XLSX.writeFile(wb, &quot;Final_Audit_Comparison.xlsx&quot;);
-}
-
-
-// =========================================================================
-// === MODE SWITCHING &amp; UNIFIED CONTROL (تمت إضافة إلغاء التثبيت هنا) ===
-// =========================================================================
-
-function switchMode(mode) {
-    currentMode = mode;
-    
-    document.getElementById(&#x27;uploadMode&#x27;).classList.toggle(&#x27;visible&#x27;, mode === &#x27;upload&#x27;);
-    document.getElementById(&#x27;uploadMode&#x27;).classList.toggle(&#x27;hidden&#x27;, mode !== &#x27;upload&#x27;);
-    
-    document.getElementById(&#x27;manualMode&#x27;).classList.toggle(&#x27;visible&#x27;, mode === &#x27;manual&#x27;);
-    document.getElementById(&#x27;manualMode&#x27;).classList.toggle(&#x27;hidden&#x27;, mode !== &#x27;manual&#x27;);
-
-    document.getElementById(&#x27;toggleUpload&#x27;).classList.toggle(&#x27;active&#x27;, mode === &#x27;upload&#x27;);
-    document.getElementById(&#x27;toggleManual&#x27;).classList.toggle(&#x27;active&#x27;, mode === &#x27;manual&#x27;);
-
-    document.getElementById(&quot;errorArea&quot;).style.display = &quot;none&quot;;
-    document.getElementById(&quot;output&quot;).classList.remove(&quot;visible&quot;);
-    
-    // === إلغاء تثبيت التوقيع عند إخفاء النتائج ===
-    document.querySelector(&#x27;.sign-off&#x27;).classList.remove(&#x27;fixed-bottom&#x27;); 
-}
-
-function unifiedAnalysis() {
-    if (currentMode === &#x27;upload&#x27;) {
-        runAudit();
-    } else {
-        analyzeManualData();
-    }
-}
-
-// =========================================================================
-// === MANUAL INPUT UX FUNCTIONS ===
-// =========================================================================
-
-function enforceDigits(input) {
-    input.value = input.value.replace(/[^0-9]/g, &#x27;&#x27;); 
-}
-function clearIfZero(input) {
-    if (input.value === &#x27;0&#x27;) {
-        input.value = &#x27;&#x27;;
-    }
-}
-function setZeroIfEmpty(input) {
-    if (input.value.trim() === &#x27;&#x27;) {
-        input.value = &#x27;0&#x27;;
-    }
-}
-
-function initializeFixedInputTables() {
-    const nazeelContainer = document.getElementById(&#x27;nazeel-inputs&#x27;);
-    const bookingContainer = document.getElementById(&#x27;booking-inputs&#x27;);
-    if(nazeelContainer.children.length &gt; 0) return; 
-
-    let id = 0; 
-    CANONICAL_TYPES.forEach(type =&gt; {
-        const inputEvents = `oninput=&quot;enforceDigits(this)&quot; onfocus=&quot;clearIfZero(this)&quot; onblur=&quot;setZeroIfEmpty(this)&quot;`;
-
-        const nRow = nazeelContainer.insertRow();
-        nRow.dataset.type = type;
-        nRow.innerHTML = `
-            &lt;td class=&quot;type-cell&quot;&gt;${type}&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;data-input&quot; id=&quot;nazeel_empty_${id}&quot; value=&quot;0&quot; ${inputEvents}&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;data-input&quot; id=&quot;nazeel_cleaning_${id}&quot; value=&quot;0&quot; ${inputEvents}&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;data-input&quot; id=&quot;nazeel_dep_${id}&quot; value=&quot;0&quot; ${inputEvents}&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;data-input&quot; id=&quot;nazeel_maint_${id}&quot; value=&quot;0&quot; ${inputEvents}&gt;&lt;/td&gt;
-        `;
-
-        const bRow = bookingContainer.insertRow();
-        bRow.dataset.type = type;
-        bRow.innerHTML = `
-            &lt;td class=&quot;type-cell&quot;&gt;${type}&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;data-input&quot; id=&quot;booking_count_${id}&quot; value=&quot;0&quot; ${inputEvents}&gt;&lt;/td&gt;
-        `;
-        
-        id++; 
-    });
-}
-
-function analyzeManualData() {
-    const errorDiv = document.getElementById(&#x27;errorArea&#x27;);
-    errorDiv.style.display = &quot;none&quot;;
-    
-    const nazeelData = {};
-    const bookingData = {};
-
-    CANONICAL_TYPES.forEach((type, id) =&gt; {
-        const emptyInput = document.getElementById(`nazeel_empty_${id}`);
-        if (emptyInput) {
-            const empty = parseInt(emptyInput.value) || 0;
-            const cleaning = parseInt(document.getElementById(`nazeel_cleaning_${id}`).value) || 0;
-            const depToday = parseInt(document.getElementById(`nazeel_dep_${id}`).value) || 0;
-            const maint = parseInt(document.getElementById(`nazeel_maint_${id}`).value) || 0;
-            
-            const vacant = empty + cleaning;
-            const avail = vacant + Math.round(depToday * 0.40);
-
-            nazeelData[type] = { vacant, depToday, avail, maint }; 
-        }
-    });
-
-    CANONICAL_TYPES.forEach((type, id) =&gt; {
-        const countInput = document.getElementById(`booking_count_${id}`);
-        if (countInput) {
-            const expected = parseInt(countInput.value) || 0;
-            bookingData[type] = { expected };
-        }
-    });
-
-    window.nazeelLastRunData = nazeelData;
-    window.bookingLastRunData = bookingData;
-    
-    const statsB_Manual = {};
-    CANONICAL_TYPES.forEach(t =&gt; {
-        statsB_Manual[t] = {
-            expected: bookingData[t]?.expected || 0,
-            arrived: 0, arrDep: 0, noShow: 0,
-            expList: [], arrList: [], nsList: [] 
-        };
-    });
-    
-    draw(statsB_Manual, nazeelData); 
-}
-
-
-// =========================================================================
-// === FILE UPLOAD FUNCTIONS ===
-// =========================================================================
-
-function processBooking(rows) {
-  const stats = {};
-  const ARIVED_TERMS = [&quot;تم السداد&quot;, &quot;paid&quot;, &quot;عربون&quot;, &quot;deposit&quot;, &quot;بالكامل&quot;]; 
-  CANONICAL_TYPES.forEach(t =&gt; stats[t] = { expected:0, expList:[], arrived:0, arrList:[], arrDep:0, noShow:0, nsList:[] });
-
-  let idxStatus=-1, idxUnit=-1, idxPayStatus=-1, idxPayRaw=-1, idxGuest=-1, headerRow=-1;
-
-  for(let r=0; r&lt;Math.min(rows.length, 25); r++) {
-    const row = rows[r];
-    for(let c=0; c&lt;row.length; c++) {
-      const val = (row[c]||&quot;&quot;).toString().toLowerCase().trim();
-      
-      if(val === &quot;status&quot; || val === &quot;الحالة&quot; || val.includes(&quot;booking status&quot;)) idxStatus = c;
-      if(val.includes(&quot;unit&quot;) || val.includes(&quot;room&quot;) || val.includes(&quot;الوحدة&quot;) || val.includes(&quot;accommodation&quot;)) idxUnit = c;
-      if(val.includes(&quot;guest&quot;) || val.includes(&quot;الضيف&quot;)) idxGuest = c;
-      if(val === &quot;payment status&quot; || val === &quot;حالة الدفع&quot;) idxPayStatus = c;
-      else if((val.includes(&quot;payment&quot;) || val.includes(&quot;الدفع&quot;)) &amp;&amp; idxPayStatus === -1) idxPayRaw = c;
-    }
-    if(idxStatus !== -1 &amp;&amp; idxUnit !== -1) { headerRow = r; break; }
-  }
-
-  if(headerRow === -1) {
-    throw new Error(&quot;لم أتمكن من العثور على جدول البيانات في ملف بوكينج. تأكد أن الملف يحتوي على أعمدة &#x27;Status&#x27; و &#x27;Unit/Room Type&#x27;.&quot;);
-  }
-
-  const activePayIdx = idxPayStatus !== -1 ? idxPayStatus : idxPayRaw;
-
-  let foundCount = 0;
-  for(let r=headerRow+1; r&lt;rows.length; r++) {
-    const row = rows[r];
-    const status = (row[idxStatus]||&quot;&quot;).toString().toLowerCase().trim();
-    const unitStr = (row[idxUnit]||&quot;&quot;).toString();
-    const payVal = activePayIdx !== -1 ? (row[activePayIdx]||&quot;&quot;).toString().trim() : &quot;&quot;;
-    const guestName = idxGuest !== -1 ? (row[idxGuest]||&quot;&quot;).toString() : &quot;Guest&quot;;
-
-    if(status !== &quot;ok&quot;) continue;
-    const rowString = JSON.stringify(row).toLowerCase();
-    if(CANCEL_FLAGS.some(f =&gt; rowString.includes(f))) continue;
-
-    foundCount++;
-
-    const units = [];
-    unitStr.split(&quot;,&quot;).forEach(p =&gt; {
-       const m = p.trim().match(/^(\d+)\s*x\s*(.+)$/i);
-       if(m) { for(let i=0; i&lt;+m[1]; i++) units.push(m[2]); } else units.push(p);
-    });
-
-    const isExplicitlyPaid = ARIVED_TERMS.some(term =&gt; payVal.toLowerCase().includes(term));
-    const isNoShow = payVal === &quot;لم يتم السداد&quot; || payVal.toLowerCase() === &quot;not paid&quot;;
-    const isEmpty = payVal === &quot;&quot;;
-
-    units.forEach(u =&gt; {
-      const type = mapUnit(u);
-      if(!type) return;
-
-      const debugInfo = `&lt;span class=&quot;guest-item&quot;&gt;${guestName} &lt;span class=&quot;pay-info&quot;&gt;[${payVal || &quot;Empty&quot;}]&lt;/span&gt;&lt;/span&gt;`;
-
-      if (isNoShow) {
-        stats[type].noShow++;
-        stats[type].nsList.push(debugInfo);
-
-      } else if (isExplicitlyPaid || (!isEmpty &amp;&amp; !isNoShow)) { 
-        stats[type].arrived++;
-        if(payVal.includes(&quot;عربون&quot;) || payVal.toLowerCase().includes(&quot;deposit&quot;)) {
-          stats[type].arrDep++;
-          stats[type].arrList.push(debugInfo.replace(&quot;]&quot;, &quot; - عربون]&quot;));
-        } else {
-          stats[type].arrList.push(debugInfo);
-        }
-      } else if (isEmpty) {
-        stats[type].expected++;
-        stats[type].expList.push(debugInfo);
-      }
-    });
-  }
-
-  if(foundCount === 0) {
-    throw new Error(`وجدت الأعمدة (Status, Unit) في السطر ${headerRow+1}، لكن لم أجد أي حجوزات بحالة &quot;OK&quot;. تأكد من الملف.`);
-  }
-
-  return stats;
-}
-
-function processNazeel(rows) {
-  const todayStr = new Date().toISOString().split(&quot;T&quot;)[0];
-  let colStatus=-1, colRoom=-1, colOut=-1, headerRow=-1;
-
-  for(let r=0; r&lt;Math.min(rows.length,25); r++) {
-    const row = rows[r];
-    for(let c=0; c&lt;row.length; c++) {
-      const v = (row[c]||&quot;&quot;).toString().trim();
-      if (v===&quot;الحالة&quot; || v===&quot;Status&quot;) colStatus=c;
-      if (v.includes(&quot;الغرفة&quot;) || v.includes(&quot;Room&quot;)) colRoom=c;
-      if (v.includes(&quot;تاريخ الخروج&quot;) || v.includes(&quot;Departure&quot;)) colOut=c;
-    }
-    if(colStatus!==-1 &amp;&amp; colRoom!==-1) { headerRow=r; break; }
-  }
-  
-  const stats = {};
-  CANONICAL_TYPES.forEach(t =&gt; stats[t] = { vac:0, vacList:[], dep:0, depList:[] }); 
-  if(headerRow===-1) throw new Error(&quot;لم يتم العثور على أعمدة (الحالة، الغرفة) في ملف نزيل.&quot;);
-
-  for(let r=headerRow+1; r&lt;rows.length; r++) {
-    const row = rows[r];
-    const status = (row[colStatus]||&quot;&quot;).toString().trim();
-    const room = (row[colRoom]||&quot;&quot;).toString().trim();
-    const outDate = row[colOut];
-
-    if(!room || room.includes(&quot;104&quot;) || (room.includes(&quot;ذوي&quot;) &amp;&amp; room.includes(&quot;عاقة&quot;))) continue;
-    const type = mapUnit(room);
-    if(!type) continue;
-
-    if([&quot;فارغة&quot;, &quot;تنظيف&quot;, &quot;Vacant&quot;, &quot;Dirty&quot;].includes(status)) {
-      stats[type].vac++;
-      stats[type].vacList.push(`&lt;span class=&quot;guest-item&quot;&gt;${room} (${status})&lt;/span&gt;`);
-    }
-
-    let isToday = false;
-    if(status.includes(&quot;مغادرة&quot;) || status.includes(&quot;Departure&quot;)) isToday = true; 
-    else if(outDate &amp;&amp; (outDate.toString().includes(todayStr) || outDate.toString().includes(new Date().toLocaleDateString(&#x27;en-GB&#x27;)))) {
-       isToday = true;
-    }
-
-    if((status===&quot;مؤجرة&quot; || status===&quot;Occupied&quot;) &amp;&amp; isToday) {
-      stats[type].dep++;
-      stats[type].depList.push(`&lt;span class=&quot;guest-item&quot;&gt;${room}&lt;/span&gt;`);
-    }
-  }
-  return stats;
-}
-
-function runAudit() {
-  const errDiv = document.getElementById(&quot;errorArea&quot;);
-  errDiv.style.display = &quot;none&quot;;
-  errDiv.textContent = &quot;&quot;;
-  
-  const fB = document.getElementById(&quot;fileBooking&quot;).files[0];
-  const fN = document.getElementById(&quot;fileNazeel&quot;).files[0];
-  
-  if(!fB || !fN) { 
-    errDiv.textContent = &quot;⚠️ الرجاء رفع الملفين للمتابعة في وضع &#x27;رفع الملفات&#x27;&quot;; 
-    errDiv.style.display = &quot;block&quot;;
-    return; 
-  }
-
-  const rB = new FileReader();
-  rB.onload = e =&gt; {
-    try {
-      const wb = XLSX.read(e.target.result, {type:&#x27;array&#x27;});
-      const rawRows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
-      const statsB = processBooking(rawRows);
-      
-      const rN = new FileReader();
-      rN.onload = e2 =&gt; {
-        try {
-          const wb2 = XLSX.read(e2.target.result, {type:&#x27;array&#x27;});
-          const rawRowsN = XLSX.utils.sheet_to_json(wb2.Sheets[wb2.SheetNames[0]], {header:1});
-          const statsN = processNazeel(rawRowsN);
-          
-          window.nazeelLastRunData = statsN;
-          window.bookingLastRunData = statsB;
-
-          draw(statsB, statsN);
-        } catch(x) { 
-          errDiv.textContent = &quot;خطأ في ملف نزيل: &quot; + x.message; 
-          errDiv.style.display = &quot;block&quot;;
-        }
-      };
-      rN.readAsArrayBuffer(fN);
-    } catch(x) { 
-      errDiv.innerHTML = &quot;خطأ في ملف بوكينج:&lt;br&gt;&quot; + x.message; 
-      errDiv.style.display = &quot;block&quot;;
-    }
-  };
-  rB.readAsArrayBuffer(fB);
-}
-
-document.addEventListener(&#x27;DOMContentLoaded&#x27;, () =&gt; {
-    initializeFixedInputTables(); 
-    switchMode(&#x27;upload&#x27;); 
-
-    const savedTheme = localStorage.getItem(THEME_KEY) || &#x27;light&#x27;;
-    applyTheme(savedTheme);
-
-    const toggleBtn = document.getElementById(&#x27;themeToggle&#x27;);
-    if (toggleBtn) {
-      toggleBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
-        const isDark = document.body.classList.contains(&#x27;theme-dark&#x27;);
-        const newTheme = isDark ? &#x27;light&#x27; : &#x27;dark&#x27;;
-        applyTheme(newTheme);
-        localStorage.setItem(THEME_KEY, newTheme);
-      });
-    }
-});
-&lt;/script&gt;
-
-&lt;div class=&quot;sign-off fixed-bottom&quot;&gt;
-  &lt;span class=&quot;sign-off-item&quot;&gt;تم التنفيذ بواسطة&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-name&quot;&gt;| &lt;b&gt;أيمن أبو ورده&lt;/b&gt;&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-email&quot;&gt;| 77aayy@gmail.com&lt;/span&gt;
-&lt;/div&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;"></iframe>
-  <iframe id="frameBooking" srcdoc="&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;ar&quot; dir=&quot;rtl&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;UTF-8&quot;&gt;
-&lt;title&gt;Elite Price System – إدارة التشغيل أيمن أبو ورده&lt;/title&gt;
-&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
-
-&lt;style&gt;
-/* ------------------------- حركات ------------------------- */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ------------------------- Dark UI مثل المقارنات ------------------------- */
-body {
-    font-family: &#x27;Tajawal&#x27;, sans-serif;
-    background: #0f172a;      /* كحلي داكن */
-    color: #f1f5f9;           /* رمادي فاتح */
-    margin: 0;
-    text-align: center;
-    padding: 30px 10px;
-}
-
-/* ------------------------- صندوق فرع ------------------------- */
-.branch {
-    width: 95%;
-    max-width: 1100px;
-    margin: 25px auto;
-    background: #1e293b;  /* الكرت الداكن */
-    padding: 22px;
-    border-radius: 16px;
-    border: 1px solid #334155;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
-    opacity: 0;
-}
-.branch h2 {
-    text-align: right;
-    color: #93c5fd;
-    font-size: 22px;
-    font-weight: 700;
-    border-bottom: 1px solid #334155;
-    padding-bottom: 10px;
-}
-
-/* ------------------------- جدول ------------------------- */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-th, td {
-    padding: 12px 8px;
-    border-bottom: 1px solid #334155;
-}
-th {
-    background: #0f172a;
-    color: #93c5fd;
-    font-size: 15px;
-}
-
-/* ------------------------- زرار ------------------------- */
-.btn {
-    background: #2563eb;
-    border: none;
-    padding: 10px 22px;
-    font-size: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    color: #fff;
-    margin-top: 15px;
-}
-.btn:hover {
-    background: #1d4ed8;
-}
-
-/* ------------------------- نمط الحقول (نفس المقارنات) ------------------------- */
-input[type=number] {
-    width: 110px;
-    padding: 6px 4px;
-    border-radius: 10px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    color: #e2e8f0;
-    font-size: 20px;
-    font-weight: 600;
-    text-align: center;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
-    transition: 0.15s;
-}
-
-/* ------------------------- إلغاء المؤشرات الجانبية ------------------------- */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-/* ------------------------- فوكس ------------------------- */
-input[type=number]:focus {
-    border-color: #60a5fa;
-    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
-    outline: none;
-}
-
-/* ------------------------- سعر بوكينج ------------------------- */
-.booking {
-    background: #1e3a8a;
-    border-color: #3b82f6;
-    color: #bae6fd;
-}
-
-/* ------------------------- نسبة ------------------------- */
-.rate-input {
-    width: 75px;
-}
-
-/* ------------------------- Unified ------------------------- */
-.unify {
-    margin: 5px 0 15px;
-    background: #0f172a;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px dashed #334155;
-    display: inline-flex;
-    gap: 10px;
-    align-items: center;
-    color: #cbd5e1;
-}
-
-.footer {
-    margin-top: 25px;
-    color: #64748b;
-}
-&lt;/style&gt;
-&lt;/head&gt;
-
-
-
-&lt;body&gt;
-
-&lt;h1 style=&quot;color:#93c5fd; font-size:26px; margin-bottom:25px;&quot;&gt;إدارة التشغيل – أيمن أبو ورده&lt;/h1&gt;
-
-&lt;!-- ===================== فرع الكورنيش ===================== --&gt;
-&lt;div class=&quot;branch&quot; id=&quot;corniche&quot;&gt;
-    &lt;h2&gt;🏨 فرع الكورنيش&lt;/h2&gt;
-
-    &lt;div class=&quot;unify&quot;&gt;
-        &lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;unifyC&quot; onchange=&quot;setUnify(&#x27;c&#x27;)&quot;&gt; توحيد النسبة&lt;/label&gt;
-        &lt;input type=&quot;number&quot; id=&quot;rateC&quot; value=&quot;45&quot; onchange=&quot;setUnify(&#x27;c&#x27;)&quot;&gt; %
-    &lt;/div&gt;
-
-    &lt;table&gt;
-        &lt;tr&gt;&lt;th&gt;الوحدة&lt;/th&gt;&lt;th&gt;السعر&lt;/th&gt;&lt;th&gt;الزيادة %&lt;/th&gt;&lt;th&gt;بوكينج&lt;/th&gt;&lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;تؤم وكينج&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_p1&quot; value=&quot;230&quot; oninput=&quot;calc(&#x27;c&#x27;,1)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_r1&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;c&#x27;,1)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_b1&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;ستوديو&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_p2&quot; value=&quot;340&quot; oninput=&quot;calc(&#x27;c&#x27;,2)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_r2&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;c&#x27;,2)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_b2&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;شقة غرفة وصالة&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_p3&quot; value=&quot;370&quot; oninput=&quot;calc(&#x27;c&#x27;,3)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_r3&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;c&#x27;,3)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_b3&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفتين وصالة&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_p4&quot; value=&quot;400&quot; oninput=&quot;calc(&#x27;c&#x27;,4)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_r4&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;c&#x27;,4)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_b4&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;VIP&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_p5&quot; value=&quot;850&quot; oninput=&quot;calc(&#x27;c&#x27;,5)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_r5&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;c&#x27;,5)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;c_b5&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-
-    &lt;button class=&quot;btn&quot; onclick=&quot;downloadExcel(&#x27;c&#x27;)&quot;&gt;تحميل Excel&lt;/button&gt;
-&lt;/div&gt;
-
-
-
-
-&lt;!-- ===================== فرع الأندلس ===================== --&gt;
-&lt;div class=&quot;branch&quot; id=&quot;andalus&quot;&gt;
-    &lt;h2&gt;🏨 فرع الأندلس&lt;/h2&gt;
-
-    &lt;div class=&quot;unify&quot;&gt;
-        &lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;unifyA&quot; onchange=&quot;setUnify(&#x27;a&#x27;)&quot;&gt; توحيد النسبة&lt;/label&gt;
-        &lt;input type=&quot;number&quot; id=&quot;rateA&quot; value=&quot;45&quot; onchange=&quot;setUnify(&#x27;a&#x27;)&quot;&gt; %
-    &lt;/div&gt;
-
-    &lt;table&gt;
-        &lt;tr&gt;&lt;th&gt;الوحدة&lt;/th&gt;&lt;th&gt;السعر&lt;/th&gt;&lt;th&gt;الزيادة %&lt;/th&gt;&lt;th&gt;بوكينج&lt;/th&gt;&lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفة خلفية تؤم&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p1&quot; value=&quot;190&quot; oninput=&quot;calc(&#x27;a&#x27;,1)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r1&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,1)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b1&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفة خلفية كينج&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p2&quot; value=&quot;205&quot; oninput=&quot;calc(&#x27;a&#x27;,2)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r2&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,2)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b2&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;ستوديو شارع&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p3&quot; value=&quot;220&quot; oninput=&quot;calc(&#x27;a&#x27;,3)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r3&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,3)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b3&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفة وصالة شارع&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p4&quot; value=&quot;290&quot; oninput=&quot;calc(&#x27;a&#x27;,4)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r4&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,4)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b4&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفتين خلفي&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p5&quot; value=&quot;390&quot; oninput=&quot;calc(&#x27;a&#x27;,5)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r5&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,5)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b5&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;غرفتين وصالة شارع&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p6&quot; value=&quot;420&quot; oninput=&quot;calc(&#x27;a&#x27;,6)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r6&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,6)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b6&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;VIP 601&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p7&quot; value=&quot;570&quot; oninput=&quot;calc(&#x27;a&#x27;,7)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r7&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,7)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b7&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;VIP 602&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p8&quot; value=&quot;370&quot; oninput=&quot;calc(&#x27;a&#x27;,8)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r8&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,8)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b8&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-        &lt;tr&gt;&lt;td&gt;VIP 604&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_p9&quot; value=&quot;320&quot; oninput=&quot;calc(&#x27;a&#x27;,9)&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_r9&quot; value=&quot;45&quot; oninput=&quot;calc(&#x27;a&#x27;,9)&quot; class=&quot;rate-input&quot;&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;input type=&quot;number&quot; id=&quot;a_b9&quot; class=&quot;booking&quot; readonly&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-
-    &lt;/table&gt;
-
-    &lt;button class=&quot;btn&quot; onclick=&quot;downloadExcel(&#x27;a&#x27;)&quot;&gt;تحميل Excel&lt;/button&gt;
-&lt;/div&gt;
-
-
-&lt;div class=&quot;footer&quot; id=&quot;footer&quot;&gt;إدارة التشغيل | آخر تحديث:&lt;/div&gt;
-
-&lt;!-- مكتبة الإكسل --&gt;
-&lt;script src=&quot;https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-/* ------------------------ سلوك الخانات ------------------------ */
-function clearOnFocus(event) {
-    const input = event.target;
-    if (input.readOnly) return;
-    input.dataset.oldValue = input.value;
-    input.value = &quot;&quot;;
-}
-function restoreOnBlur(event) {
-    const input = event.target;
-    if (!input.readOnly &amp;&amp; input.value.trim()===&quot;&quot;) {
-        input.value = input.dataset.oldValue || &quot;&quot;;
-    }
-}
-function enhanceInputs() {
-    document.querySelectorAll(&quot;input[type=&#x27;number&#x27;]&quot;).forEach(inp=&gt;{
-        if (!inp.readOnly){
-            inp.addEventListener(&quot;focus&quot;,clearOnFocus);
-            inp.addEventListener(&quot;blur&quot;,restoreOnBlur);
-        }
-    });
-}
-
-/* ------------------------ الحساب ------------------------ */
-function calc(branch,i){
-    let p=parseFloat(document.getElementById(branch+&#x27;_p&#x27;+i).value)||0;
-    let r=parseFloat(document.getElementById(branch+&#x27;_r&#x27;+i).value)||0;
-    document.getElementById(branch+&#x27;_b&#x27;+i).value=(p*(1+r/100)).toFixed(2);
-}
-
-/* ------------------------ توحيد النسبة ------------------------ */
-function setUnify(branch){
-    let unify=document.getElementById(branch===&#x27;c&#x27;?&#x27;unifyC&#x27;:&#x27;unifyA&#x27;).checked;
-    let rate=parseFloat(document.getElementById(branch===&#x27;c&#x27;?&#x27;rateC&#x27;:&#x27;rateA&#x27;).value)||0;
-    let rows=branch===&#x27;c&#x27;?5:9;
-    for(let i=1;i&lt;=rows;i++){
-        document.getElementById(branch+&#x27;_r&#x27;+i).value = unify?rate:45;
-        calc(branch,i);
-    }
-}
-
-/* ------------------------ التاريخ ------------------------ */
-function arabicDate(d){
-    const m=[&#x27;يناير&#x27;,&#x27;فبراير&#x27;,&#x27;مارس&#x27;,&#x27;أبريل&#x27;,&#x27;مايو&#x27;,&#x27;يونيو&#x27;,&#x27;يوليو&#x27;,&#x27;أغسطس&#x27;,&#x27;سبتمبر&#x27;,&#x27;أكتوبر&#x27;,&#x27;نوفمبر&#x27;,&#x27;ديسمبر&#x27;];
-    return d.getDate()+&quot; &quot;+m[d.getMonth()]+&quot; &quot;+d.getFullYear();
-}
-
-/* ------------------------ الأنيميشن ------------------------ */
-function applyBranchAnimation() {
-    document.querySelectorAll(&#x27;.branch&#x27;).forEach((b,i)=&gt;{
-        setTimeout(()=&gt;{
-            b.style.opacity=1;
-            b.style.animation=&quot;fadeInUp .8s ease-out&quot;;
-        }, i*180);
-    });
-}
-
-/* ------------------------ تصدير إكسل ------------------------ */
-function downloadExcel(branch){
-    const wb=XLSX.utils.book_new();
-
-    const title=&quot;إدارة التشغيل – أيمن أبو ورده&quot;;
-    const branchName = branch===&#x27;c&#x27;?&#x27;فرع الكورنيش&#x27;:&#x27;فرع الأندلس&#x27;;
-    const now=new Date();
-    const dateText=&quot;تاريخ التصدير: &quot;+arabicDate(now);
-    const timeText=&quot;وقت التصدير: &quot;+now.toLocaleTimeString(&#x27;en-GB&#x27;);
-    const rows = branch===&#x27;c&#x27;?5:9;
-
-    let data=[
-        [title],[branchName],[],
-        [&quot;الوحدة&quot;,&quot;السعر&quot;,&quot;بوكينج&quot;]
-    ];
-
-    for(let i=1;i&lt;=rows;i++){
-        data.push([
-            document.querySelector(`#${branch===&#x27;c&#x27;?&#x27;corniche&#x27;:&#x27;andalus&#x27;} table tr:nth-child(${i+1}) td:first-child`).innerText,
-            document.getElementById(branch+&#x27;_p&#x27;+i).value,
-            document.getElementById(branch+&#x27;_b&#x27;+i).value
-        ]);
-    }
-
-    data.push([],[dateText],[timeText]);
-
-    const ws=XLSX.utils.aoa_to_sheet(data);
-    ws[&#x27;!cols&#x27;]=[{wch:35},{wch:15},{wch:15}];
-
-    XLSX.utils.book_append_sheet(wb,ws,&quot;Sheet&quot;);
-    XLSX.writeFile(wb, branch===&#x27;c&#x27;?&#x27;Corniche.xlsx&#x27;:&#x27;Andalus.xlsx&#x27;);
-}
-
-/* ------------------------ تهيئة ------------------------ */
-function init(){
-    document.getElementById(&#x27;footer&#x27;).innerText+=&quot; &quot;+arabicDate(new Date());
-    for(let i=1;i&lt;=5;i++) calc(&#x27;c&#x27;,i);
-    for(let i=1;i&lt;=9;i++) calc(&#x27;a&#x27;,i);
-    enhanceInputs();
-    applyBranchAnimation();
-}
-
-window.onload = init;
-&lt;/script&gt;
-
-
-&lt;div class=&quot;sign-off fixed-bottom&quot;&gt;
-  &lt;span class=&quot;sign-off-item&quot;&gt;تم التنفيذ بواسطة&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-name&quot;&gt;| &lt;b&gt;أيمن أبو ورده&lt;/b&gt;&lt;/span&gt;
-  &lt;span class=&quot;sign-off-item sign-off-email&quot;&gt;| 77aayy@gmail.com&lt;/span&gt;
-&lt;/div&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-" style="display:none"></iframe>
-  <div id="frameSeasons" style="display:none;">
-    <div class="seasons-shell">
-      <div class="seasons-title">📅 المواسم والإجازات الدراسية</div>
-      <div class="seasons-sub">
-        الفترة من نهاية عام 1446–1447 هـ حتى بداية العام الدراسي 1448–1449 هـ<br/>
-        (مرتبة حسب التاريخ الميلادي مع عرض التاريخ الهجري للمراجعة)
+      <div id="errorArea"></div>
+
+      <div class="upload-grid">
+        <div class="upload-box">
+          <label style="display:block;margin-bottom:10px;color:var(--primary-dark);font-weight:bold">ملف Booking</label>
+          <input type="file" id="fileBooking" accept=".xlsx,.xls,.csv">
+        </div>
+        <div class="upload-box">
+          <label style="display:block;margin-bottom:10px;color:var(--primary-dark);font-weight:bold">ملف Nazeel</label>
+          <input type="file" id="fileNazeel" accept=".xlsx,.xls,.csv">
+        </div>
       </div>
+
+      <button class="btn-action" onclick="runAudit()">بدء التحليل</button>
+    </div>
+
+    <div id="output" style="display:none;">
+      <div class="card">
+        <h2>1. تحليل Booking</h2>
+        <div id="tableBooking"></div>
+      </div>
+      <div class="card">
+        <h2>2. تحليل Nazeel</h2>
+        <div id="tableNazeel"></div>
+      </div>
+      <div class="card">
+        <h2>3. المقارنة والتوصية</h2>
+        <div id="tableCompare"></div>
+        <div style="text-align:center; margin-top:20px;">
+           <button class="btn-download" onclick="exportComparisonToExcel()">📥 تصدير Excel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-booking" class="section-view">
+    <div class="card">
+      <h1>حاسبة الأسعار</h1>
+      
+      <div id="corniche" style="margin-bottom:40px; border-bottom:2px solid #f0f0f0; padding-bottom:30px;">
+        <h2 style="color:var(--accent-gold)">🏨 فرع الكورنيش</h2>
+        <div style="margin-bottom:15px;">
+            <label style="cursor:pointer; font-weight:bold; margin-left:15px;">
+                <input type="checkbox" id="unifyC" onchange="setUnify('c')"> توحيد النسبة
+            </label>
+            <input type="number" id="rateC" value="45" onchange="setUnify('c')" class="calc-input rate-input"> %
+        </div>
+
+        <table>
+            <thead><tr><th>الوحدة</th><th>السعر</th><th>الزيادة %</th><th>بوكينج</th></tr></thead>
+            <tbody>
+                <tr><td>تؤم وكينج</td>
+                    <td><input type="number" id="c_p1" value="230" oninput="calc('c',1)" class="calc-input"></td>
+                    <td><input type="number" id="c_r1" value="45" oninput="calc('c',1)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="c_b1" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>ستوديو</td>
+                    <td><input type="number" id="c_p2" value="340" oninput="calc('c',2)" class="calc-input"></td>
+                    <td><input type="number" id="c_r2" value="45" oninput="calc('c',2)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="c_b2" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>شقة غرفة وصالة</td>
+                    <td><input type="number" id="c_p3" value="370" oninput="calc('c',3)" class="calc-input"></td>
+                    <td><input type="number" id="c_r3" value="45" oninput="calc('c',3)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="c_b3" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>غرفتين وصالة</td>
+                    <td><input type="number" id="c_p4" value="400" oninput="calc('c',4)" class="calc-input"></td>
+                    <td><input type="number" id="c_r4" value="45" oninput="calc('c',4)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="c_b4" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>VIP</td>
+                    <td><input type="number" id="c_p5" value="850" oninput="calc('c',5)" class="calc-input"></td>
+                    <td><input type="number" id="c_r5" value="45" oninput="calc('c',5)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="c_b5" class="calc-input calc-readonly" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn-download" onclick="downloadExcel('c')">تحميل Excel (الكورنيش)</button>
+      </div>
+
+      <div id="andalus">
+        <h2 style="color:var(--accent-gold)">🏨 فرع الأندلس</h2>
+        <div style="margin-bottom:15px;">
+            <label style="cursor:pointer; font-weight:bold; margin-left:15px;">
+                <input type="checkbox" id="unifyA" onchange="setUnify('a')"> توحيد النسبة
+            </label>
+            <input type="number" id="rateA" value="45" onchange="setUnify('a')" class="calc-input rate-input"> %
+        </div>
+
+        <table>
+            <thead><tr><th>الوحدة</th><th>السعر</th><th>الزيادة %</th><th>بوكينج</th></tr></thead>
+            <tbody>
+                <tr><td>غرفة خلفية تؤم</td>
+                    <td><input type="number" id="a_p1" value="190" oninput="calc('a',1)" class="calc-input"></td>
+                    <td><input type="number" id="a_r1" value="45" oninput="calc('a',1)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b1" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>غرفة خلفية كينج</td>
+                    <td><input type="number" id="a_p2" value="205" oninput="calc('a',2)" class="calc-input"></td>
+                    <td><input type="number" id="a_r2" value="45" oninput="calc('a',2)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b2" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>ستوديو شارع</td>
+                    <td><input type="number" id="a_p3" value="220" oninput="calc('a',3)" class="calc-input"></td>
+                    <td><input type="number" id="a_r3" value="45" oninput="calc('a',3)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b3" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>غرفة وصالة شارع</td>
+                    <td><input type="number" id="a_p4" value="290" oninput="calc('a',4)" class="calc-input"></td>
+                    <td><input type="number" id="a_r4" value="45" oninput="calc('a',4)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b4" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>غرفتين خلفي</td>
+                    <td><input type="number" id="a_p5" value="390" oninput="calc('a',5)" class="calc-input"></td>
+                    <td><input type="number" id="a_r5" value="45" oninput="calc('a',5)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b5" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>غرفتين وصالة شارع</td>
+                    <td><input type="number" id="a_p6" value="420" oninput="calc('a',6)" class="calc-input"></td>
+                    <td><input type="number" id="a_r6" value="45" oninput="calc('a',6)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b6" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>VIP 601</td>
+                    <td><input type="number" id="a_p7" value="570" oninput="calc('a',7)" class="calc-input"></td>
+                    <td><input type="number" id="a_r7" value="45" oninput="calc('a',7)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b7" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>VIP 602</td>
+                    <td><input type="number" id="a_p8" value="370" oninput="calc('a',8)" class="calc-input"></td>
+                    <td><input type="number" id="a_r8" value="45" oninput="calc('a',8)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b8" class="calc-input calc-readonly" readonly></td>
+                </tr>
+                <tr><td>VIP 604</td>
+                    <td><input type="number" id="a_p9" value="320" oninput="calc('a',9)" class="calc-input"></td>
+                    <td><input type="number" id="a_r9" value="45" oninput="calc('a',9)" class="calc-input rate-input"></td>
+                    <td><input type="number" id="a_b9" class="calc-input calc-readonly" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn-download" onclick="downloadExcel('a')">تحميل Excel (الأندلس)</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-seasons" class="section-view">
+    <div class="card">
+      <h1>المواسم والإجازات</h1>
+      <div class="subtitle">التقويم الدراسي 1446–1449 هـ</div>
       <table class="seasons-table">
         <thead>
           <tr>
@@ -1949,19 +331,308 @@ window.onload = init;
         </thead>
         <tbody id="seasonsBody"></tbody>
       </table>
-      <div class="seasons-footer-note">
-        مصدر التواريخ: التقويم الدراسي الرسمي + تقويم السعودية (saudicalendars.com)،
-        مع الاعتماد على التاريخ الميلادي كمصدر أساسي ومراجعة الهجري للتأكد من عدم التعارض.
-      </div>
     </div>
   </div>
+
 </div>
 
-<div class="sign-off fixed-bottom">
-  <span class="sign-off-item">تم التنفيذ بواسطة</span>
-  <span class="sign-off-item sign-off-name">| <b>أيمن أبو ورده</b></span>
-  <span class="sign-off-item sign-off-email">| 77aayy@gmail.com</span>
+<div class="sign-off">
+  <span>تم التنفيذ بواسطة <b>أيمن أبو ورده</b></span>
+  <span class="sign-off-email"> | 77aayy@gmail.com</span>
 </div>
+
+<script>
+/* =========================================================
+   GLOBAL & TABS
+   ========================================================= */
+function switchTab(tabId) {
+  document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.switchBtn').forEach(el => el.classList.remove('active'));
+  
+  document.getElementById('view-' + tabId).classList.add('active');
+  const btns = document.querySelectorAll('.switchBtn');
+  if(tabId==='compare') btns[0].classList.add('active');
+  if(tabId==='booking') btns[1].classList.add('active');
+  if(tabId==='seasons') btns[2].classList.add('active');
+}
+
+/* =========================================================
+   COMPARE LOGIC (UNCHANGED)
+   ========================================================= */
+const CANONICAL_TYPES = ["شقة بغرفتي نوم", "شقة مع إطلالة على البحر", "ستوديو امامي", "غرفة كينج مفرد", "غرفة تؤم خلفية", "VIP"];
+const CANCEL_FLAGS = ["cancel", "cancelled", "cancelled_by_guest", "ملغي", "كنسل"];
+window.nazeelLastRunData = null;
+window.bookingLastRunData = null;
+
+function mapUnit(raw) {
+  if (!raw) return null;
+  const s = raw.toString().trim();
+  if (s.includes("غرفتين") || s.includes("غرفتي")) return "شقة بغرفتي نوم";
+  if (s.includes("صالة مطله") || s.includes("صالة مطلة") || s.includes("نوم مطلة") || s.includes("مع إطلالة") || s.includes("Sea View")) return "شقة مع إطلالة على البحر";
+  if (s.includes("ستوديو") && s.includes("امامي")) return "ستوديو امامي";
+  if (s.toUpperCase().includes("VIP")) return "VIP";
+  if ((s.includes("كينج") || s.includes("King")) && !s.includes("تؤم") && !s.includes("Twin")) return "غرفة كينج مفرد";
+  if (s.includes("تؤم") || s.includes("Twin")) return "غرفة تؤم خلفية";
+  return null;
+}
+
+function getSmartRecommendation(diff) {
+    if (diff === 1) return '✅ اقترح عليك تفتح 1. ولو أجّرت استقبال اقفلها بوكينج';
+    else if (diff === 2) return '✅ اقترح عليك تفتح 1 على الأقل';
+    else if (diff === 3) return '✅ اقترح عليك تفتح 2 على الأقل';
+    else if (diff === 4) return '✅ اقترح عليك تفتح 4. الشاغر كتير';
+    else if (diff > 4) return `✅ اقترح عليك تفتح ${diff - 1} على الأقل. أنت في الأمان`;
+    return '✅ افتح المزيد من الغرف';
+}
+
+function processBooking(rows) {
+  const stats = {};
+  const ARIVED_TERMS = ["تم السداد", "paid", "عربون", "deposit", "بالكامل"]; 
+  CANONICAL_TYPES.forEach(t => stats[t] = { expected:0, expList:[], arrived:0, arrList:[], arrDep:0, noShow:0, nsList:[] });
+  let idxStatus=-1, idxUnit=-1, idxPayStatus=-1, idxPayRaw=-1, idxGuest=-1, headerRow=-1;
+  for(let r=0; r<Math.min(rows.length, 25); r++) {
+    const row = rows[r];
+    for(let c=0; c<row.length; c++) {
+      const val = (row[c]||"").toString().toLowerCase().trim();
+      if(val === "status" || val === "الحالة" || val.includes("booking status")) idxStatus = c;
+      if(val.includes("unit") || val.includes("room") || val.includes("الوحدة") || val.includes("accommodation")) idxUnit = c;
+      if(val.includes("guest") || val.includes("الضيف")) idxGuest = c;
+      if(val === "payment status" || val === "حالة الدفع") idxPayStatus = c;
+      else if((val.includes("payment") || val.includes("الدفع")) && idxPayStatus === -1) idxPayRaw = c;
+    }
+    if(idxStatus !== -1 && idxUnit !== -1) { headerRow = r; break; }
+  }
+  if(headerRow === -1) throw new Error("لم يتم العثور على جدول Booking.");
+  const activePayIdx = idxPayStatus !== -1 ? idxPayStatus : idxPayRaw;
+  let foundCount = 0;
+  for(let r=headerRow+1; r<rows.length; r++) {
+    const row = rows[r];
+    const status = (row[idxStatus]||"").toString().toLowerCase().trim();
+    const unitStr = (row[idxUnit]||"").toString();
+    const payVal = activePayIdx !== -1 ? (row[activePayIdx]||"").toString().trim() : "";
+    const guestName = idxGuest !== -1 ? (row[idxGuest]||"").toString() : "Guest";
+    if(status !== "ok") continue;
+    if(CANCEL_FLAGS.some(f => JSON.stringify(row).toLowerCase().includes(f))) continue;
+    foundCount++;
+    const units = [];
+    unitStr.split(",").forEach(p => {
+       const m = p.trim().match(/^(\d+)\s*x\s*(.+)$/i);
+       if(m) { for(let i=0; i<+m[1]; i++) units.push(m[2]); } else units.push(p);
+    });
+    const isExplicitlyPaid = ARIVED_TERMS.some(term => payVal.toLowerCase().includes(term));
+    const isNoShow = payVal === "لم يتم السداد" || payVal.toLowerCase() === "not paid";
+    const isEmpty = payVal === "";
+    units.forEach(u => {
+      const type = mapUnit(u); if(!type) return;
+      const debugInfo = `<div style="font-size:11px; color:#888">${guestName} [${payVal || "Empty"}]</div>`;
+      if (isNoShow) { stats[type].noShow++; stats[type].nsList.push(debugInfo); }
+      else if (isExplicitlyPaid || (!isEmpty && !isNoShow)) { 
+        stats[type].arrived++;
+        if(payVal.includes("عربون") || payVal.toLowerCase().includes("deposit")) { stats[type].arrDep++; stats[type].arrList.push(debugInfo.replace("]", " - عربون]")); }
+        else { stats[type].arrList.push(debugInfo); }
+      } else if (isEmpty) { stats[type].expected++; stats[type].expList.push(debugInfo); }
+    });
+  }
+  if(foundCount === 0) throw new Error("لا توجد حجوزات OK.");
+  return stats;
+}
+
+function processNazeel(rows) {
+  const todayStr = new Date().toISOString().split("T")[0];
+  let colStatus=-1, colRoom=-1, colOut=-1, headerRow=-1;
+  for(let r=0; r<Math.min(rows.length,25); r++) {
+    const row = rows[r];
+    for(let c=0; c<row.length; c++) {
+      const v = (row[c]||"").toString().trim();
+      if (v==="الحالة" || v==="Status") colStatus=c;
+      if (v.includes("الغرفة") || v.includes("Room")) colRoom=c;
+      if (v.includes("تاريخ الخروج") || v.includes("Departure")) colOut=c;
+    }
+    if(colStatus!==-1 && colRoom!==-1) { headerRow=r; break; }
+  }
+  const stats = {}; CANONICAL_TYPES.forEach(t => stats[t] = { vac:0, vacList:[], dep:0, depList:[] }); 
+  if(headerRow===-1) throw new Error("لم يتم العثور على جدول Nazeel.");
+  for(let r=headerRow+1; r<rows.length; r++) {
+    const row = rows[r];
+    const status = (row[colStatus]||"").toString().trim();
+    const room = (row[colRoom]||"").toString().trim();
+    const outDate = row[colOut];
+    if(!room || room.includes("104") || (room.includes("ذوي") && room.includes("عاقة"))) continue;
+    const type = mapUnit(room); if(!type) continue;
+    if(["فارغة", "تنظيف", "Vacant", "Dirty"].includes(status)) {
+      stats[type].vac++; stats[type].vacList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eee; border-radius:4px;">${room}</span>`);
+    }
+    let isToday = false;
+    if(status.includes("مغادرة") || status.includes("Departure")) isToday = true; 
+    else if(outDate && (outDate.toString().includes(todayStr) || outDate.toString().includes(new Date().toLocaleDateString('en-GB')))) isToday = true;
+    if((status==="مؤجرة" || status==="Occupied") && isToday) {
+      stats[type].dep++; stats[type].depList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eef; border-radius:4px;">${room}</span>`);
+    }
+  }
+  return stats;
+}
+
+function runAudit() {
+  const errDiv = document.getElementById("errorArea"); errDiv.style.display = "none";
+  const fB = document.getElementById("fileBooking").files[0];
+  const fN = document.getElementById("fileNazeel").files[0];
+  if(!fB || !fN) { errDiv.textContent = "⚠️ الرجاء رفع الملفين أولاً"; errDiv.style.display = "block"; return; }
+  const rB = new FileReader();
+  rB.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'array'});
+      const statsB = processBooking(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1}));
+      const rN = new FileReader();
+      rN.onload = e2 => {
+        try {
+          const wb2 = XLSX.read(e2.target.result, {type:'array'});
+          const statsN = processNazeel(XLSX.utils.sheet_to_json(wb2.Sheets[wb2.SheetNames[0]], {header:1}));
+          window.nazeelLastRunData = statsN; window.bookingLastRunData = statsB;
+          draw(statsB, statsN);
+        } catch(x) { errDiv.textContent = "خطأ في ملف نزيل: " + x.message; errDiv.style.display = "block"; }
+      };
+      rN.readAsArrayBuffer(fN);
+    } catch(x) { errDiv.innerHTML = "خطأ في ملف بوكينج:<br>" + x.message; errDiv.style.display = "block"; }
+  };
+  rB.readAsArrayBuffer(fB);
+}
+
+function draw(b, n) {
+  document.getElementById("output").style.display = 'block';
+  let h1 = `<table><thead><tr><th>النوع</th><th>المتوقع</th><th>وصل</th><th>No Show</th></tr></thead><tbody>`;
+  CANONICAL_TYPES.forEach(t => {
+    const d = b[t]; if (!d) return; 
+    h1 += `<tr><td>${t}</td><td>${d.expected>0?`<span class="badge badge-ok">${d.expected} (OK)</span>`:"0"} ${d.expList?d.expList.join(""):""}</td><td>${d.arrived>0?`<b>${d.arrived}</b>`+(d.arrDep>0?` <span class="badge badge-gold">(${d.arrDep} عربون)</span>`: ""):"0"} ${d.arrList?d.arrList.join(""):""}</td><td>${d.noShow>0?`<span class="badge badge-err">${d.noShow}</span>`:"0"} ${d.nsList?d.nsList.join(""):""}</td></tr>`;
+  });
+  document.getElementById("tableBooking").innerHTML = h1 + "</tbody></table>";
+
+  let h2 = `<table><thead><tr><th>النوع</th><th>شاغر</th><th>خروج اليوم</th><th>المتاح</th></tr></thead><tbody>`;
+  CANONICAL_TYPES.forEach(t => {
+    const d = n[t]; if (!d) return;
+    const avail = (d.vac||0) + Math.round((d.dep||0)*0.40);
+    h2 += `<tr><td>${t}</td><td><b>${d.vac||0}</b> ${d.vacList?d.vacList.join(""):""}</td><td>${d.dep||0} ${d.depList?d.depList.join(""):""}</td><td><span class="badge badge-warn" style="font-size:1rem">${avail}</span></td></tr>`;
+  });
+  document.getElementById("tableNazeel").innerHTML = h2 + "</tbody></table>";
+
+  let h3 = `<table><thead><tr><th>النوع</th><th>متاح</th><th>مطلوب</th><th>الفرق</th><th>التوصية</th></tr></thead><tbody>`;
+  CANONICAL_TYPES.forEach(t => {
+    const nData = n[t], bData = b[t]; if (!nData && !bData) return;
+    const avail = nData ? ((nData.vac||0) + Math.round((nData.dep||0)*0.40)) : 0;
+    const req = bData ? bData.expected : 0;
+    if (avail === 0 && req === 0) return;
+    const diff = avail - req;
+    let rec = diff > 0 ? getSmartRecommendation(diff) : (diff < 0 ? '⛔ أغلق فوراً' : '⏸️ متوازن');
+    let cls = diff > 0 ? 'badge-ok' : (diff < 0 ? 'badge-err' : 'badge-gold');
+    h3 += `<tr><td>${t}</td><td>${avail}</td><td>${req}</td><td><span class="badge ${cls}">${diff}</span></td><td style="font-weight:bold">${rec}</td></tr>`;
+  });
+  document.getElementById("tableCompare").innerHTML = h3 + "</tbody></table>";
+}
+
+function exportComparisonToExcel() {
+    const wb = XLSX.utils.book_new();
+    const wsData = [["النوع", "متاح", "مطلوب", "الفرق", "التوصية"]];
+    CANONICAL_TYPES.forEach(t => {
+        const nData = window.nazeelLastRunData[t], bData = window.bookingLastRunData[t];
+        const avail = nData ? ((nData.vac||0) + Math.round((nData.dep||0)*0.40)) : 0;
+        const req = bData ? bData.expected : 0;
+        if (avail === 0 && req === 0) return;
+        wsData.push([t, avail, req, avail-req, avail-req > 0 ? getSmartRecommendation(avail-req) : 'Check']);
+    });
+    wsData.push([], ["تم التنفيذ بواسطة: أيمن أبو ورده"]);
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(wsData), "Report");
+    XLSX.writeFile(wb, "Audit_Report.xlsx");
+}
+
+/* =========================================================
+   CALCULATOR LOGIC (RESTORED)
+   ========================================================= */
+function calc(branch,i){
+    let p=parseFloat(document.getElementById(branch+'_p'+i).value)||0;
+    let r=parseFloat(document.getElementById(branch+'_r'+i).value)||0;
+    document.getElementById(branch+'_b'+i).value=(p*(1+r/100)).toFixed(2);
+}
+function setUnify(branch){
+    let unify=document.getElementById(branch==='c'?'unifyC':'unifyA').checked;
+    let rate=parseFloat(document.getElementById(branch==='c'?'rateC':'rateA').value)||0;
+    let rows=branch==='c'?5:9;
+    for(let i=1;i<=rows;i++){
+        document.getElementById(branch+'_r'+i).value = unify?rate:45;
+        calc(branch,i);
+    }
+}
+function downloadExcel(branch){
+    const wb=XLSX.utils.book_new();
+    const rows = branch==='c'?5:9;
+    let data=[["الوحدة","السعر","بوكينج"]];
+    for(let i=1;i<=rows;i++){
+        data.push([
+            document.querySelector(`#${branch==='c'?'corniche':'andalus'} table tr:nth-child(${i+1}) td:first-child`).innerText,
+            document.getElementById(branch+'_p'+i).value,
+            document.getElementById(branch+'_b'+i).value
+        ]);
+    }
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), "Sheet");
+    XLSX.writeFile(wb, branch==='c'?'Corniche.xlsx':'Andalus.xlsx');
+}
+// Initialize Calc
+window.onload = function(){
+    for(let i=1;i<=5;i++) calc('c',i);
+    for(let i=1;i<=9;i++) calc('a',i);
+    buildSeasonsTable(); // Initialize Seasons
+};
+
+/* =========================================================
+   SEASONS LOGIC (RESTORED FULL LIST)
+   ========================================================= */
+const seasonEvents = [
+  { greg: "26/06/2025", hijri: "01/01/1447", title: "بداية إجازة نهاية العام الدراسي للطلاب 1447", type: "موسم" },
+  { greg: "24/08/2025", hijri: "01/03/1447", title: "بداية العام الدراسي 2025-2026 (1447-1448)", type: "ركود" },
+  { greg: "23/09/2025", hijri: "01/04/1447", title: "إجازة اليوم الوطني 2025", type: "موسم" },
+  { greg: "21/11/2025", hijri: "30/05/1447", title: "بداية إجازة الخريف 2025", type: "موسم" },
+  { greg: "29/11/2025", hijri: "08/06/1447", title: "نهاية إجازة الخريف 2025", type: "موسم" },
+  { greg: "11/12/2025", hijri: "20/06/1447", title: "بداية إجازة إضافية 2025", type: "موسم" },
+  { greg: "14/12/2025", hijri: "23/06/1447", title: "نهاية الإجازة الإضافية 2025", type: "موسم" },
+  { greg: "09/01/2026", hijri: "20/07/1447", title: "بداية إجازة منتصف العام الدراسي 2025-2026", type: "موسم" },
+  { greg: "17/01/2026", hijri: "28/07/1447", title: "نهاية إجازة منتصف العام الدراسي 2025-2026", type: "موسم" },
+  { greg: "22/02/2026", hijri: "05/09/1447", title: "إجازة يوم التأسيس 2026", type: "موسم" },
+  { greg: "06/03/2026", hijri: "17/09/1447", title: "بداية إجازة عيد الفطر 2026", type: "موسم" },
+  { greg: "28/03/2026", hijri: "09/10/1447", title: "نهاية إجازة عيد الفطر 2026", type: "موسم" },
+  { greg: "22/05/2026", hijri: "15/12/1447", title: "بداية إجازة عيد الأضحى 2026", type: "موسم" },
+  { greg: "01/06/2026", hijri: "25/12/1447", title: "نهاية إجازة عيد الأضحى 2026", type: "موسم" },
+  { greg: "25/06/2026", hijri: "10/01/1448", title: "بداية إجازة نهاية العام الدراسي 2025-2026", type: "موسم" },
+  { greg: "11/08/2026", hijri: "28/02/1448", title: "عودة المشرفين والإداريين 2026", type: "ركود" },
+  { greg: "16/08/2026", hijri: "03/03/1448", title: "عودة المعلمين 2026", type: "ركود" },
+  { greg: "23/08/2026", hijri: "10/03/1448", title: "بداية العام الدراسي 2026-2027 (1448-1449)", type: "ركود" }
+];
+
+function parseDMY(str) {
+  const parts = str.split("/");
+  return new Date(parseInt(parts[2],10), parseInt(parts[1],10)-1, parseInt(parts[0],10));
+}
+
+function buildSeasonsTable() {
+  const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg));
+  const tbody = document.getElementById('seasonsBody');
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  for (const ev of sorted) {
+    const tr = document.createElement('tr');
+    
+    const tdType = document.createElement('td');
+    const badge = document.createElement('span');
+    badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood');
+    badge.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام';
+    tdType.appendChild(badge);
+
+    const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title;
+    const tdHijri = document.createElement('td'); tdHijri.textContent = ev.hijri;
+    const tdGreg = document.createElement('td'); tdGreg.textContent = ev.greg;
+
+    tr.appendChild(tdType); tr.appendChild(tdTitle); tr.appendChild(tdHijri); tr.appendChild(tdGreg);
+    tbody.appendChild(tr);
+  }
+}
+</script>
 
 </body>
 </html>
