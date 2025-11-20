@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>منظومة التشغيل – VPRO Final</title>
+<title>منظومة التشغيل – VPRO Ultimate</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -17,6 +17,7 @@
   --text-sub: #8F9BBA;
   --shadow: 0px 4px 20px rgba(43, 54, 116, 0.05);
   --radius: 20px;
+  --border-color: #E0E5F2; /* لون فواصل الجدول */
 }
 
 * { box-sizing: border-box; }
@@ -111,33 +112,94 @@ input[type="file"] { width: 100%; }
 .btn-download {
     background: #fff; border: 1px solid var(--primary-dark); color: var(--primary-dark);
     padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: 600; margin-top: 15px;
+    transition: 0.2s;
+}
+.btn-download:hover { background: var(--primary-dark); color: #fff; }
+
+/* === Tables (High Contrast & Clear Divisions) === */
+table { 
+    width: 100%; 
+    border-collapse: separate; /* للفواصل الدائرية */
+    border-spacing: 0; /* إلغاء المسافات لإظهار الخطوط */
+    margin-top: 15px; 
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    overflow: hidden;
 }
 
-/* Tables */
-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; }
-th { color: var(--text-sub); font-weight: 600; padding: 10px; font-size: 0.85rem; }
-td { background: #F4F7FE; padding: 15px; text-align: center; font-weight: 600; color: var(--primary-dark); }
-tr td:first-child { border-radius: 0 10px 10px 0; text-align: right; padding-right: 20px; }
-tr td:last-child { border-radius: 10px 0 0 10px; }
+th { 
+    background: #F4F7FE;
+    color: var(--primary-dark); 
+    font-weight: 700; 
+    padding: 15px; 
+    font-size: 0.9rem; 
+    border-bottom: 2px solid #D1D9E6;
+}
 
-/* Inputs inside tables (Calculator) */
+td { 
+    padding: 15px; 
+    text-align: center; 
+    font-weight: 600; 
+    color: var(--primary-dark); 
+    border-bottom: 1px solid var(--border-color); /* خط فاصل بين الصفوف */
+}
+
+/* Zebra Striping (تخطيط الحمار الوحشي) */
+tbody tr:nth-child(even) {
+    background-color: #FAFBFF; /* لون رمادي فاتح جداً للصفوف الزوجية */
+}
+tbody tr:hover {
+    background-color: #F0F4FF; /* لون عند المرور بالماوس */
+}
+
+tr:last-child td { border-bottom: none; }
+
+/* Inputs inside tables */
 .calc-input {
-    width: 80px; text-align: center; border: 1px solid #D1D9E6; 
-    border-radius: 10px; padding: 8px; font-weight: 700; color: var(--primary-dark);
-    background: #fff;
+    width: 90px; text-align: center; border: 1px solid #D1D9E6; 
+    border-radius: 8px; padding: 8px; font-weight: 700; color: var(--primary-dark);
+    background: #fff; font-size: 1rem;
+    transition: 0.2s;
 }
-.calc-input:focus { border-color: var(--accent-gold); outline: none; }
-.calc-readonly { background: #E9EDF7; border: none; color: var(--primary-dark); }
+.calc-input:focus { 
+    border-color: var(--accent-gold); 
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    outline: none; 
+}
+.calc-readonly { background: #E9EDF7; border: none; color: var(--primary-dark); pointer-events: none; }
 .rate-input { width: 60px; }
 
 /* Badges */
-.badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; }
+.badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; white-space: nowrap; }
 .badge-ok { background: rgba(5, 205, 153, 0.15); color: #05CD99; }
 .badge-err { background: rgba(238, 93, 80, 0.15); color: #EE5D50; }
 .badge-warn { background: rgba(255, 181, 71, 0.15); color: #FFB547; }
 .badge-gold { background: rgba(212, 175, 55, 0.15); color: #D4AF37; }
 .badge-season { background: rgba(5, 205, 153, 0.1); color: #05CD99; border: 1px solid rgba(5, 205, 153, 0.2); }
 .badge-rukood { background: #eee; color: #888; border: 1px solid #ddd; }
+
+/* === Next Season Highlight Effect === */
+.highlight-next-season {
+    border: 2px solid var(--accent-gold) !important;
+    background: #FFFDF5 !important;
+    position: relative;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    animation: pulse-gold 2s infinite;
+    z-index: 1;
+}
+.highlight-next-season td {
+    border-top: 1px solid var(--accent-gold);
+    border-bottom: 1px solid var(--accent-gold);
+    color: #9A7D0A; /* لون ذهبي داكن للنص */
+}
+.highlight-next-season td:first-child { border-left: 2px solid var(--accent-gold); }
+.highlight-next-season td:last-child { border-right: 2px solid var(--accent-gold); }
+
+@keyframes pulse-gold {
+    0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
 
 /* Sign-off */
 .sign-off {
@@ -151,6 +213,54 @@ tr td:last-child { border-radius: 10px 0 0 10px; }
 #errorArea {
   background: #FFF2F2; color: #EE5D50; padding: 15px; border-radius: 15px; 
   margin-bottom: 20px; display: none; border: 1px solid #FFD6D6;
+}
+
+/* === PRINT STYLES (A4 Landscape) === */
+@media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: #fff; padding: 0; margin: 0; }
+    
+    /* إخفاء كل شيء */
+    #switchBar, .upload-grid, #errorArea, .btn-action, .btn-download, 
+    h1, .subtitle, h2, 
+    .card { 
+        display: none !important; 
+        box-shadow: none !important; 
+        border: none !important; 
+        margin: 0 !important; padding: 0 !important;
+    }
+
+    /* إظهار فقط جدول المقارنة والتوقيع */
+    #output { display: block !important; }
+    /* نخفي جدول بوكينج ونزيل، ونظهر فقط المقارنة */
+    #output .card:nth-child(1), #output .card:nth-child(2) { display: none !important; }
+    
+    /* تنسيق كارت المقارنة للطباعة */
+    #output .card:nth-child(3) {
+        display: block !important;
+        position: absolute; top: 0; left: 0; width: 100%;
+    }
+    
+    /* إعادة إظهار العنوان للطباعة */
+    #output .card:nth-child(3) h2 { 
+        display: block !important; 
+        text-align: center; 
+        font-size: 24px; 
+        margin-bottom: 20px !important;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+    }
+
+    /* تنسيق الجدول للطباعة */
+    table { border: 1px solid #000 !important; width: 100%; }
+    th { background: #eee !important; color: #000 !important; border: 1px solid #000; }
+    td { border: 1px solid #000 !important; color: #000 !important; }
+    
+    /* التوقيع في الطباعة */
+    .sign-off { 
+        display: block !important; position: fixed; bottom: 0; 
+        border: none; color: #000; font-size: 10px;
+    }
 }
 </style>
 </head>
@@ -196,11 +306,12 @@ tr td:last-child { border-radius: 10px 0 0 10px; }
         <h2>2. تحليل Nazeel</h2>
         <div id="tableNazeel"></div>
       </div>
-      <div class="card">
-        <h2>3. المقارنة والتوصية</h2>
+      <div class="card" id="comparisonCard">
+        <h2>📊 التقرير النهائي (المقارنة والتوصية)</h2>
         <div id="tableCompare"></div>
         <div style="text-align:center; margin-top:20px;">
            <button class="btn-download" onclick="exportComparisonToExcel()">📥 تصدير Excel</button>
+           <button class="btn-download" onclick="window.print()" style="background:var(--primary-dark); color:#fff; border:none;">🖨️ طباعة التقرير (A4)</button>
         </div>
       </div>
     </div>
@@ -220,7 +331,7 @@ tr td:last-child { border-radius: 10px 0 0 10px; }
         </div>
 
         <table>
-            <thead><tr><th>الوحدة</th><th>السعر</th><th>الزيادة %</th><th>بوكينج</th></tr></thead>
+            <thead><tr><th>الوحدة</th><th>السعر الأساسي</th><th>الزيادة %</th><th>سعر بوكينج</th></tr></thead>
             <tbody>
                 <tr><td>تؤم وكينج</td>
                     <td><input type="number" id="c_p1" value="230" oninput="calc('c',1)" class="calc-input"></td>
@@ -262,7 +373,7 @@ tr td:last-child { border-radius: 10px 0 0 10px; }
         </div>
 
         <table>
-            <thead><tr><th>الوحدة</th><th>السعر</th><th>الزيادة %</th><th>بوكينج</th></tr></thead>
+            <thead><tr><th>الوحدة</th><th>السعر الأساسي</th><th>الزيادة %</th><th>سعر بوكينج</th></tr></thead>
             <tbody>
                 <tr><td>غرفة خلفية تؤم</td>
                     <td><input type="number" id="a_p1" value="190" oninput="calc('a',1)" class="calc-input"></td>
@@ -319,7 +430,7 @@ tr td:last-child { border-radius: 10px 0 0 10px; }
   <div id="view-seasons" class="section-view">
     <div class="card">
       <h1>المواسم والإجازات</h1>
-      <div class="subtitle">التقويم الدراسي 1446–1449 هـ</div>
+      <div class="subtitle">يتم تمييز الموسم القادم (خلال 60 يوماً) بإطار ذهبي</div>
       <table class="seasons-table">
         <thead>
           <tr>
@@ -544,8 +655,23 @@ function exportComparisonToExcel() {
 }
 
 /* =========================================================
-   CALCULATOR LOGIC (RESTORED)
+   CALCULATOR LOGIC (Auto-Clear & Restored)
    ========================================================= */
+// (1) Auto-Clear Logic
+function enhanceInputs() {
+    document.querySelectorAll("input[type='number']").forEach(inp => {
+        if(!inp.readOnly){
+            inp.addEventListener("focus", function() {
+                this.dataset.oldValue = this.value;
+                this.value = "";
+            });
+            inp.addEventListener("blur", function() {
+                if(this.value.trim() === "") this.value = this.dataset.oldValue || "0";
+            });
+        }
+    });
+}
+
 function calc(branch,i){
     let p=parseFloat(document.getElementById(branch+'_p'+i).value)||0;
     let r=parseFloat(document.getElementById(branch+'_r'+i).value)||0;
@@ -574,15 +700,9 @@ function downloadExcel(branch){
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), "Sheet");
     XLSX.writeFile(wb, branch==='c'?'Corniche.xlsx':'Andalus.xlsx');
 }
-// Initialize Calc
-window.onload = function(){
-    for(let i=1;i<=5;i++) calc('c',i);
-    for(let i=1;i<=9;i++) calc('a',i);
-    buildSeasonsTable(); // Initialize Seasons
-};
 
 /* =========================================================
-   SEASONS LOGIC (RESTORED FULL LIST)
+   SEASONS LOGIC (Smart Highlight)
    ========================================================= */
 const seasonEvents = [
   { greg: "26/06/2025", hijri: "01/01/1447", title: "بداية إجازة نهاية العام الدراسي للطلاب 1447", type: "موسم" },
@@ -611,20 +731,36 @@ function parseDMY(str) {
 }
 
 function buildSeasonsTable() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
   const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg));
   const tbody = document.getElementById('seasonsBody');
   if (!tbody) return;
   tbody.innerHTML = "";
+  
+  let foundNext = false; // لتمييز أول موسم قادم فقط
+
   for (const ev of sorted) {
-    const tr = document.createElement('tr');
+    const evDate = parseDMY(ev.greg);
+    const diffTime = evDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
+    // الشروط: تاريخ مستقبلي + خلال 60 يوم + لم نجد واحداً قبله
+    const isNext = !foundNext && diffDays >= 0 && diffDays <= 60;
+    
+    const tr = document.createElement('tr');
+    if (isNext) {
+        tr.className = 'highlight-next-season';
+        foundNext = true; // لضمان تمييز واحد فقط
+    }
+
     const tdType = document.createElement('td');
     const badge = document.createElement('span');
     badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood');
-    badge.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام';
+    badge.textContent = ev.type === 'موسم' ? 'موسم' : 'دراسة';
     tdType.appendChild(badge);
 
-    const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title;
+    const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title + (isNext ? " (قريباً 🔥)" : "");
     const tdHijri = document.createElement('td'); tdHijri.textContent = ev.hijri;
     const tdGreg = document.createElement('td'); tdGreg.textContent = ev.greg;
 
@@ -632,6 +768,14 @@ function buildSeasonsTable() {
     tbody.appendChild(tr);
   }
 }
+
+// Initialize
+window.onload = function(){
+    for(let i=1;i<=5;i++) calc('c',i);
+    for(let i=1;i<=9;i++) calc('a',i);
+    enhanceInputs(); // تفعيل المسح التلقائي
+    buildSeasonsTable(); // تفعيل جدول المواسم الذكي
+};
 </script>
 
 </body>
