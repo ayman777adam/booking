@@ -2,11 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Unified</title>
+<title>منظومة التشغيل – المقارنات + أسعار بوكينج + المواسم</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
+* {
+  box-sizing: border-box;
+}
 body {
   margin:0;
+  font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background:#020617;
+  color:#e5e7eb;
 }
 #switchBar {
   display:flex;
@@ -20,28 +26,146 @@ body {
   z-index:9999;
 }
 .switchBtn {
-  padding:8px 16px;
+  padding:8px 18px;
   border-radius:999px;
   border:1px solid #1d4ed8;
   background:#1d4ed8;
-  color:white;
+  color:#e5e7eb;
   cursor:pointer;
+  font-size:15px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease, color 0.15s ease;
+}
+.switchBtn span.icon {
+  font-size:16px;
 }
 .switchBtn.inactive {
   background:#020617;
-  color:#94a3b8;
+  color:#9ca3af;
   border-color:#1f2937;
+}
+.switchBtn:hover {
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(37,99,235,0.45);
 }
 .frame-wrapper {
   width:100%;
-  height:calc(100vh - 50px);
+  height:calc(100vh - 60px);
 }
 iframe {
   width:100%;
   height:100%;
   border:none;
 }
-/* signature */
+/* موسم/ركود صفحة المواسم */
+#frameSeasons {
+  width:100%;
+  height:100%;
+  padding:20px 12px 80px;
+  overflow:auto;
+  background:radial-gradient(circle at top left,#0f172a 0,#020617 55%,#000 100%);
+}
+.seasons-shell {
+  max-width:1100px;
+  margin:0 auto;
+  animation: fadeInUp 0.6s ease-out;
+}
+.seasons-title {
+  font-size:24px;
+  margin-bottom:8px;
+  color:#38bdf8;
+  text-align:center;
+}
+.seasons-sub {
+  font-size:13px;
+  color:#9ca3af;
+  text-align:center;
+  margin-bottom:18px;
+}
+.seasons-table {
+  width:100%;
+  border-collapse:collapse;
+  background:#020617;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(15,23,42,0.8);
+  font-size:14px;
+}
+.seasons-table thead {
+  background:#0f172a;
+}
+.seasons-table th,
+.seasons-table td {
+  padding:10px 8px;
+  border-bottom:1px solid #111827;
+  text-align:center;
+  white-space:nowrap;
+}
+.seasons-table th {
+  color:#a5b4fc;
+  font-weight:600;
+  font-size:13px;
+}
+.seasons-table tbody tr:nth-child(even) {
+  background:#020617;
+}
+.seasons-table tbody tr:nth-child(odd) {
+  background:#020814;
+}
+.seasons-table tbody tr:hover {
+  background:#0b1220;
+}
+.seasons-table td.event-title {
+  text-align:right;
+  direction:rtl;
+  max-width:260px;
+  white-space:normal;
+}
+.badge {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+}
+.badge-season {
+  background:rgba(22,163,74,0.12);
+  color:#4ade80;
+  border:1px solid rgba(34,197,94,0.7);
+}
+.badge-rukood {
+  background:rgba(148,163,184,0.15);
+  color:#cbd5f5;
+  border:1px solid rgba(148,163,184,0.8);
+}
+.badge-season .dot,
+.badge-rukood .dot {
+  width:8px;
+  height:8px;
+  border-radius:999px;
+}
+.badge-season .dot {
+  background:#22c55e;
+}
+.badge-rukood .dot {
+  background:#e5e7eb;
+}
+.seasons-footer-note {
+  margin-top:10px;
+  font-size:11px;
+  color:#6b7280;
+  text-align:center;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* التوقيع العام */
 .sign-off {
   text-align: center;
   padding: 0;
@@ -77,21 +201,197 @@ iframe {
 </style>
 <script>
 function showFrame(which){
-  const c=document.getElementById('frameCompare');
-  const b=document.getElementById('frameBooking');
-  const bc=document.getElementById('btnCompare');
-  const bb=document.getElementById('btnBooking');
-  if(which==='compare'){ c.style.display='block'; b.style.display='none'; bc.classList.remove('inactive'); bb.classList.add('inactive'); }
-  else{ c.style.display='none'; b.style.display='block'; bc.classList.add('inactive'); bb.classList.remove('inactive'); }
+  const fCompare = document.getElementById('frameCompare');
+  const fBooking = document.getElementById('frameBooking');
+  const fSeasons = document.getElementById('frameSeasons');
+  const bCompare = document.getElementById('btnCompare');
+  const bBooking = document.getElementById('btnBooking');
+  const bSeasons = document.getElementById('btnSeasons');
+
+  fCompare.style.display = (which === 'compare') ? 'block' : 'none';
+  fBooking.style.display = (which === 'booking') ? 'block' : 'none';
+  fSeasons.style.display = (which === 'seasons') ? 'block' : 'none';
+
+  bCompare.classList.toggle('inactive', which !== 'compare');
+  bBooking.classList.toggle('inactive', which !== 'booking');
+  bSeasons.classList.toggle('inactive', which !== 'seasons');
 }
-window.onload=()=>showFrame('compare');
+
+// بيانات المواسم / الإجازات / العودة
+const seasonEvents = [
+  {
+    greg: "26/06/2025",
+    hijri: "01/01/1447",
+    title: "بداية إجازة نهاية العام الدراسي للطلاب 1447",
+    type: "موسم"
+  },
+  {
+    greg: "24/08/2025",
+    hijri: "01/03/1447",
+    title: "بداية العام الدراسي 2025-2026 (1447-1448)",
+    type: "ركود"
+  },
+  {
+    greg: "23/09/2025",
+    hijri: "01/04/1447",
+    title: "إجازة اليوم الوطني 2025",
+    type: "موسم"
+  },
+  {
+    greg: "21/11/2025",
+    hijri: "30/05/1447",
+    title: "بداية إجازة الخريف 2025",
+    type: "موسم"
+  },
+  {
+    greg: "29/11/2025",
+    hijri: "08/06/1447",
+    title: "نهاية إجازة الخريف 2025",
+    type: "موسم"
+  },
+  {
+    greg: "11/12/2025",
+    hijri: "20/06/1447",
+    title: "بداية إجازة إضافية 2025",
+    type: "موسم"
+  },
+  {
+    greg: "14/12/2025",
+    hijri: "23/06/1447",
+    title: "نهاية الإجازة الإضافية 2025",
+    type: "موسم"
+  },
+  {
+    greg: "09/01/2026",
+    hijri: "20/07/1447",
+    title: "بداية إجازة منتصف العام الدراسي 2025-2026",
+    type: "موسم"
+  },
+  {
+    greg: "17/01/2026",
+    hijri: "28/07/1447",
+    title: "نهاية إجازة منتصف العام الدراسي 2025-2026",
+    type: "موسم"
+  },
+  {
+    greg: "22/02/2026",
+    hijri: "05/09/1447",
+    title: "إجازة يوم التأسيس 2026",
+    type: "موسم"
+  },
+  {
+    greg: "06/03/2026",
+    hijri: "17/09/1447",
+    title: "بداية إجازة عيد الفطر 2026",
+    type: "موسم"
+  },
+  {
+    greg: "28/03/2026",
+    hijri: "09/10/1447",
+    title: "نهاية إجازة عيد الفطر 2026",
+    type: "موسم"
+  },
+  {
+    greg: "22/05/2026",
+    hijri: "15/12/1447",
+    title: "بداية إجازة عيد الأضحى 2026",
+    type: "موسم"
+  },
+  {
+    greg: "01/06/2026",
+    hijri: "25/12/1447",
+    title: "نهاية إجازة عيد الأضحى 2026",
+    type: "موسم"
+  },
+  {
+    greg: "25/06/2026",
+    hijri: "10/01/1448",
+    title: "بداية إجازة نهاية العام الدراسي 2025-2026",
+    type: "موسم"
+  },
+  {
+    greg: "11/08/2026",
+    hijri: "28/02/1448",
+    title: "عودة المشرفين والإداريين 2026",
+    type: "ركود"
+  },
+  {
+    greg: "16/08/2026",
+    hijri: "03/03/1448",
+    title: "عودة المعلمين 2026",
+    type: "ركود"
+  },
+  {
+    greg: "23/08/2026",
+    hijri: "10/03/1448",
+    title: "بداية العام الدراسي 2026-2027 (1448-1449)",
+    type: "ركود"
+  }
+];
+
+function parseDMY(str) {
+  const parts = str.split("/");
+  const d = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const y = parseInt(parts[2], 10);
+  return new Date(y, m - 1, d);
+}
+
+function buildSeasonsTable() {
+  const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg));
+  const tbody = document.getElementById('seasonsBody');
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  for (const ev of sorted) {
+    const tr = document.createElement('tr');
+
+    const tdType = document.createElement('td');
+    const badge = document.createElement('span');
+    badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood');
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    const label = document.createElement('span');
+    label.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام';
+    badge.appendChild(dot);
+    badge.appendChild(label);
+    tdType.appendChild(badge);
+
+    const tdTitle = document.createElement('td');
+    tdTitle.className = 'event-title';
+    tdTitle.textContent = ev.title;
+
+    const tdHijri = document.createElement('td');
+    tdHijri.textContent = ev.hijri;
+
+    const tdGreg = document.createElement('td');
+    tdGreg.textContent = ev.greg;
+
+    tr.appendChild(tdType);
+    tr.appendChild(tdTitle);
+    tr.appendChild(tdHijri);
+    tr.appendChild(tdGreg);
+    tbody.appendChild(tr);
+  }
+}
+
+window.addEventListener('load', function() {
+  showFrame('compare'); // افتراضي: المقارنات
+  buildSeasonsTable();
+});
 </script>
 </head>
 <body>
 
 <div id="switchBar">
-  <button id="btnCompare" class="switchBtn" onclick="showFrame('compare')">مشروع المقارنات</button>
-  <button id="btnBooking" class="switchBtn inactive" onclick="showFrame('booking')">حاسبة أسعار بوكينج</button>
+  <button id="btnCompare" class="switchBtn" onclick="showFrame('compare')">
+    <span class="icon">📊</span><span>مشروع المقارنات</span>
+  </button>
+  <button id="btnBooking" class="switchBtn inactive" onclick="showFrame('booking')">
+    <span class="icon">💰</span><span>حاسبة أسعار بوكينج</span>
+  </button>
+  <button id="btnSeasons" class="switchBtn inactive" onclick="showFrame('seasons')">
+    <span class="icon">🎉</span><span>المواسم والاعياد</span>
+  </button>
 </div>
 
 <div class="frame-wrapper">
@@ -1631,15 +1931,37 @@ window.onload = init;
 &lt;/body&gt;
 &lt;/html&gt;
 " style="display:none"></iframe>
+  <div id="frameSeasons" style="display:none;">
+    <div class="seasons-shell">
+      <div class="seasons-title">📅 المواسم والإجازات الدراسية</div>
+      <div class="seasons-sub">
+        الفترة من نهاية عام 1446–1447 هـ حتى بداية العام الدراسي 1448–1449 هـ<br/>
+        (مرتبة حسب التاريخ الميلادي مع عرض التاريخ الهجري للمراجعة)
+      </div>
+      <table class="seasons-table">
+        <thead>
+          <tr>
+            <th>التصنيف</th>
+            <th>الحدث</th>
+            <th>التاريخ الهجري</th>
+            <th>التاريخ الميلادي</th>
+          </tr>
+        </thead>
+        <tbody id="seasonsBody"></tbody>
+      </table>
+      <div class="seasons-footer-note">
+        مصدر التواريخ: التقويم الدراسي الرسمي + تقويم السعودية (saudicalendars.com)،
+        مع الاعتماد على التاريخ الميلادي كمصدر أساسي ومراجعة الهجري للتأكد من عدم التعارض.
+      </div>
+    </div>
+  </div>
 </div>
-
 
 <div class="sign-off fixed-bottom">
   <span class="sign-off-item">تم التنفيذ بواسطة</span>
   <span class="sign-off-item sign-off-name">| <b>أيمن أبو ورده</b></span>
   <span class="sign-off-item sign-off-email">| 77aayy@gmail.com</span>
 </div>
-
 
 </body>
 </html>
