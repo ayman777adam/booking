@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>المنظومة الموحدة – Elite Final Update</title>
+<title>المنظومة الموحدة – Elite Final v9</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="system-signature" content="AYMAN-SAFE-PROTECTED-2025"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -192,9 +192,6 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
     
     .prof-footer { margin-top: 50px; display: flex; justify-content: space-between; padding-top: 20px; border-top: 3px solid #000; }
     .prof-footer div { width: 45%; text-align: center; font-weight: 900; font-size: 18px; }
-    
-    /* Hide default simple print style */
-    .simple-print { display: none; }
 }
 
 /* iOS Toast & Modal */
@@ -611,13 +608,12 @@ const seasonEvents = [
 function parseDMY(str) { const parts = str.split("/"); return new Date(parseInt(parts[2],10), parseInt(parts[1],10)-1, parseInt(parts[0],10)); }
 function buildSeasonsTable() { const today = new Date(); today.setHours(0,0,0,0); const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg)); const tbody = document.getElementById('seasonsBody'); if (!tbody) return; tbody.innerHTML = ""; let foundNext = false; for (const ev of sorted) { const evDate = parseDMY(ev.greg); const diffTime = evDate - today; const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); const isNext = !foundNext && diffDays >= 0 && diffDays <= 60; const tr = document.createElement('tr'); if (isNext) { tr.className = 'highlight-next-season'; foundNext = true; } const tdType = document.createElement('td'); const badge = document.createElement('span'); badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood'); badge.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام'; tdType.appendChild(badge); const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title + (isNext ? " (قريباً 🔥)" : ""); const tdHijri = document.createElement('td'); tdHijri.textContent = ev.hijri; const tdGreg = document.createElement('td'); tdGreg.textContent = ev.greg; tr.appendChild(tdType); tr.appendChild(tdTitle); tr.appendChild(tdHijri); tr.appendChild(tdGreg); tbody.appendChild(tr); } }
 
-/* CASHBOX LOGIC V8 - Final Mods */
+/* CASHBOX LOGIC V9 - Final */
 let allBoxData = [];
 const BOX_KEY = 'cashboxData';
 let undoTimer = null;
 let currentPage = 1;
 const ITEMS_PER_PAGE = 5;
-let lastZeroToastTime = 0;
 let lastVarianceToastTime = 0;
 
 function loadBoxData() {
@@ -629,7 +625,6 @@ function loadBoxData() {
 }
 
 function createNewRowObj() {
-    // MOD 1: Employee name empty (was auto-filled)
     allBoxData.push({ id: allBoxData.length + 1, employee: "", reserve: 0, exp: 0, time: "--:--", cash: 0, tempExp: 0, network: 0, transfer: 0, prog: 0, note: "", closed: false });
     saveData();
 }
@@ -651,7 +646,6 @@ function renderBoxTable() {
         const varColor = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
 
         const ev = `contenteditable onfocus="handleCellFocus(this)" onblur="handleCellBlur(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
-        // MOD 1: No numbers allowed in name
         const empEv = `contenteditable onfocus="if(this.innerText==='اكتب اسمك')this.innerText='';" onblur="updateRow(${row.id}, this)" oninput="validateNameInput(this); updateRow(${row.id}, this)"`;
 
         const employeeDisp = row.employee && row.employee !== "" ? row.employee : (row.closed ? "" : "اكتب اسمك");
@@ -728,12 +722,10 @@ function handleCellBlur(id, el) {
     updateRow(id, el);
 }
 
-// MOD 1: Helper to block numbers in name
 function validateNameInput(el) {
     const val = el.innerText;
     if(/[0-9]/.test(val)) {
         el.innerText = val.replace(/[0-9]/g, '');
-        // Move cursor to end
         const range = document.createRange();
         const sel = window.getSelection();
         range.selectNodeContents(el);
@@ -749,7 +741,7 @@ function updateRow(id, el) {
     if(field === 'employee') {
         row.employee = el.innerText.trim() === 'اكتب اسمك' ? '' : el.innerText.trim();
         if (row.employee) {
-            localStorage.setItem('cashboxEmployee', row.employee); // Save only to cache, not applied to new rows per request
+            localStorage.setItem('cashboxEmployee', row.employee); 
             boxGreet();
         }
         saveData();
@@ -761,19 +753,16 @@ function updateRow(id, el) {
     const v = (parseFloat(row.cash)||0) + (parseFloat(row.network)||0) + (parseFloat(row.transfer)||0) + (parseFloat(row.exp)||0) + (parseFloat(row.tempExp)||0) + (parseFloat(row.reserve)||0) - (parseFloat(row.prog)||0);
     el.parentElement.cells[10].innerText = formatNumber(v); 
     el.parentElement.cells[10].style.color = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
-    
-    // MOD 4: Specific Variance Notifications
     notifyVariance(v);
 }
 
-// MOD 4: Variance Notifications (+, -, 0)
 function notifyVariance(v) {
     const now = Date.now();
-    if (now - lastVarianceToastTime < 3500) return; // Throttle
+    if (now - lastVarianceToastTime < 3500) return; 
     lastVarianceToastTime = now;
 
     if (v === 0) {
-        showToast(`🎉 أداء ممتاز (متطابق)! الانحراف صفر.`, 'success');
+        showToast(`🎉 ممتاز! الانحراف صفر.`, 'success');
     } else if (v > 0) {
         showToast(`⚠️ تنبيه: يوجد زيادة (فائض) في الصندوق بمقدار ${formatNumber(v)}`, 'info');
     } else {
@@ -812,7 +801,6 @@ function closeShift() {
         return; 
     }
 
-    // MOD 2: If notes empty, add input to modal
     let currentNote = document.getElementById('txtShiftNotes').value;
     const isNoteEmpty = !currentNote || currentNote.trim() === "";
 
@@ -836,7 +824,6 @@ function closeShift() {
     okBtn.className = 'btn-modal btn-modal-primary';
     okBtn.innerText = 'تأكيد';
     okBtn.onclick = function() {
-        // Save note if entered in modal
         if(isNoteEmpty) {
             const modalNote = document.getElementById('modalNoteInput').value;
             row.note = modalNote;
@@ -844,7 +831,6 @@ function closeShift() {
             row.note = currentNote;
         }
         document.getElementById('txtShiftNotes').value = "";
-        
         hideModal();
         performClose(row);
     };
@@ -887,6 +873,7 @@ function undoClose(id) {
     renderBoxTable();
     showToast("تم التراجع عن إغلاق التقفيلة.", "info");
 }
+
 function saveData() { localStorage.setItem(BOX_KEY, JSON.stringify(allBoxData)); }
 
 let calcHistory = [];
@@ -905,26 +892,65 @@ function validateCalcInput(el) {
 
 function cApp(v) {
     const disp = document.getElementById('cDisp');
-    if(v==='C') { disp.value = ""; calcHistory = []; document.getElementById('calcHistory').innerHTML = ""; } 
+    if(v==='C') { 
+        disp.value = ""; 
+        calcHistory = []; 
+        document.getElementById('calcHistory').innerHTML = ""; 
+    } 
     else if(v==='=') { 
         try { 
             const safeExp = disp.value.replace(/[^0-9\+\-\*\/\.\(\)]/g, '');
             if(!safeExp) return;
             const res = eval(safeExp); 
-            if (!isNaN(res)) { addCalcHistory(disp.value, formatNumber(res)); disp.value = parseFloat(res.toFixed(2)); } else { disp.value = "Error"; }
+            if (!isNaN(res)) { 
+                addCalcHistory(disp.value, formatNumber(res)); 
+                disp.value = parseFloat(res.toFixed(2)); 
+            } else { 
+                disp.value = "Error"; 
+            }
         } catch { disp.value = "Error"; } 
-    } else { disp.value += v; } 
+    } else { 
+        disp.value += v; 
+    } 
 }
 
+/* =========================================
+   تعديل وظيفة ترحيل الحاسبة (يحل المعادلة ثم يصفر)
+   ========================================= */
 function transferCalcResult() {
     const disp = document.getElementById('cDisp');
-    const val = disp.value;
-    if(!val || isNaN(parseFloat(val))) { showToast("لا توجد قيمة صالحة للترحيل", "error"); return; }
+    let val = disp.value;
+
+    // 1. حل العملية الحسابية قبل الترحيل
+    try {
+        const safeExp = val.toString().replace(/[^0-9\+\-\*\/\.\(\)]/g, '');
+        if (!safeExp) {
+             showToast("⚠️ لا توجد قيمة للترحيل", "error");
+             return;
+        }
+        const calculated = eval(safeExp);
+        if (isNaN(calculated) || !isFinite(calculated)) throw new Error("Invalid");
+        val = parseFloat(calculated.toFixed(2)).toString(); 
+    } catch (e) {
+        showToast("⚠️ تأكد من العملية الحسابية أولاً", "error");
+        return;
+    }
+
+    if(!val || isNaN(parseFloat(val))) { 
+        showToast("لا توجد قيمة صالحة للترحيل", "error"); 
+        return; 
+    }
+
     const activeRowIndex = allBoxData.length - 1;
     const activeRow = allBoxData[activeRowIndex];
-    if (activeRow.closed) { showToast("لا يوجد صندوق مفتوح للترحيل", "error"); return; }
+    if (activeRow.closed) { 
+        showToast("لا يوجد صندوق مفتوح للترحيل", "error"); 
+        return; 
+    }
+
     const resultVal = formatNumber(val);
-    showChoiceModal('ترحيل النتيجة', `اختر الخانة التي تريد ترحيل المبلغ (${resultVal}) إليها:`, [
+
+    showChoiceModal('ترحيل النتيجة', `اختر الخانة التي تريد ترحيل المبلغ النهائي (${resultVal}) إليها:`, [
         { label: '💳 شبكة', action: () => updateAndSave(activeRow, 'network', resultVal) },
         { label: '🏦 تحويل', action: () => updateAndSave(activeRow, 'transfer', resultVal) },
         { label: '📉 مصروف رسمي', action: () => updateAndSave(activeRow, 'exp', resultVal) },
@@ -935,9 +961,11 @@ function transferCalcResult() {
 
 function updateAndSave(row, field, val) {
     row[field] = val;
+    if(field === 'cash') row.isCalcCash = true;
     saveData();
     renderBoxTable();
-    showToast(`تم ترحيل ${val} إلى ${field}`, 'success');
+    cApp('C'); // تصفير الحاسبة بعد الترحيل
+    showToast(`تم ترحيل ${val} إلى ${field} وتصفير الحاسبة`, 'success');
 }
 
 function validateCashInput(el) {
@@ -988,6 +1016,7 @@ function exportBoxExcel() {
     XLSX.utils.book_append_sheet(wb, ws, "Shifts");
     XLSX.writeFile(wb, "Cashbox_Shifts.xlsx"); 
 }
+
 function boxGreet(){ 
     const h = new Date().getHours(); 
     const base = h < 12 ? "صباح الخير 🌞" : "مساء الخير 🌙";
@@ -1010,28 +1039,15 @@ document.addEventListener('keydown', function(e){
     else if (key === 'Backspace') { const d = document.getElementById('cDisp'); d.value = d.value.slice(0,-1); e.preventDefault(); }
 });
 
-// MOD 3: Professional Print for Last Shift
+// PRINT FUNCTIONS
 function printLastShift() {
     const closedRows = allBoxData.filter(r => r.closed);
     if(closedRows.length === 0) { showToast("لا توجد تقفيلات مغلقة للطباعة.", "info"); return; }
     const r = closedRows[closedRows.length-1];
-    
-    // Calc values
-    const cash = parseFloat(r.cash)||0;
-    const reserve = parseFloat(r.reserve)||0;
-    const totalCash = cash + reserve;
-    
-    const net = parseFloat(r.network)||0;
-    const transfer = parseFloat(r.transfer)||0;
-    const totalBank = net + transfer;
-    
-    const exp = parseFloat(r.exp)||0;
-    const tempExp = parseFloat(r.tempExp)||0;
-    const totalExp = exp + tempExp;
-    
-    const prog = parseFloat(r.prog)||0;
-    const actualTotal = totalCash + totalBank + totalExp;
-    const variance = actualTotal - prog;
+    const cash = parseFloat(r.cash)||0, reserve = parseFloat(r.reserve)||0, totalCash = cash + reserve;
+    const net = parseFloat(r.network)||0, transfer = parseFloat(r.transfer)||0, totalBank = net + transfer;
+    const exp = parseFloat(r.exp)||0, tempExp = parseFloat(r.tempExp)||0, totalExp = exp + tempExp;
+    const prog = parseFloat(r.prog)||0, actualTotal = totalCash + totalBank + totalExp, variance = actualTotal - prog;
 
     const html = `
     <div class="prof-report-container">
@@ -1040,76 +1056,25 @@ function printLastShift() {
             <p>الموظف المسؤول: ${r.employee}</p>
             <p>تاريخ ووقت الإغلاق: ${r.time}</p>
         </div>
-
         <table class="prof-table">
-            <thead>
-                <tr>
-                    <th colspan="2">النقدية (Cash)</th>
-                    <th colspan="2">البنك (Bank)</th>
-                </tr>
-            </thead>
+            <thead><tr><th colspan="2">النقدية (Cash)</th><th colspan="2">البنك (Bank)</th></tr></thead>
             <tbody>
-                <tr>
-                    <td>الكاش في الدرج</td>
-                    <td>${formatNumber(cash)}</td>
-                    <td>شبكة</td>
-                    <td>${formatNumber(net)}</td>
-                </tr>
-                <tr>
-                    <td>الاحتياطي</td>
-                    <td>${formatNumber(reserve)}</td>
-                    <td>تحويل بنكي</td>
-                    <td>${formatNumber(transfer)}</td>
-                </tr>
-                <tr style="background:#f9f9f9">
-                    <td>إجمالي النقدية</td>
-                    <td>${formatNumber(totalCash)}</td>
-                    <td>إجمالي البنك</td>
-                    <td>${formatNumber(totalBank)}</td>
-                </tr>
+                <tr><td>الكاش في الدرج</td><td>${formatNumber(cash)}</td><td>شبكة</td><td>${formatNumber(net)}</td></tr>
+                <tr><td>الاحتياطي</td><td>${formatNumber(reserve)}</td><td>تحويل بنكي</td><td>${formatNumber(transfer)}</td></tr>
+                <tr style="background:#f9f9f9"><td>إجمالي النقدية</td><td>${formatNumber(totalCash)}</td><td>إجمالي البنك</td><td>${formatNumber(totalBank)}</td></tr>
             </tbody>
         </table>
-
         <table class="prof-table">
-            <thead>
-                <tr>
-                    <th colspan="2">المصروفات (Expenses)</th>
-                    <th colspan="2">المطابقة (Reconciliation)</th>
-                </tr>
-            </thead>
+            <thead><tr><th colspan="2">المصروفات (Expenses)</th><th colspan="2">المطابقة (Reconciliation)</th></tr></thead>
             <tbody>
-                <tr>
-                    <td>مصروف رسمي</td>
-                    <td>${formatNumber(exp)}</td>
-                    <td>إيراد البرنامج</td>
-                    <td>${formatNumber(prog)}</td>
-                </tr>
-                <tr>
-                    <td>مصروف مؤقت</td>
-                    <td>${formatNumber(tempExp)}</td>
-                    <td>الإجمالي الفعلي المحصل</td>
-                    <td>${formatNumber(actualTotal)}</td>
-                </tr>
-                <tr style="background:${variance === 0 ? '#e6fffa' : '#fff5f5'}">
-                    <td>إجمالي المصروفات</td>
-                    <td>${formatNumber(totalExp)}</td>
-                    <td>العجز / الزيادة</td>
-                    <td>${formatNumber(variance)}</td>
-                </tr>
+                <tr><td>مصروف رسمي</td><td>${formatNumber(exp)}</td><td>إيراد البرنامج</td><td>${formatNumber(prog)}</td></tr>
+                <tr><td>مصروف مؤقت</td><td>${formatNumber(tempExp)}</td><td>الإجمالي الفعلي المحصل</td><td>${formatNumber(actualTotal)}</td></tr>
+                <tr style="background:${variance === 0 ? '#e6fffa' : '#fff5f5'}"><td>إجمالي المصروفات</td><td>${formatNumber(totalExp)}</td><td>العجز / الزيادة</td><td>${formatNumber(variance)}</td></tr>
             </tbody>
         </table>
-
-        <div class="prof-box">
-            <h3>📝 الملاحظات:</h3>
-            <div style="min-height:60px; font-size:14px;">${r.note || "لا توجد ملاحظات."}</div>
-        </div>
-
-        <div class="prof-footer">
-            <div>توقيع الموظف<br><br>.........................</div>
-                   </div>
-    </div>
-    `;
-    
+        <div class="prof-box"><h3>📝 الملاحظات:</h3><div style="min-height:60px; font-size:14px;">${r.note || "لا توجد ملاحظات."}</div></div>
+        <div class="prof-footer"><div>توقيع الموظف<br><br>.........................</div><div>توقيع المحاسب / المدير<br><br>.........................</div></div>
+    </div>`;
     document.getElementById('printArea').innerHTML = html;
     window.print();
 }
@@ -1154,5 +1119,3 @@ window.onload = function(){
     enhanceInputs(); buildSeasonsTable(); boxGreet(); loadBoxData(); 
 };
 </script>
-</body>
-</html>
