@@ -6,7 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="system-signature" content="AYMAN-SAFE-PROTECTED-2025"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/cpexcel.full.min.js"></script>
 
 <style>
 /* =========================================================
@@ -24,7 +26,7 @@
   --row-alt: #EDF0F5;       
   --radius: 12px;
 
-  /* BOX Theme Vars (Namespaced where possible to avoid conflict) */
+  /* BOX Theme Vars */
   --box-bg: #0f172a; 
   --box-panel: rgba(17,25,40,.85);
   --box-text: #e6edf3;
@@ -141,7 +143,6 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 
 /* =========================================================
    2. CASHBOX (BOX) SPECIFIC STYLES
-   Scoped mostly to #view-cashbox to avoid conflicts
    ========================================================= */
 #view-cashbox {
     background: radial-gradient(1200px 600px at 10% 10%, rgba(0,194,255,.08), transparent 60%),
@@ -154,7 +155,6 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
     border: 1px solid #333;
 }
 
-/* --- Login Overlay (Scoped to Tab) --- */
 #box-login {
   position: absolute; inset: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: center;
@@ -172,7 +172,6 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 .login-input { width: 100%; padding: 12px; border-radius: 12px; font-size: 16px; text-align: center; background: rgba(0,0,0,.35); color: #fff; border: 1px solid rgba(255,255,255,0.1); outline: none; margin: 10px 0; }
 .login-input:focus { border-color: var(--box-gold); }
 
-/* --- Box Header --- */
 .box-header {
     background: linear-gradient(180deg, rgba(17,25,40,.95), rgba(17,25,40,.7));
     backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -180,12 +179,10 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
     border-radius: 12px; margin-bottom: 20px;
 }
 
-/* --- Box Metrics --- */
 .box-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .metric-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px; text-align: center; }
 .metric-val { font-size: 24px; font-weight: 900; color: var(--box-gold); }
 
-/* --- Box Table --- */
 .box-table-wrap { overflow-x: auto; background: rgba(255,255,255,0.02); border-radius: 18px; padding: 10px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px; }
 table.box-table { width: 100%; border-collapse: collapse; color: #fff; }
 table.box-table th, table.box-table td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
@@ -194,7 +191,6 @@ table.box-table td[contenteditable] { background: rgba(0,0,0,0.25); border: 1px 
 table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outline: none; }
 .closed-row { background: rgba(255,255,255,0.04); opacity: 0.8; font-style: italic; pointer-events: none; }
 
-/* --- Calculators --- */
 .calc-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
 .calc-box { width: 340px; max-width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 15px; }
 .calc-display { width: 100%; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #444; padding: 10px; font-size: 20px; text-align: right; margin-bottom: 10px; border-radius: 8px; }
@@ -205,28 +201,23 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 .calc-btn.eq { background: var(--box-gold); color: #000; grid-column: span 3; }
 .calc-btn.clr { background: #ef4444; color: #fff; }
 
-/* --- Fix #6: Cash Sum Visibility --- */
 #lblCashSum { color: #000 !important; font-weight: 900; background: #fff; padding: 2px 6px; border-radius: 4px; }
 
-/* --- Box Buttons --- */
 .btn-box { border: none; border-radius: 10px; padding: 8px 16px; font-weight: 800; cursor: pointer; transition: 0.2s; color: #fff; }
 .btn-box-gold { background: linear-gradient(135deg, var(--box-gold), #e9b12d); color: #251c07; }
 .btn-box-blue { background: linear-gradient(135deg, var(--box-blue), #3ea8ff); color: #06202b; }
 .btn-box-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
 .btn-box:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
 
-/* --- Print Styles --- */
 @media print {
     @page { size: A4 landscape; margin: 10mm; }
     body { background: #fff !important; padding: 0; margin: 0; }
     #switchBar, .upload-grid, .mode-toggle-container, .btn-action, .btn-download, #box-login, .calc-container, #notesContainer, .box-header button { display: none !important; }
     .section-view { display: none !important; }
-    /* Only show active content logic handled by JS or user manually */
     #view-compare.active, #view-booking.active, #view-seasons.active, #view-cashbox.active { display: block !important; position: absolute; top: 0; left: 0; width: 100%; }
     .card, #view-cashbox { border: none !important; background: none !important; box-shadow: none !important; color: #000 !important; }
     table { border: 2px solid #000 !important; width: 100%; color: #000 !important; }
     th, td { border: 1px solid #000 !important; color: #000 !important; }
-    /* Cashbox specific print fixes */
     #view-cashbox * { color: #000 !important; }
     .box-table th { background: #ddd !important; }
 }
@@ -468,14 +459,11 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
    1. CORE NAVIGATION LOGIC
    ========================================================= */
 function switchTab(tabId) {
-  // Hide all views
   document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.switchBtn').forEach(el => el.classList.remove('active'));
   
-  // Show selected
   document.getElementById('view-' + tabId).classList.add('active');
   
-  // Activate button
   const btns = document.querySelectorAll('.switchBtn');
   if(tabId==='compare') btns[0].classList.add('active');
   if(tabId==='booking') btns[1].classList.add('active');
@@ -611,7 +599,6 @@ function runAudit() {
   const fB = document.getElementById("fileBooking").files[0];
   const fN = document.getElementById("fileNazeel").files[0];
   
-  // Basic validation (even though parsing logic is updated, files are needed)
   if(!fB || !fN) { errDiv.textContent = "⚠️ الرجاء رفع الملفين أولاً"; errDiv.style.display = "block"; return; }
   
   const rB = new FileReader();
@@ -635,14 +622,96 @@ function runAudit() {
   rB.readAsArrayBuffer(fB);
 }
 
-// Updated Process Booking (Keyword Search)
+// ------------------------------------------------
+//  New Helper: Parse Excel Dates (Number or String)
+// ------------------------------------------------
+function parseExcelDate(value) {
+    if (!value) return null;
+    // 1. If it's a number (Excel Serial Date), convert it
+    if (!isNaN(value) && value > 20000) {
+        const date = new Date((value - (25567 + 2)) * 86400 * 1000);
+        return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
+    }
+    // 2. If it's a string, try to normalize common formats
+    const str = value.toString().trim();
+    // Handle DD/MM/YYYY
+    if (str.match(/^\d{1,2}\/\d{1,2}\/\d{4}/)) {
+        const parts = str.split("/");
+        // Note: Assuming DD/MM/YYYY for Saudi region
+        return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+    }
+    // Handle YYYY-MM-DD
+    if (str.match(/^\d{4}-\d{1,2}-\d{1,2}/)) {
+        return str.split(" ")[0];
+    }
+    return str; // Return as is if unknown
+}
+
+// ------------------------------------------------
+//  Updated Process Nazeel with Intelligent Date Logic
+// ------------------------------------------------
+function processNazeel(rows) {
+  const todayObj = new Date();
+  const todayStr = todayObj.toISOString().split("T")[0]; 
+
+  let colStatus=-1, colRoom=-1, colOut=-1, headerRow=-1;
+
+  // Header Hunt
+  for(let r=0; r<Math.min(rows.length, 60); r++) {
+    const row = rows[r]; 
+    for(let c=0; c<row.length; c++) {
+      const v = (row[c]||"").toString().toLowerCase().trim();
+      if (v.includes("status") || v.includes("الحالة") || v.includes("الوضع")) colStatus = c;
+      if (v.includes("unit") || v.includes("room") || v.includes("الوحدة") || v.includes("apartment") || v.includes("شقة")) colRoom = c;
+      if (v.includes("departure") || v.includes("خروج") || v.includes("checkout") || v.includes("مغادرة")) colOut = c;
+    }
+    if(colStatus !== -1 && colRoom !== -1) { headerRow = r; break; }
+  }
+
+  const stats = {}; 
+  CANONICAL_TYPES.forEach(t => stats[t] = { vac:0, vacList:[], dep:0, depList:[] }); 
+  
+  if(headerRow === -1) throw new Error("لم يتم العثور على رؤوس أعمدة Nazeel.");
+
+  for(let r=headerRow+1; r<rows.length; r++) {
+    const row = rows[r];
+    const statusRaw = (row[colStatus]||"").toString();
+    const status = statusRaw.trim();
+    const room = (row[colRoom]||"").toString().trim();
+    
+    // Parse the date properly using the helper function
+    const rawOutDate = (colOut !== -1 && row[colOut]) ? row[colOut] : "";
+    const parsedOutDate = parseExcelDate(rawOutDate);
+
+    if(!room || room.includes("104") || (room.includes("ذوي") && room.includes("عاقة"))) continue;
+    
+    const type = mapUnit(room); if(!type) continue;
+
+    // 1. Vacant Logic
+    if(["فارغة", "تنظيف", "Vacant", "Dirty"].some(s => status.includes(s))) {
+      stats[type].vac++; 
+      stats[type].vacList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eee; border-radius:4px;">${room}</span>`);
+    }
+
+    // 2. Departure Logic (Dep Today)
+    let isTodayDate = (parsedOutDate === todayStr);
+    let isStatusDep = ["مغادرة", "departure", "خروج", "checkout"].some(s => status.toLowerCase().includes(s));
+    const isOccupied = ["مؤجرة", "occupied", "rent", "in house", "سكن"].some(s => status.toLowerCase().includes(s));
+
+    if (isStatusDep || (isOccupied && isTodayDate)) {
+      stats[type].dep++; 
+      stats[type].depList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eef; border-radius:4px;">${room}</span>`);
+    }
+  }
+  return stats;
+}
+
 function processBooking(rows) {
   const stats = {}; const ARIVED_TERMS = ["تم السداد", "paid", "عربون", "deposit", "بالكامل"]; 
   CANONICAL_TYPES.forEach(t => stats[t] = { expected:0, expList:[], arrived:0, arrList:[], arrDep:0, noShow:0, nsList:[] });
   
   let idxStatus=-1, idxUnit=-1, idxPayStatus=-1, idxPayRaw=-1, idxGuest=-1, headerRow=-1;
   
-  // Find Headers dynamically
   for(let r=0; r<Math.min(rows.length, 25); r++) {
     const row = rows[r]; 
     for(let c=0; c<row.length; c++) {
@@ -664,13 +733,12 @@ function processBooking(rows) {
     const row = rows[r];
     const status = (row[idxStatus]||"").toString().toLowerCase().trim();
     if(status !== "ok") continue; // Filter OK first
-    if(CANCEL_FLAGS.some(f => JSON.stringify(row).toLowerCase().includes(f))) continue; // Double check cancels
+    if(CANCEL_FLAGS.some(f => JSON.stringify(row).toLowerCase().includes(f))) continue; 
 
     const unitStr = (row[idxUnit]||"").toString();
     const payVal = activePayIdx !== -1 ? (row[activePayIdx]||"").toString().trim() : "";
     const guestName = idxGuest !== -1 ? (row[idxGuest]||"").toString() : "Guest";
 
-    // Split Multi-unit bookings "2 x Room"
     const units = [];
     unitStr.split(",").forEach(p => { 
         const m = p.trim().match(/^(\d+)\s*x\s*(.+)$/i); 
@@ -699,66 +767,6 @@ function processBooking(rows) {
           stats[type].expected++; stats[type].expList.push(debugInfo); 
       }
     });
-  }
-  return stats;
-}
-
-// Updated Process Nazeel (Smart Header Detection)
-function processNazeel(rows) {
-  const today = new Date();
-  const todayStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
-  const todayGB = today.toLocaleDateString('en-GB'); // DD/MM/YYYY potentially
-
-  let colStatus=-1, colRoom=-1, colOut=-1, headerRow=-1;
-
-  // Header Hunt (Expanded range & keywords)
-  for(let r=0; r<Math.min(rows.length, 60); r++) { // Fix: Scan 60 rows instead of 25
-    const row = rows[r]; 
-    for(let c=0; c<row.length; c++) {
-      const v = (row[c]||"").toString().toLowerCase().trim();
-      
-      // Fix: Use includes() instead of === for Status to catch "Current Status" etc.
-      if (v.includes("status") || v.includes("الحالة") || v.includes("الوضع")) colStatus = c;
-      
-      // Fix: Add "apartment" and "شقة" for ApartmentsInfo reports
-      if (v.includes("unit") || v.includes("room") || v.includes("الوحدة") || v.includes("apartment") || v.includes("شقة") || v.includes("السكن")) colRoom = c;
-      
-      if (v.includes("departure") || v.includes("خروج") || v.includes("checkout") || v.includes("مغادرة")) colOut = c;
-    }
-    // Break only if we found both mandatory columns
-    if(colStatus !== -1 && colRoom !== -1) { headerRow = r; break; }
-  }
-
-  const stats = {}; CANONICAL_TYPES.forEach(t => stats[t] = { vac:0, vacList:[], dep:0, depList:[] }); 
-  
-  if(headerRow === -1) throw new Error("لم يتم العثور على رؤوس أعمدة Nazeel (Unit/Status/Apartment). تأكد أن الملف يحتوي على عمود للوحدة وعمود للحالة.");
-
-  for(let r=headerRow+1; r<rows.length; r++) {
-    const row = rows[r];
-    const statusRaw = (row[colStatus]||"").toString();
-    const status = statusRaw.trim();
-    const room = (row[colRoom]||"").toString().trim();
-    const outDate = (colOut !== -1 && row[colOut]) ? row[colOut].toString() : "";
-
-    if(!room || room.includes("104") || (room.includes("ذوي") && room.includes("عاقة"))) continue;
-    
-    const type = mapUnit(room); if(!type) continue;
-
-    // Vacant Logic
-    if(["فارغة", "تنظيف", "Vacant", "Dirty"].some(s => status.includes(s))) {
-      stats[type].vac++; 
-      stats[type].vacList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eee; border-radius:4px;">${room}</span>`);
-    }
-
-    // Departure Logic (Is Today?)
-    let isToday = false;
-    if(status.includes("مغادرة") || status.includes("Departure") || status.includes("خروج")) isToday = true;
-    else if(outDate && (outDate.includes(todayStr) || outDate.includes(todayGB))) isToday = true;
-    
-    if((status.includes("مؤجرة") || status.includes("Occupied") || isToday) && isToday) {
-      stats[type].dep++; 
-      stats[type].depList.push(`<span style="font-size:11px; display:inline-block; margin:1px; padding:2px 5px; background:#eef; border-radius:4px;">${room}</span>`);
-    }
   }
   return stats;
 }
@@ -868,29 +876,23 @@ function buildSeasonsTable() {
 
 /* =========================================================
    5. CASHBOX (BOX) LOGIC
-   Merged from BOX.html
    ========================================================= */
 let boxUser = null;
 let boxRows = [];
 const BOX_KEY = 'cashboxData';
 
-// --- Login & Init ---
 function initBox() {
     const usr = document.getElementById('boxUser').value;
     if(!usr || usr.length < 2) return;
     boxUser = usr;
     document.getElementById('lblBoxUser').textContent = boxUser;
     
-    // UI Transitions
     document.getElementById('box-login').style.display = 'none';
     const content = document.getElementById('box-content');
     content.style.filter = 'none';
     content.style.pointerEvents = 'auto';
     
-    // Play sound
     try{ document.getElementById('sndIntro').play(); }catch(e){}
-
-    // Load Data
     loadBoxData();
 }
 
@@ -903,8 +905,6 @@ function logoutBox() {
 }
 
 function newBoxRow() {
-    // Save current active row first if exists?
-    // In this simple version, we just append a row.
     const tr = document.createElement('tr');
     tr.innerHTML = `
         <td>${boxRows.length + 1}</td>
@@ -921,7 +921,6 @@ function deleteBoxRow(btn) {
     if(confirm('هل أنت متأكد من حذف هذا الصف؟')) {
         const tr = btn.closest('tr');
         tr.remove();
-        // Update model logic if strictly bound, here we rely on DOM for simplicity in merged file
         recalcBox();
     }
 }
@@ -932,9 +931,7 @@ function recalcBox() {
     const rows = document.querySelectorAll('#tbodyBox tr');
     rows.forEach(tr => {
         const tds = tr.querySelectorAll('td');
-        if(tr.classList.contains('closed-row')) {
-            // Read only logic if needed for totals
-        } else {
+        if(!tr.classList.contains('closed-row')) {
             const reserve = parseFloat(tds[1].innerText) || 0;
             const exp = parseFloat(tds[2].innerText) || 0;
             const cash = parseFloat(tds[4].innerText) || 0;
@@ -944,10 +941,7 @@ function recalcBox() {
             const transfer = parseFloat(tds[8].innerText) || 0;
             const progRev = parseFloat(tds[9].innerText) || 0;
 
-            const totalFound = cash + visa + master + mada + transfer + exp + reserve;
             const net = visa + master + mada + transfer;
-            
-            // PATCH FIX: Original logic restored for Variance
             const variance = (cash + visa + master + mada + transfer + exp) - (progRev + reserve);
 
             tds[10].innerText = variance.toFixed(2);
@@ -982,7 +976,6 @@ function closeShift() {
 }
 
 function saveBoxData() {
-    // Simple LocalStorage Persistence
     const data = [];
     document.querySelectorAll('#tbodyBox tr').forEach(tr => {
         const cells = tr.querySelectorAll('td');
@@ -1032,7 +1025,6 @@ function loadBoxData() {
     recalcBox();
 }
 
-/* --- Calculators --- */
 let cExp = "";
 function cApp(v) {
     if(v==='C') cExp = "";
@@ -1055,20 +1047,14 @@ function boxGreet(){
     document.getElementById('boxGreet').innerText = h < 12 ? "صباح الخير 🌞" : "مساء الخير 🌙";
 }
 
-
 /* =========================================================
    6. GLOBAL INIT
    ========================================================= */
 window.onload = function(){
-    // Init Pricing
     for(let i=1;i<=5;i++) calc('c',i);
     for(let i=1;i<=9;i++) calc('a',i);
     enhanceInputs(); 
-    
-    // Init Seasons
     buildSeasonsTable(); 
-
-    // Init Box
     boxGreet();
 };
 </script>
