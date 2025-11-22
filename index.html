@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>المنظومة الموحدة – التشغيل والصندوق</title>
+<title>المنظومة الموحدة – Elite Update</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="system-signature" content="AYMAN-SAFE-PROTECTED-2025"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -30,7 +30,12 @@
   --box-blue: #00c2ff;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; outline: none; }
+
+/* إخفاء أسهم الأرقام في المتصفحات */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
 
 body {
   margin: 0; font-family: "Tajawal", "Cairo", sans-serif;
@@ -68,36 +73,31 @@ h1, h2 { color: var(--primary-dark); margin-top: 0; font-weight: 800; }
 .subtitle { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 20px; font-weight: 500; }
 
 table.std-table { width: 100%; border-collapse: collapse; margin-top: 15px; border: 1px solid #000; }
-table.std-table th { background: #E2E5EA; color: #000; font-weight: 800; padding: 12px; font-size: 0.9rem; border: 1px solid var(--border-strong); }
-table.std-table td { padding: 12px; text-align: center; font-weight: 700; color: var(--primary-dark); border: 1px solid var(--border-strong); }
+table.std-table th { background: #E2E5EA; color: #000; font-weight: 800; padding: 8px; font-size: 0.85rem; border: 1px solid var(--border-strong); }
+table.std-table td { padding: 8px; text-align: center; font-weight: 700; color: var(--primary-dark); border: 1px solid var(--border-strong); font-size: 0.9rem; }
 table.std-table tbody tr:nth-child(even) { background-color: var(--row-alt); }
 table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 
-/* --- Mobile Fix --- */
-.table-responsive {
-    width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
-    border: 1px solid #ddd; border-radius: 8px;
+/* Manual Mode Grid Update */
+#manualModeWrapper .manual-grid {
+    display: grid; 
+    grid-template-columns: 1fr 2px 1fr; 
+    gap: 15px; 
+    align-items: start;
 }
-@media (max-width: 768px) {
-    .data-input, .calc-input { 
-        width: 100% !important; 
-        min-width: 50px;
-        font-size: 0.85rem !important; 
-        padding: 2px !important; 
-        text-align: center;
-    }
-    .calc-readonly { background: #E9EDF7; font-weight: 900; }
-    table.std-table th, table.std-table td { padding: 6px 4px !important; font-size: 0.8rem !important; }
-    .rate-input { width: 45px !important; }
+.vertical-sep { background: #ddd; height: 100%; width: 2px; }
+@media (max-width: 900px) {
+    #manualModeWrapper .manual-grid { grid-template-columns: 1fr; }
+    .vertical-sep { display: none; }
 }
 
 /* Inputs */
 .data-input, .calc-input {
-    width: 100%; max-width: 100px; text-align: center; border: 1px solid #999; 
-    border-radius: 4px; padding: 8px; font-weight: 700; color: #000; background: #fff; font-size: 1rem;
+    width: 100%; max-width: 80px; text-align: center; border: 1px solid #999; 
+    border-radius: 4px; padding: 6px; font-weight: 700; color: #000; background: #fff; font-size: 0.95rem;
 }
 .calc-readonly { background: #E9EDF7; pointer-events: none; border: none; }
-.rate-input { width: 60px; }
+.rate-input { width: 50px; }
 
 /* Buttons */
 .btn-action {
@@ -151,9 +151,9 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 table.box-table { width: 100%; border-collapse: collapse; color: #fff; }
 table.box-table th, table.box-table td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
 table.box-table th { background: rgba(255,255,255,0.05); color: var(--box-gold); white-space: nowrap; }
-table.box-table td[contenteditable] { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); color: #fff; min-width: 60px; }
+table.box-table td[contenteditable] { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.05); color: #fff; min-width: 60px; cursor: text; }
 table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outline: none; background: rgba(0,194,255,0.1); }
-.closed-row { background: rgba(255,255,255,0.04); opacity: 0.8; font-style: italic; /* تم إزالة pointer-events حتى يعمل التراجع والتحديد */ }
+.closed-row { background: rgba(255,255,255,0.04); opacity: 0.8; font-style: italic; }
 
 .pagination-controls { display: flex; justify-content: center; gap: 5px; margin-top: 20px; flex-wrap: wrap; }
 .page-btn { padding: 8px 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; border-radius: 6px; font-weight: bold; }
@@ -162,13 +162,15 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 
 .calc-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
 .calc-box { width: 340px; max-width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 15px; }
-.calc-display { width: 100%; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #444; padding: 10px; font-size: 20px; text-align: right; margin-bottom: 10px; border-radius: 8px; }
+.calc-display { width: 100%; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #444; padding: 10px; font-size: 20px; text-align: right; margin-bottom: 10px; border-radius: 8px; font-family: inherit; }
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
 .calc-btn { padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; transition: 0.2s; }
 .calc-btn:hover { background: rgba(255,255,255,0.2); }
 .calc-btn.op { background: var(--box-blue); color: #000; }
-.calc-btn.eq { background: var(--box-gold); color: #000; grid-column: span 3; }
+.calc-btn.eq { background: var(--box-gold); color: #000; } /* تعديل حجم الزر ليناسب الزر الجديد */
 .calc-btn.clr { background: #ef4444; color: #fff; }
+.calc-btn.transfer { background: #10b981; color: #000; grid-column: span 2; } /* زر الترحيل الجديد */
+
 #lblCashSum { color: #000 !important; font-weight: 900; background: #fff; padding: 2px 6px; border-radius: 4px; }
 .btn-box { border: none; border-radius: 10px; padding: 8px 16px; font-weight: 800; cursor: pointer; transition: 0.2s; color: #fff; }
 .btn-box-gold { background: linear-gradient(135deg, var(--box-gold), #e9b12d); color: #251c07; }
@@ -203,8 +205,9 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
     #printArea th, #printArea td { border: 1px solid #000; padding: 10px; text-align: center; color: #000; }
     #printArea th { background: #f0f0f0 !important; font-weight: bold; }
     
-    /* Signature Footer */
+    /* Signature Footer only for Pricing/Box, hidden in Compare if requested */
     .print-footer { margin-top: 40px; text-align: left; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; display: flex; justify-content: space-between; }
+    .no-print { display: none !important; }
 }
 
 /* =========================================================
@@ -302,6 +305,10 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
   background: #22c55e;
   color: #022c22;
 }
+.choice-btn {
+    width: 100%; margin-bottom: 8px; text-align: right; padding: 12px; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-weight: bold;
+}
+.choice-btn:hover { background: rgba(255,255,255,0.2); }
 </style>
 </head>
 <body>
@@ -341,9 +348,10 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
           </div>
       </div>
       <div id="manualModeWrapper" style="display:none;">
-          <div style="display:grid; grid-template-columns: 1fr; gap:20px;">
+          <div class="manual-grid">
               <div><h3 style="color:var(--accent-gold); border-bottom:2px solid #ddd; padding-bottom:5px;">📦 مخزون نزيل</h3><table class="std-table"><thead><tr><th style="width:25%">الوحدة</th><th>شاغر</th><th>نظافة</th><th>خروج</th><th>صيانة</th></tr></thead><tbody id="nazeel-inputs"></tbody></table></div>
-              <div><h3 style="color:var(--accent-gold); border-bottom:2px solid #ddd; padding-bottom:5px;">📅 حركة بوكينج</h3><table class="std-table"><thead><tr><th style="width:70%">الوحدة</th><th>المتوقع وصوله (Expected)</th></tr></thead><tbody id="booking-inputs"></tbody></table></div>
+              <div class="vertical-sep"></div>
+              <div><h3 style="color:var(--accent-gold); border-bottom:2px solid #ddd; padding-bottom:5px;">📅 حركة بوكينج</h3><table class="std-table"><thead><tr><th style="width:70%">الوحدة</th><th>المتوقع (Expected)</th></tr></thead><tbody id="booking-inputs"></tbody></table></div>
           </div>
       </div>
       <button class="btn-action" onclick="unifiedAnalysis()">بدء التحليل</button>
@@ -460,26 +468,26 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 
     <div class="calc-container">
         <div class="calc-box">
-            <input type="text" class="calc-display" id="cDisp" readonly>
+            <input type="text" class="calc-display" id="cDisp" oninput="validateCalcInput(this)" placeholder="0">
             <div class="calc-grid" id="cGrid">
                 <button class="calc-btn" onclick="cApp('7')">7</button><button class="calc-btn" onclick="cApp('8')">8</button><button class="calc-btn" onclick="cApp('9')">9</button><button class="calc-btn op" onclick="cApp('/')">÷</button>
                 <button class="calc-btn" onclick="cApp('4')">4</button><button class="calc-btn" onclick="cApp('5')">5</button><button class="calc-btn" onclick="cApp('6')">6</button><button class="calc-btn op" onclick="cApp('*')">×</button>
                 <button class="calc-btn" onclick="cApp('1')">1</button><button class="calc-btn" onclick="cApp('2')">2</button><button class="calc-btn" onclick="cApp('3')">3</button><button class="calc-btn op" onclick="cApp('-')">-</button>
                 <button class="calc-btn" onclick="cApp('0')">0</button><button class="calc-btn" onclick="cApp('.')">.</button><button class="calc-btn clr" onclick="cApp('C')">C</button><button class="calc-btn op" onclick="cApp('+')">+</button>
-                <button class="calc-btn eq" onclick="cApp('=')">=</button>
+                <button class="calc-btn transfer" onclick="transferCalcResult()">⬇️ ترحيل للجدول</button><button class="calc-btn eq" onclick="cApp('=')">=</button>
             </div>
             <div id="calcHistory" class="calc-history"></div>
         </div>
         <div class="calc-box">
             <h3 style="color:var(--box-gold); text-align:center; margin:0 0 10px 0;">حاسبة الكاش</h3>
             <table class="box-table" id="tblCashCalc">
-                <tr><td contenteditable oninput="recalcCash()"></td><td>500</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>200</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>100</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>50</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>10</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>5</td></tr>
-                <tr><td contenteditable oninput="recalcCash()"></td><td>1</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>500</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>200</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>100</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>50</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>10</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>5</td></tr>
+                <tr><td contenteditable oninput="validateCashInput(this)"></td><td>1</td></tr>
             </table>
             <div style="text-align:center; font-weight:bold; font-size:18px; margin-top:10px; color:#fff;">المجموع: <span id="lblCashSum">0</span></div>
             <button class="btn-box btn-box-blue" style="width:100%; margin-top:10px;" onclick="transferToCash()">🔽 ترحيل للكاش</button>
@@ -490,7 +498,6 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 
 <div id="printArea"></div>
 
-<!-- iOS Toast & Modal Roots -->
 <div id="toastContainer"></div>
 
 <div id="modalOverlay" class="ios-modal-overlay">
@@ -572,6 +579,36 @@ function showConfirm(message, onConfirm) {
   overlay.style.display = 'flex';
 }
 
+function showChoiceModal(title, message, choices) {
+    const overlay = document.getElementById('modalOverlay');
+    if (!overlay) return;
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalBody').innerText = message;
+    
+    // Using the body area for choices to list them vertically
+    const body = document.getElementById('modalBody');
+    body.innerHTML = `<div style="margin-bottom:10px;">${message}</div>`;
+    
+    choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = c.label;
+        btn.onclick = () => { hideModal(); c.action(); };
+        body.appendChild(btn);
+    });
+
+    const actions = document.getElementById('modalActions');
+    actions.innerHTML = '';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn-modal btn-modal-secondary';
+    cancelBtn.innerText = 'إلغاء';
+    cancelBtn.onclick = hideModal;
+    actions.appendChild(cancelBtn);
+    
+    overlay.style.display = 'flex';
+}
+
+
 /* رقم بدون 00 */
 function formatNumber(val) {
   const num = parseFloat(val);
@@ -597,7 +634,7 @@ function switchMode(mode) {
     const btnManual = document.getElementById('toggleManual');
     const output = document.getElementById('output');
     if(mode === 'upload') { uploadWrap.style.display = 'block'; manualWrap.style.display = 'none'; btnUpload.classList.add('active'); btnManual.classList.remove('active'); } 
-    else { uploadWrap.style.display = 'none'; manualWrap.style.display = 'block'; btnUpload.classList.remove('active'); btnManual.classList.add('active'); if(document.getElementById('nazeel-inputs').children.length === 0) initializeFixedInputTables(); }
+    else { uploadWrap.style.display = 'block'; manualWrap.style.display = 'block'; uploadWrap.style.display = 'none'; btnUpload.classList.remove('active'); btnManual.classList.add('active'); if(document.getElementById('nazeel-inputs').children.length === 0) initializeFixedInputTables(); }
     output.style.display = 'none'; document.getElementById('errorArea').style.display = 'none';
 }
 function unifiedAnalysis() { if (currentMode === 'upload') runAudit(); else analyzeManualData(); }
@@ -638,7 +675,6 @@ function mapUnit(raw) { if (!raw) return null; const s = raw.toString().trim(); 
 function getSmartRecommendation(diff) { if (diff === 1) return '✅ اقترح عليك تفتح 1. ولو أجّرت استقبال اقفلها بوكينج'; else if (diff === 2) return '✅ اقترح عليك تفتح 1 على الأقل'; else if (diff === 3) return '✅ اقترح عليك تفتح 2 على الأقل'; else if (diff === 4) return '✅ اقترح عليك تفتح 4. الشاغر كتير'; else if (diff > 4) return `✅ اقترح عليك تفتح ${diff - 1} على الأقل. أنت في الأمان`; return '✅ افتح المزيد من الغرف'; }
 function runAudit() { const errDiv = document.getElementById("errorArea"); errDiv.style.display = "none"; const fB = document.getElementById("fileBooking").files[0]; const fN = document.getElementById("fileNazeel").files[0]; if(!fB || !fN) { errDiv.textContent = "⚠️ الرجاء رفع الملفين أولاً"; errDiv.style.display = "block"; return; }
 
-  // منع محاولة قراءة PDF كنزيل
   const isPdfN = fN && (fN.type === 'application/pdf' || /\.pdf$/i.test(fN.name));
   if (isPdfN) {
     errDiv.textContent = "ملف نزيل بصيغة PDF لا يمكن تحليله مباشرة. فضلاً صدّر نفس التقرير من نزيل بصيغة Excel (XLS / XLSX) ثم أعد الرفع.";
@@ -677,7 +713,7 @@ const seasonEvents = [
 function parseDMY(str) { const parts = str.split("/"); return new Date(parseInt(parts[2],10), parseInt(parts[1],10)-1, parseInt(parts[0],10)); }
 function buildSeasonsTable() { const today = new Date(); today.setHours(0,0,0,0); const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg)); const tbody = document.getElementById('seasonsBody'); if (!tbody) return; tbody.innerHTML = ""; let foundNext = false; for (const ev of sorted) { const evDate = parseDMY(ev.greg); const diffTime = evDate - today; const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); const isNext = !foundNext && diffDays >= 0 && diffDays <= 60; const tr = document.createElement('tr'); if (isNext) { tr.className = 'highlight-next-season'; foundNext = true; } const tdType = document.createElement('td'); const badge = document.createElement('span'); badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood'); badge.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام'; tdType.appendChild(badge); const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title + (isNext ? " (قريباً 🔥)" : ""); const tdHijri = document.createElement('td'); tdHijri.textContent = ev.hijri; const tdGreg = document.createElement('td'); tdGreg.textContent = ev.greg; tr.appendChild(tdType); tr.appendChild(tdTitle); tr.appendChild(tdHijri); tr.appendChild(tdGreg); tbody.appendChild(tr); } }
 
-/* CASHBOX LOGIC V7 */
+/* CASHBOX LOGIC V7.1 - Refined */
 let allBoxData = [];
 const BOX_KEY = 'cashboxData';
 let undoTimer = null;
@@ -689,7 +725,6 @@ function loadBoxData() {
     const raw = localStorage.getItem(BOX_KEY);
     if(!raw) { allBoxData = []; createNewRowObj(); } 
     else { allBoxData = JSON.parse(raw); if(allBoxData.length === 0) createNewRowObj(); }
-    // تأمين وجود حقل الموظف في البيانات القديمة
     allBoxData.forEach(r => { if(typeof r.employee === 'undefined') r.employee = localStorage.getItem('cashboxEmployee') || ""; });
     if(allBoxData.length > 0 && allBoxData[allBoxData.length-1].closed) { createNewRowObj(); }
     renderBoxTable();
@@ -715,17 +750,13 @@ function renderBoxTable() {
         const v = (parseFloat(row.cash)||0) + (parseFloat(row.network)||0) + (parseFloat(row.transfer)||0) + (parseFloat(row.exp)||0) + (parseFloat(row.tempExp)||0) + (parseFloat(row.reserve)||0) - (parseFloat(row.prog)||0);
         const varColor = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
 
-        const ev = `contenteditable onfocus="this.innerText=''" onblur="if(this.innerText=='')this.innerText='0'; updateRow(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
+        const ev = `contenteditable onfocus="handleCellFocus(this)" onblur="handleCellBlur(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
         const empEv = `contenteditable onfocus="if(this.innerText==='اكتب اسمك')this.innerText='';" onblur="updateRow(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
 
         const employeeDisp = row.employee && row.employee !== "" ? row.employee : (row.closed ? "" : "اكتب اسمك");
-        const reserveDisp = formatNumber(row.reserve);
-        const expDisp = formatNumber(row.exp);
-        const cashDisp = formatNumber(row.cash);
-        const tempExpDisp = formatNumber(row.tempExp);
-        const netDisp = formatNumber(row.network);
-        const transferDisp = formatNumber(row.transfer);
-        const progDisp = formatNumber(row.prog);
+        
+        // Helper for cell rendering to attach calc-flag
+        const cashAttr = row.isCalcCash ? 'data-from-calc="true"' : '';
 
         const chk = row.closed ? `<input type="checkbox" class="print-chk" value="${row.id}"> ${row.id}` : `<span style="opacity:0.6;">${row.id}</span>`;
         const noteHtml = row.note ? `<span onclick="showNote(${row.id})" style="cursor:pointer; font-size:20px;">📖</span>` : '';
@@ -737,14 +768,14 @@ function renderBoxTable() {
         
         tr.innerHTML = `<td>${chk}</td>
                         <td ${row.closed?'':empEv} data-field="employee">${employeeDisp}</td>
-                        <td ${row.closed?'':ev} data-field="reserve">${reserveDisp}</td>
-                        <td ${row.closed?'':ev} data-field="exp">${expDisp}</td>
+                        <td ${row.closed?'':ev} data-field="reserve">${formatNumber(row.reserve)}</td>
+                        <td ${row.closed?'':ev} data-field="exp">${formatNumber(row.exp)}</td>
                         <td>${row.time}</td>
-                        <td ${row.closed?'':ev} data-field="cash">${cashDisp}</td>
-                        <td ${row.closed?'':ev} data-field="tempExp">${tempExpDisp}</td>
-                        <td ${row.closed?'':ev} data-field="network">${netDisp}</td>
-                        <td ${row.closed?'':ev} data-field="transfer">${transferDisp}</td>
-                        <td ${row.closed?'':ev} data-field="prog">${progDisp}</td>
+                        <td ${row.closed?'':ev} data-field="cash" ${cashAttr}>${formatNumber(row.cash)}</td>
+                        <td ${row.closed?'':ev} data-field="tempExp">${formatNumber(row.tempExp)}</td>
+                        <td ${row.closed?'':ev} data-field="network">${formatNumber(row.network)}</td>
+                        <td ${row.closed?'':ev} data-field="transfer">${formatNumber(row.transfer)}</td>
+                        <td ${row.closed?'':ev} data-field="prog">${formatNumber(row.prog)}</td>
                         <td style="font-weight:bold; color:${varColor}">${formatNumber(v)}</td>
                         <td>${noteHtml}</td>
                         <td>${actionHtml}</td>`;
@@ -775,13 +806,28 @@ function renderPagination(total) {
     if(total <= 1) return;
     for(let i=1; i<=total; i++) { const btn = document.createElement('button'); btn.className = `page-btn ${i === currentPage ? 'active' : ''}`; btn.innerText = i; btn.onclick = () => { currentPage = i; renderBoxTable(); }; container.appendChild(btn); }
 }
-function notifyZeroVariance(empName) {
-    const now = Date.now();
-    if (now - lastZeroToastTime < 5000) return;
-    lastZeroToastTime = now;
-    const extra = empName ? ` يا ${empName}` : '';
-    showToast(`🎉 أداء ممتاز${extra}! الانحراف صفر.`, 'success');
+
+function handleCellFocus(el) {
+    el.dataset.oldVal = el.innerText;
+    if(el.dataset.field === 'cash' && el.dataset.fromCalc === 'true') {
+        showConfirm('هذه القيمة تم جلبها من الحاسبة. هل تود تغيير المبلغ يدوياً؟', function(){
+            el.dataset.fromCalc = 'false'; // Remove flag confirmed
+            const rowId = el.parentElement.dataset.id;
+            const row = allBoxData.find(r => r.id == rowId);
+            if(row) { row.isCalcCash = false; saveData(); }
+            el.focus();
+        });
+        el.blur(); // Blur temporarily until confirmed
+        return;
+    }
+    el.innerText = '';
 }
+
+function handleCellBlur(id, el) {
+    if(el.innerText.trim() === '') el.innerText = el.dataset.oldVal || '0';
+    updateRow(id, el);
+}
+
 function updateRow(id, el) {
     const row = allBoxData.find(r => r.id === id); if(!row) return;
     const field = el.dataset.field; 
@@ -790,7 +836,6 @@ function updateRow(id, el) {
         if (row.employee) {
             localStorage.setItem('cashboxEmployee', row.employee);
             boxGreet();
-            showToast(`مرحباً يا ${row.employee} 👋 نتمنى لك تقفيلة سلسة.`, 'success');
         }
         saveData();
         return;
@@ -801,10 +846,17 @@ function updateRow(id, el) {
     const v = (parseFloat(row.cash)||0) + (parseFloat(row.network)||0) + (parseFloat(row.transfer)||0) + (parseFloat(row.exp)||0) + (parseFloat(row.tempExp)||0) + (parseFloat(row.reserve)||0) - (parseFloat(row.prog)||0);
     el.parentElement.cells[10].innerText = formatNumber(v); 
     el.parentElement.cells[10].style.color = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
-    if (v === 0) {
-        notifyZeroVariance(row.employee && row.employee.trim());
-    }
+    if (v === 0) notifyZeroVariance(row.employee);
 }
+
+function notifyZeroVariance(empName) {
+    const now = Date.now();
+    if (now - lastZeroToastTime < 5000) return;
+    lastZeroToastTime = now;
+    const extra = empName && empName !== 'اكتب اسمك' ? ` يا ${empName}` : '';
+    showToast(`🎉 أداء ممتاز${extra}! الانحراف صفر.`, 'success');
+}
+
 function updateCards(row) {
     if(!row) return; const d = row;
     document.getElementById('metRev').innerText = formatNumber(d.prog);
@@ -814,34 +866,60 @@ function updateCards(row) {
     const v = (parseFloat(d.cash)||0) + (parseFloat(d.network)||0) + (parseFloat(d.transfer)||0) + (parseFloat(d.exp)||0) + (parseFloat(d.tempExp)||0) + (parseFloat(d.reserve)||0) - (parseFloat(d.prog)||0);
     document.getElementById('metVar').innerText = formatNumber(v);
 }
+
 function closeShift() {
     const rowsDOM = document.querySelectorAll('#tbodyBox tr');
     if(rowsDOM.length === 0) return;
-    const activeTR = rowsDOM[0];
-    const progCell = activeTR.querySelector('[data-field="prog"]');
-    if(!progCell) return;
-    const progVal = progCell.innerText;
-    if(parseFloat(progVal) <= 0 || progVal.trim() == "" || progVal == "0") { 
-        showToast("⚠️ لا يمكن إغلاق الصندوق. يجب إدخال إيراد البرنامج.", "error");
+    const activeTR = rowsDOM[0]; // The first one (latest)
+    if (activeTR.classList.contains('closed-row')) return; // Already closed
+    
+    const rowId = parseInt(activeTR.dataset.id);
+    const row = allBoxData.find(r => r.id === rowId);
+    if (!row) return;
+
+    // Validation 1: Employee Name
+    const empName = row.employee ? row.employee.trim() : "";
+    // Regex: At least one letter (Arabic or English)
+    if(!empName || !/[a-zA-Z\u0600-\u06FF]/.test(empName)) {
+        showToast("⚠️ يجب كتابة اسم الموظف (أحرف) قبل الإغلاق.", "error");
+        return;
+    }
+
+    // Validation 2: Program Revenue
+    const progVal = parseFloat(row.prog);
+    if(!progVal || progVal <= 0) { 
+        showToast("⚠️ يجب إدخال إيراد البرنامج قبل الإغلاق.", "error");
         return; 
     }
 
     showConfirm('هل تريد إغلاق الصندوق؟', function() {
-        const lastIdx = allBoxData.length - 1; const row = allBoxData[lastIdx];
-        const noteTxt = document.getElementById('txtShiftNotes').value; row.note = noteTxt; document.getElementById('txtShiftNotes').value = "";
-        row.closed = true; row.isUndoActive = true;
-        const now = new Date(); row.time = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
-        saveData(); createNewRowObj(); renderBoxTable();
-        let timeLeft = 30; undoTimer = setInterval(() => { timeLeft--; const timerSpan = document.getElementById('undoTimer'); if(timerSpan) timerSpan.innerText = timeLeft; if(timeLeft <= 0) { finalizeClose(row.id); } }, 1000);
+        const noteTxt = document.getElementById('txtShiftNotes').value; 
+        row.note = noteTxt; 
+        document.getElementById('txtShiftNotes').value = "";
+        row.closed = true; 
+        row.isUndoActive = true;
+        const now = new Date(); 
+        row.time = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
+        saveData(); 
+        createNewRowObj(); 
+        renderBoxTable();
+        
+        let timeLeft = 30; 
+        undoTimer = setInterval(() => { 
+            timeLeft--; 
+            const timerSpan = document.getElementById('undoTimer'); 
+            if(timerSpan) timerSpan.innerText = timeLeft; 
+            if(timeLeft <= 0) finalizeClose(row.id); 
+        }, 1000);
+        
         try{ document.getElementById('sndAction').play(); }catch(e){}
     });
 }
 function finalizeClose(id) { clearInterval(undoTimer); const row = allBoxData.find(r => r.id === id); if(row) { row.isUndoActive = false; saveData(); renderBoxTable(); } }
 
-// Undo logic
 function undoClose(id) {
     clearInterval(undoTimer);
-    allBoxData.pop(); 
+    allBoxData.pop(); // Remove the new blank row created on close
     const row = allBoxData.find(r => r.id === id); 
     if(row) { 
         row.closed = false; 
@@ -853,52 +931,124 @@ function undoClose(id) {
 }
 function saveData() { localStorage.setItem(BOX_KEY, JSON.stringify(allBoxData)); }
 
-let cExp = "";
+/* CALCULATOR LOGIC */
 let calcHistory = [];
 function addCalcHistory(exp, result) {
     const cleanExp = (exp || "").toString().replace(/\s+/g,'');
     calcHistory.unshift(`${cleanExp} = ${result}`);
     if (calcHistory.length > 10) calcHistory.pop();
     const box = document.getElementById('calcHistory');
-    if (!box) return;
-    box.innerHTML = calcHistory.map(line => `<div class="calc-history-entry">${line}</div>`).join('');
+    if (box) box.innerHTML = calcHistory.map(line => `<div class="calc-history-entry">${line}</div>`).join('');
 }
-function cApp(v) { 
-    if(v==='C') cExp = ""; 
+
+function validateCalcInput(el) {
+    // Allow standard operators + - * / . and numbers
+    const val = el.value;
+    // If last char is not valid, remove it
+    if (!/^[0-9\+\-\*\/\.\(\)\s]*$/.test(val)) {
+        el.value = val.slice(0, -1);
+    }
+}
+
+function cApp(v) {
+    const disp = document.getElementById('cDisp');
+    if(v==='C') { 
+        disp.value = ""; 
+        calcHistory = [];
+        document.getElementById('calcHistory').innerHTML = "";
+    } 
     else if(v==='=') { 
         try { 
-            const res = eval(cExp || "0"); 
+            const safeExp = disp.value.replace(/[^0-9\+\-\*\/\.\(\)]/g, ''); // Sanitization
+            if(!safeExp) return;
+            const res = eval(safeExp); 
             if (!isNaN(res)) {
-                addCalcHistory(cExp, formatNumber(res));
-                cExp = res.toString(); 
+                addCalcHistory(disp.value, formatNumber(res));
+                disp.value = parseFloat(res.toFixed(2)); 
             } else {
-                cExp = "Error";
+                disp.value = "Error";
             }
-        } catch { cExp = "Error"; } 
+        } catch { disp.value = "Error"; } 
     } else { 
-        cExp += v; 
+        disp.value += v; 
     } 
-    document.getElementById('cDisp').value = cExp; 
 }
+
+// Main Calc Transfer Logic
+function transferCalcResult() {
+    const disp = document.getElementById('cDisp');
+    const val = disp.value;
+    if(!val || isNaN(parseFloat(val))) { showToast("لا توجد قيمة صالحة للترحيل", "error"); return; }
+
+    const activeRowIndex = allBoxData.length - 1;
+    const activeRow = allBoxData[activeRowIndex];
+    if (activeRow.closed) { showToast("لا يوجد صندوق مفتوح للترحيل", "error"); return; }
+
+    const resultVal = formatNumber(val);
+
+    showChoiceModal('ترحيل النتيجة', `اختر الخانة التي تريد ترحيل المبلغ (${resultVal}) إليها:`, [
+        { label: '💳 شبكة', action: () => updateAndSave(activeRow, 'network', resultVal) },
+        { label: '🏦 تحويل', action: () => updateAndSave(activeRow, 'transfer', resultVal) },
+        { label: '📉 مصروف رسمي', action: () => updateAndSave(activeRow, 'exp', resultVal) },
+        { label: '⏳ مصروف مؤقت', action: () => updateAndSave(activeRow, 'tempExp', resultVal) },
+        { label: '💵 الكاش (تنبيه: سيستبدل القيمة)', action: () => updateAndSave(activeRow, 'cash', resultVal) }
+    ]);
+}
+
+function updateAndSave(row, field, val) {
+    row[field] = val;
+    saveData();
+    renderBoxTable();
+    showToast(`تم ترحيل ${val} إلى ${field}`, 'success');
+}
+
+/* CASH CALC LOGIC */
+function validateCashInput(el) {
+    // Regex to allow only numbers (English & Arabic) and dots
+    const regex = /[^0-9\u0660-\u0669\.]/g;
+    if (regex.test(el.innerText)) {
+        el.innerText = el.innerText.replace(regex, '');
+    }
+    recalcCash();
+}
+
 function recalcCash() { 
     let sum = 0; 
     const rows = document.querySelectorAll('#tblCashCalc tr');
     rows.forEach(r => { 
-        const qty = parseFloat(r.cells[0].innerText) || 0; 
+        let txtQty = r.cells[0].innerText;
+        // Convert Arabic numerals if needed
+        txtQty = txtQty.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+        const qty = parseFloat(txtQty) || 0; 
         const val = parseFloat(r.cells[1].innerText) || 0; 
         sum += qty * val; 
     }); 
     document.getElementById('lblCashSum').innerText = formatNumber(sum); 
 }
+
 function transferToCash() { 
     const sum = document.getElementById('lblCashSum').innerText; 
-    const firstRow = document.querySelector('#tbodyBox tr:not(.closed-row)');
-    if(firstRow) {
-        const cashCell = firstRow.querySelector('[data-field="cash"]');
-        if(cashCell) { cashCell.innerText = sum; const id = parseInt(firstRow.dataset.id); updateRow(id, cashCell); }
-    } else { 
-        showToast("لا يوجد صف مفتوح.", "info");
+    if(parseFloat(sum) === 0) { showToast("المجموع صفر، لا يمكن الترحيل.", "info"); return; }
+
+    const activeRowIndex = allBoxData.length - 1;
+    const row = allBoxData[activeRowIndex];
+
+    if (!row || row.closed) { 
+        showToast("لا يوجد صف مفتوح للترحيل.", "info");
+        return;
     }
+
+    // Update logic
+    row.cash = sum;
+    row.isCalcCash = true; // Mark as came from calculator
+    saveData();
+    renderBoxTable();
+    
+    // Reset Cash Calculator inputs
+    document.querySelectorAll('#tblCashCalc td[contenteditable]').forEach(td => td.innerText = '');
+    document.getElementById('lblCashSum').innerText = '0';
+
+    showToast("تم ترحيل المجموع للكاش وتصفير الحاسبة.", "success");
 }
 
 function exportBoxExcel() { 
@@ -942,14 +1092,23 @@ function boxGreet(){
     const emp = localStorage.getItem('cashboxEmployee') || "";
     document.getElementById('boxGreet').innerText = emp ? `${base} يا ${emp}` : base; 
 }
-document.addEventListener('click', function(e){ if(e.target.tagName === 'TD' && e.target.isContentEditable && e.target.closest('#tbodyBox')) { if(document.activeElement !== e.target) { e.target.focus(); } } });
 
-// Keyboard support for calculator (أرقام عربية/إنجليزية)
+// Keyboard support for calculator (Numbers, Enter as =)
 document.addEventListener('keydown', function(e){
     const activeView = document.getElementById('view-cashbox');
     if (!activeView || !activeView.classList.contains('active')) return;
     const target = e.target;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
+    // If user is typing in a table cell or note, do not capture calc keys
+    if (target.tagName === 'TEXTAREA' || target.isContentEditable) return;
+    
+    // Special case: Input field of Calc needs to allow native behavior unless it's Enter
+    if (target.id === 'cDisp') {
+        if (e.key === 'Enter') {
+            cApp('=');
+            e.preventDefault();
+        }
+        return;
+    }
 
     const key = e.key;
     const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
@@ -957,19 +1116,17 @@ document.addEventListener('keydown', function(e){
     if (arabicDigits.indexOf(key) >= 0) {
         const num = arabicDigits.indexOf(key).toString();
         cApp(num);
-        e.preventDefault();
     } else if (/[0-9]/.test(key)) {
         cApp(key);
-        e.preventDefault();
     } else if (['+','-','*','/','.'].includes(key)) {
         cApp(key);
-        e.preventDefault();
     } else if (key === 'Enter' || key === '=') {
         cApp('=');
         e.preventDefault();
     } else if (key === 'Backspace') {
-        cExp = cExp.slice(0,-1);
-        document.getElementById('cDisp').value = cExp;
+        // Remove last char
+        const d = document.getElementById('cDisp');
+        d.value = d.value.slice(0,-1);
         e.preventDefault();
     }
 });
@@ -995,7 +1152,9 @@ function printSelectedShifts() {
     generatePrintTable(selectedRows); window.print();
 }
 function printCompare() {
-    document.getElementById('printArea').innerHTML = document.getElementById('tableCompare').outerHTML + `<div class="print-footer"><div>التوقيع: ...........................</div></div>`;
+    // Clone table to remove signature for this specific print view
+    const tbl = document.getElementById('tableCompare').cloneNode(true);
+    document.getElementById('printArea').innerHTML = `<h2>تقرير المطابقة</h2>` + tbl.outerHTML; // No Signature Footer
     window.print();
 }
 
