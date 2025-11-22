@@ -6,13 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="system-signature" content="AYMAN-SAFE-PROTECTED-2025"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/cpexcel.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 /* =========================================================
-   1. GLOBAL STYLES
+   1. GLOBAL STYLES (Original)
    ========================================================= */
 :root {
   --bg-body: #F5F7FA;       
@@ -28,6 +29,16 @@
   --box-text: #e6edf3;
   --box-gold: #f5c542;
   --box-blue: #00c2ff;
+  /* إضافة متغيرات الألوان الجديدة من PR.html */
+  --pr-input-border: #b3b9c4;
+  --pr-input-focus: #00b8d9;
+  --pr-accent-1: #00b8d9;
+  --pr-accent-2: #36b37e;
+  --pr-accent-3: #6554c0;
+  --pr-danger: #DC143C;
+  --pr-warning: #FFAB00;
+  --pr-gold: #FFD700;
+  --pr-row-alt-bg: #dde3f3;
 }
 
 * { box-sizing: border-box; outline: none; }
@@ -120,7 +131,7 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 .sign-off { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 10px; text-align: center; font-size: 0.8rem; color: var(--text-sub); border-top: 2px solid var(--primary-dark); z-index: 999; }
 
 /* =========================================================
-   2. CASHBOX STYLES
+   2. CASHBOX STYLES (Original)
    ========================================================== */
 #view-cashbox {
     background: radial-gradient(1200px 600px at 10% 10%, rgba(0,194,255,.08), transparent 60%),
@@ -217,6 +228,163 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 .choice-btn { width: 100%; margin-bottom: 8px; text-align: right; padding: 12px; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-weight: bold; }
 .choice-btn:hover { background: rgba(255,255,255,0.2); }
 #modalNoteInput { width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #555; background: rgba(0,0,0,0.3); color: #fff; font-family: inherit; }
+
+/* =========================================================
+   3. RECEPTION PRICING STYLES (FROM PR.html) - Added
+   ========================================================= */
+.page-container-R {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+}
+@media (max-width: 950px) {
+    .page-container-R { grid-template-columns: 1fr; }
+}
+
+.card-R {
+    background: var(--bg-card);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(9, 30, 66, 0.05);
+    padding: 24px;
+    border: 1px solid #dfe1e6;
+    margin-bottom: 20px;
+    transition: all 0.35s ease-in-out;
+}
+.smart-table-R {
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    width: 100%;
+}
+.smart-table-R th {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--text-sub); /* Text muted */
+    font-weight: 600;
+    padding: 0 8px;
+}
+.smart-table-R td {
+    background: #fff;
+    padding: 6px 9px;
+    vertical-align: middle;
+}
+.smart-table-R tbody tr:nth-child(even) td {
+    background-color: var(--pr-row-alt-bg);
+}
+
+/* مدخلات رئيسية */
+.strong-input-R {
+  border: 2px solid var(--pr-input-border);
+  background: #ffffff;
+  color: var(--text-main);
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: 0.35s ease-in-out;
+  width: 100%;
+  outline: none;
+  font-family: 'DM Sans', Arial, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+.strong-input-R:focus {
+  border-color: var(--pr-input-focus);
+  box-shadow: 0 0 0 2px rgba(0, 184, 217, 0.18);
+}
+
+/* حقل الجدول – رقم إنجليزي فقط */
+.table-input-R {
+  border: 2px solid var(--pr-input-border);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: 0.15s ease-out;
+  padding: 10px;
+  width: 90px;
+  outline: none;
+  font-family: 'DM Sans', Arial, sans-serif !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+.table-input-R:focus,
+.table-input-R:hover {
+  border-color: var(--pr-input-focus);
+  background-color: #f7fcff;
+  box-shadow: 0 0 0 1px rgba(0,184,217,0.2);
+}
+
+/* Gold Glow */
+@keyframes partyGlowR {
+  0%   { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+  50%  { box-shadow: 0 0 25px rgba(255,215,0,0.9), 0 0 5px rgba(255,215,0,0.7); }
+  100% { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+}
+.celebratory-glow-R {
+  animation: partyGlowR 1.2s infinite alternate;
+  border: 2px solid var(--pr-gold) !important;
+  background: rgba(255,215,0,0.1) !important;
+}
+.party-box-R {
+  background: linear-gradient(135deg,#FFF176 0%,#FFD700 100%) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--pr-gold);
+  box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+}
+
+/* Branch status pulse */
+.status-pulse-R {
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  margin-left:6px;
+  margin-right:4px;
+  background:#dfe1e6;
+  box-shadow:0 0 0 0 rgba(0,0,0,0.15);
+  transition: background-color 0.4s, box-shadow 0.4s, transform 0.2s;
+}
+.status-low-R     { background:var(--pr-accent-2); box-shadow:0 0 0 4px rgba(54,179,126,0.25); }
+.status-medium-R  { background:var(--pr-warning); box-shadow:0 0 0 4px rgba(255,171,0,0.25); }
+.status-high-R    { background:#FF5630; box-shadow:0 0 0 4px rgba(255,86,48,0.25); }
+.status-overload-R{ background:var(--pr-accent-3); box-shadow:0 0 0 4px rgba(101,84,192,0.35); }
+
+@keyframes overloadShakeR {
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-1px);}
+  50%{transform:translateX(1px);}
+  75%{transform:translateX(-1px);}
+  100%{transform:translateX(0);}
+}
+.overload-shake-R { animation: overloadShakeR 0.4s infinite; }
+
+/* نبضة السعر عند التغير */
+@keyframes pricePulseAnimR {
+  0%   { transform:scale(1); box-shadow:0 0 0 0 rgba(0,184,217,0); }
+  50%  { transform:scale(1.03); box-shadow:0 0 0 7px rgba(0,184,217,0.15); }
+  100% { transform:scale(1); box-shadow:0 0 0 0 rgba(0,184,217,0); }
+}
+.price-pulse-R {
+  animation: pricePulseAnimR 0.6s ease-out;
+}
+
+.price-pill-R {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 1rem;
+  display:inline-flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  min-width:110px;
+}
+.pill-blue-R  { background:rgba(0,184,217,0.08); color:var(--pr-accent-1); }
+.pill-green-R { background:rgba(54,179,126,0.08); color:var(--pr-accent-2); }
+.pill-red-R   { background:rgba(220,20,60,0.08);  color:var(--pr-danger); }
+
 </style>
 </head>
 <body>
@@ -280,7 +448,132 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 
   <div id="view-booking" class="section-view">
     <div class="card">
-      <h1>حاسبة الأسعار</h1>
+      
+      <div id="receptionPricing">
+          <div style="margin-bottom: 30px;">
+              <h1>حاسبة أسعار موظفي الاستقبال</h1>
+              <div class="subtitle">نظام التسعير الذكي (الموظفين) - يتأثر بـ (الفرع/الإشغال/العدد)</div>
+          </div>
+          
+          <div class="page-container-R">
+              
+              <aside style="grid-column: 1 / 2;">
+                  <div class="card-R" style="padding:15px;">
+                      <div class="card-header">
+                          <h2>الإعدادات الرئيسية</h2>
+                      </div>
+              
+                      <label style="margin-top:12px; display:block;">الفرع</label>
+                      <select id="branchSelectR" class="strong-input-R" onchange="updateAllR('branchSelectR')" style="margin-bottom:12px;">
+                          <option value="cornish">🌊 فرع الكورنيش</option>
+                          <option value="andalus">🏰 فرع الأندلس</option>
+                      </select>
+              
+                      <label style="display:block;">نسبة الإشغال العامة (%)</label>
+                      <input
+                          type="number"
+                          id="occupancyInputR"
+                          class="strong-input-R"
+                          value="0"
+                          placeholder="0"
+                          oninput="updateAllR()"
+                          onfocus="this.value='';"
+                          onblur="if(this.value==''){ this.value=0; updateAllR(); }"
+                          max="100"
+                          style="margin-bottom:12px;"
+                      >
+              
+                      <div style="margin-bottom: 12px;">
+                          <label style="display:block;">وضع التسعير</label>
+                          <select id="pricingModeR" class="strong-input-R" onchange="updateAllR()">
+                              <option value="daily">سعر يومي (افتراضي)</option>
+                              <option value="monthly-normal">سعر شهري أيام عادية</option>
+                              <option value="monthly-company">سعر شهري شركات (-5%)</option>
+                              <option value="monthly-season">سعر شهري موسم</option>
+                          </select>
+                      </div>
+              
+                      <div style="margin-top: 15px; position: relative; height: 160px; width: 100%;">
+                          <canvas id="occupancyChartR"></canvas>
+                          <div style="position: absolute; top:55%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+                              <div id="occupancyDisplayR" style="font-size:2rem; font-weight:800; line-height:1; font-family:'DM Sans',Arial;">0%</div>
+                              <span style="font-size:0.8rem; color:var(--text-sub);">نسبة الإشغال</span>
+                          </div>
+                      </div>
+              
+                      <div style="margin-top: 15px; text-align:center;">
+                          <div id="chartExplanationR" style="font-size:0.9rem; color:var(--text-main); font-weight:600;">
+                              أدخل نسبة الإشغال للبدء
+                          </div>
+                      </div>
+                  </div>
+              
+                  <div id="smartAdviceBoxR" class="card-R" style="border-left:5px solid var(--pr-accent-1);">
+                      <h4 id="adviceTitleR" style="color:var(--pr-accent-1); font-size:0.95rem;">
+                          <i class="fas fa-lightbulb"></i> نصيحة النظام الذكية
+                      </h4>
+                      <div id="adviceContentR" class="alert-box" style="font-size:0.85rem;">
+                          أدخل نسبة الإشغال للبدء...
+                      </div>
+                  </div>
+              
+                  <div class="card-R" style="border-left:5px solid var(--pr-accent-2);">
+                    <h4 style="color:var(--pr-accent-2); font-size:0.95rem;">قاعدة التحكم بالعدد</h4>
+                    <ul style="font-size:0.8rem; color:var(--text-main); padding-right:20px; margin:5px 0 0;">
+                      <li><span style="font-weight:700;">1 - 3 غرف:</span> يطبق السعر القياسي (حسب الإشغال).</li>
+                      <li><span style="font-weight:700;">4 غرف:</span> يتم تطبيق خصم (فئة أقل).</li>
+                      <li><span style="font-weight:700;">5+ غرف:</span> تفعيل سعر الطوارئ.</li>
+                    </ul>
+                  </div>
+              
+              </aside>
+              
+              <main style="grid-column: 2 / 3;">
+                  <div id="mainTableCardR" class="card-R">
+                      <div class="card-header" style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid var(--pr-input-border); padding-bottom:10px;">
+                          <div>
+                              <h2 style="font-size:1.4rem;">
+                                  <span id="branchStatusPulseR" class="status-pulse-R"></span>
+                                  جدول الوحدات
+                              </h2>
+                              <div class="subtitle" style="font-size:0.85rem; color:var(--text-sub);">
+                                  يتم تحديث الأسعار لحظياً بناءً على المدخلات
+                              </div>
+                          </div>
+                          <div style="text-align:left;">
+                              <div style="font-size:0.75rem; color:var(--text-sub);">فئة السعر الحالية</div>
+                              <div id="currentTierLabelR" style="font-weight:800; color:var(--pr-accent-3); font-size:1.1rem;">منخفض</div>
+                          </div>
+                      </div>
+              
+                      <div id="tableWrapperR" style="transition:opacity 0.35s ease-in-out;">
+                          <table class="smart-table-R">
+                              <thead>
+                                  <tr>
+                                      <th>نوع الوحدة</th>
+                                      <th style="text-align:center;">العدد المتاح</th>
+                                      <th>السعر المقترح</th>
+                                      <th>تحليل الحالة</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="tableBodyR"></tbody>
+                          </table>
+                      </div>
+              
+                      <div id="aiHintBoxR" style="margin-top:20px; padding:15px; border-radius:10px; background:rgba(101,84,192,0.05); color:var(--pr-accent-3); font-weight:600; font-size:0.9rem;">
+                          <i class="fas fa-magic"></i> اقتراحات التسعير الآلية: <span>--</span>
+                      </div>
+                  </div>
+                  <div style="text-align:center; margin-top:15px;">
+                      <button class="btn-download" onclick="printReceptionPricing()">🖨️ طباعة قائمة الاستقبال</button>
+                  </div>
+              </main>
+              
+          </div>
+          <hr style="margin: 40px 0; border: 1px solid var(--border-strong);">
+      </div>
+      
+      <h1>حاسبة الأسعار الإدارية</h1>
       <div id="corniche" style="margin-bottom:40px; border-bottom:2px solid #ddd; padding-bottom:30px;">
         <h2 style="color:var(--accent-gold)">🏨 فرع الكورنيش</h2>
         <div style="margin-bottom:15px;">
@@ -299,7 +592,7 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
                 </tbody>
             </table>
         </div>
-        <button class="btn-download" onclick="printPricing('corniche')">🖨️ طباعة القائمة (الكورنيش)</button>
+        <button class="btn-download" onclick="printPricingAdmin('corniche')">🖨️ طباعة القائمة (الكورنيش)</button>
       </div>
       <div id="andalus">
         <h2 style="color:var(--accent-gold)">🏨 فرع الأندلس</h2>
@@ -323,7 +616,7 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
                 </tbody>
             </table>
         </div>
-        <button class="btn-download" onclick="printPricing('andalus')">🖨️ طباعة القائمة (الأندلس)</button>
+        <button class="btn-download" onclick="printPricingAdmin('andalus')">🖨️ طباعة القائمة (الأندلس)</button>
       </div>
     </div>
   </div>
@@ -1091,9 +1384,9 @@ function printCompare() {
     document.getElementById('printArea').innerHTML = `<h2>تقرير المطابقة</h2>` + tbl.outerHTML; 
     window.print();
 }
-function printPricing(sectionId) {
+function printPricingAdmin(sectionId) {
     const tbody = document.getElementById('body_' + sectionId);
-    const title = sectionId === 'corniche' ? 'قائمة أسعار الكورنيش' : 'قائمة أسعار الأندلس';
+    const title = sectionId === 'corniche' ? 'قائمة أسعار بوكينج الإدارية - الكورنيش' : 'قائمة أسعار بوكينج الإدارية - الأندلس';
     let tableHTML = `<table style="width:100%; border-collapse:collapse; text-align:center;"><thead><tr style="background:#eee; font-weight:bold;"><th style="border:1px solid #000; padding:10px;">الوحدة</th><th style="border:1px solid #000; padding:10px;">السعر الأساسي</th><th style="border:1px solid #000; padding:10px;">الزيادة %</th><th style="border:1px solid #000; padding:10px;">سعر بوكينج</th></tr></thead><tbody>`;
     const rows = tbody.querySelectorAll('tr');
     rows.forEach(row => {
@@ -1114,8 +1407,408 @@ function generatePrintTable(rows) {
     document.getElementById('printArea').innerHTML = html;
 }
 
+/* =========================================================
+   RECEPTION PRICING LOGIC (R) - From PR.html - Added/Renamed
+   ========================================================= */
+const TIERS_R = { EMG:0, UNDER60:1, OVER60:2, OVER70:3, OVER80:4, SEASON:5 };
+let unitCountsR = {};
+let chartInstanceR = null;
+let previousPricesR = {};
+let newPricesR = {}; 
+
+// ✅ DB: يومي (كما هو) + شهري من الإكسل
+const dbR = {
+  cornish: [
+    { name: "تؤم وكينج",      prices: [230, 280, 315, 350, 375, 400],  monthlySeason: 6440,  monthlyNormal: 5600 },
+    { name: "ستوديو",         prices: [340, 390, 420, 460, 480, 510],  monthlySeason: 8970,  monthlyNormal: 7800 },
+    { name: "شقة غرفه وصالة", prices: [370, 420, 460, 500, 530, 550],  monthlySeason: 9660,  monthlyNormal: 8400 },
+    { name: "غرفتين وصالة",   prices: [400, 450, 550, 600, 650, 680],  monthlySeason: 10350, monthlyNormal: 9000 },
+    { name: "VIP",            prices: [850, 900, 1000, 1100, 1250,1399],monthlySeason: 20700, monthlyNormal: 18000 },
+  ],
+  andalus: [
+    { name: "غرفة وحمام خلفية سريرين ( تؤم)",                    prices: [190.4, 220.4, 250, 280, 300, 320],   monthlySeason: 5510,   monthlyNormal: 5069.2 },
+    { name: "غرفة وحمام خلفية سرير مزدوج (غرفه كينج)",          prices: [204.65,234.65,262,290,310,330],      monthlySeason: 5866.25,monthlyNormal: 5396.95 },
+    { name: "غرفة وحمام مطلة على الشارع (ستوديو)",              prices: [219.85,249.85,285,320,335,350],      monthlySeason: 6246.25,monthlyNormal: 5746.55 },
+    { name: "غرفة وصالة وحمام مطلة على الشارع",                 prices: [290.15,320.15,360,400,445,490],      monthlySeason: 8003.75,monthlyNormal: 7363.45 },
+    { name: "غرفتين خلفيتين سرير مزدوج وسريرين تؤام (3+4)",     prices: [389.9,419.9,460,500,575,650],        monthlySeason: 10497.5,monthlyNormal: 9657.7 },
+    { name: "غرفتين وصالة على الشارع سريرين مزدوج (1+2)",       prices: [420.3,450.3,500,550,640,730],        monthlySeason: 11257.5,monthlyNormal: 10356.9 },
+    { name: "غرفتين و صالة وملحق  وجاكوزي وبخار VIP 601",      prices: [570,600,650,700,757,850],            monthlySeason: 15000,  monthlyNormal: 14000 },
+    { name: "غرفة و صالة  و جاكوزي  VIP 602",                  prices: [370,400,475,500,525,550],            monthlySeason: 11500,  monthlyNormal: 10000 },
+    { name: "غرفة و ملحق خارجي   VIP 604",                     prices: [320,350,375,400,420,440],            monthlySeason: 8500,   monthlyNormal: 8000 },
+  ]
+};
+
+function getBaseTierR(p){
+  if(p < 60) return TIERS_R.UNDER60;
+  if(p >= 60 && p < 70) return TIERS_R.OVER60;
+  if(p >= 70 && p < 80) return TIERS_R.OVER70;
+  if(p >= 80 && p < 90) return TIERS_R.OVER80;
+  if(p >= 90) return TIERS_R.SEASON;
+  return TIERS_R.UNDER60;
+}
+
+function updateChartExplanationR(occupancy){
+  const el = document.getElementById('chartExplanationR');
+  let text = '';
+  if(occupancy <= 60) text = 'الوضع سيئ ويدعو للقلق';
+  else if(occupancy <= 70) text = 'شد شويه هتحسن الإشغال، هانت';
+  else if(occupancy <= 85) text = 'وضعك مستقر ولكن في مجال للتحسين';
+  else text = 'وضعك الآن صار ممتاز، شوية ونحتفل بك يا بطل!';
+  el.innerText = text;
+}
+
+function generateSmartAdviceR(occupancy){
+  const box = document.getElementById('smartAdviceBoxR');
+  const title = document.getElementById('adviceTitleR');
+  const content = document.getElementById('adviceContentR');
+
+  box.className = 'card-R';
+  box.style.borderLeftColor = 'var(--pr-accent-1)';
+  title.style.color = 'var(--pr-accent-1)';
+  content.className = 'alert-box';
+
+  if(occupancy >= 86){
+    box.classList.add('celebratory-glow-R','party-box-R');
+    title.innerHTML = '<i class="fas fa-medal"></i> احتفال اليوم!';
+    title.style.color = 'var(--text-main)';
+    content.innerHTML = '<strong>تهانينا!</strong> لقد أديت أداءً رائعاً، إشغالك تجاوز الـ 86%. استغل هذا المستوى في تحصيل أفضل سعر ممكن!';
+  } else if(occupancy === 0){
+    content.innerHTML = '<span style="color:var(--pr-warning);"><i class="fas fa-exclamation-triangle"></i></span> <strong>انتبه!</strong> النسبة صفر، يفضل البدء بنسبة واقعية للحصول على تسعير صحيح.';
+  } else if(occupancy < 65){
+    content.innerHTML = '<span style="color:var(--pr-accent-1);"><i class="fas fa-bullhorn"></i></span> <strong>يا بطل!</strong> لديك شاغر كبير. اضغط على الوحدات المتاحة 5+ لتفعيل <b>الطوارئ</b> والمنافسة بقوة.';
+  } else {
+    content.innerHTML = '<span style="color:var(--pr-accent-2);"><i class="fas fa-chart-line"></i></span> <strong>وضع مستقر!</strong> قم بتحصيل أفضل سعر. لو عدد الغرف 4، طبّق خصم الوفرة لجذب حجوزات إضافية.';
+  }
+}
+
+function generateAIHintR(branch, data, occupancy){
+  const targetUnit = data.find(u => u.name.includes('غرفتين') || u.name.includes('VIP')) || data[0];
+  let suggestion = 'لا توجد توصيات فورية.';
+  let change = 0;
+
+  if(occupancy >= 80) change = 25;
+  else if(occupancy < 60) change = -15;
+
+  if(change !== 0){
+    const sign = change > 0 ? '+' : '';
+    suggestion = `بناءً على الإشغال الحالي، السعر المثالي لـ ${targetUnit.name} هو <strong>${sign}${change} ريال</strong> لتعظيم الربح.`;
+  }
+  document.querySelector('#aiHintBoxR span').innerHTML = suggestion;
+}
+
+function updateBranchStatusPulseR(occupancy){
+  const pulse = document.getElementById('branchStatusPulseR');
+  pulse.className = 'status-pulse-R';
+  if(occupancy > 90)      pulse.classList.add('status-overload-R','overload-shake-R');
+  else if(occupancy > 80) pulse.classList.add('status-high-R');
+  else if(occupancy > 60) pulse.classList.add('status-medium-R');
+  else                    pulse.classList.add('status-low-R');
+}
+
+// السعر المعروض حسب وضع التسعير
+function getDisplayedPriceR(finalDaily, item, pricingMode){
+  if (pricingMode === 'daily') {
+    return finalDaily; // يتأثر بالـ tier والعدد والإشغال
+  }
+  // الشهري ثابت لا يتأثر بالـ tier ولا العدد
+  if (pricingMode === 'monthly-normal') {
+    return item.monthlyNormal;
+  }
+  if (pricingMode === 'monthly-company') {
+    return item.monthlyNormal * 0.95;
+  }
+  if (pricingMode === 'monthly-season') {
+    return item.monthlySeason;
+  }
+  return finalDaily;
+}
+
+function updateAllR(callerId){
+  const branch = document.getElementById('branchSelectR').value;
+  const occupancyInput = document.getElementById('occupancyInputR');
+  const pricingMode = document.getElementById('pricingModeR').value;
+
+  let occupancy = parseInt(occupancyInput.value) || 0;
+  if(occupancy > 100){ occupancy = 100; occupancyInput.value = 100; }
+
+  document.getElementById('occupancyDisplayR').innerText = occupancy + '%';
+  updateChartR(occupancy);
+  generateSmartAdviceR(occupancy);
+  updateChartExplanationR(occupancy);
+  updateBranchStatusPulseR(occupancy);
+
+  const baseTier = getBaseTierR(occupancy);
+  const tierNames = ["طوارئ ⚡","منخفض (<60%)","متوسط (>60%)","جيد (>70%)","مرتفع (>80%)","🔥 موسم"];
+  document.getElementById('currentTierLabelR').innerText = tierNames[baseTier];
+
+  const data = dbR[branch];
+  const tableWrapper = document.getElementById('tableWrapperR');
+
+  if(callerId === 'branchSelectR'){
+    tableWrapper.style.opacity = 0;
+    setTimeout(() => {
+      renderTableBodyR();
+      tableWrapper.style.opacity = 1;
+    }, 350);
+    return;
+  }
+
+  renderTableBodyR();
+
+  function renderTableBodyR(){
+    let html = '';
+    newPricesR = {};
+    const isMonthlyMode = (pricingMode !== 'daily');
+
+    data.forEach((item, index) => {
+      const uid = branch + index;
+      const count = unitCountsR[uid] !== undefined ? unitCountsR[uid] : 0;
+
+      let finalTier = isMonthlyMode ? TIERS_R.UNDER60 : baseTier;
+      let badgeClass = 'pill-blue-R';
+      let statusMsg = 'السعر الأساسي';
+      let statusColor = 'var(--text-sub)';
+
+      const isTargeted =
+        (branch === 'cornish' && (item.name.includes('تؤم') || item.name.includes('VIP'))) ||
+        (branch === 'andalus' && item.name.includes('VIP'));
+
+      if (!isMonthlyMode) {
+        // منطق اليومية فقط
+        if(count >= 5){
+          finalTier = TIERS_R.EMG;
+          badgeClass = 'pill-red-R';
+          statusMsg = '🔥 سعر الإغراق';
+          statusColor = 'var(--pr-danger)';
+        } else if(count === 4){
+          if(finalTier > TIERS_R.UNDER60){
+            finalTier -= 1;
+            badgeClass = 'pill-green-R';
+            statusMsg = 'خصم 4 وحدات';
+            statusColor = 'var(--pr-accent-2)';
+          } else {
+            statusMsg = 'أقل سعر ممكن';
+            statusColor = 'var(--text-sub)';
+          }
+        } else if(isTargeted && (count === 1 || count === 2)){
+          if(finalTier > TIERS_R.UNDER60){
+            finalTier -= 1;
+            badgeClass = 'pill-green-R';
+            statusMsg = 'خصم ندرة (1-2 وحدة)';
+            statusColor = 'var(--pr-accent-2)';
+          } else {
+            statusMsg = 'أقل سعر ممكن';
+            statusColor = 'var(--text-sub)';
+          }
+        } else if(count >= 1 && count <= 3){
+          statusMsg = 'السعر الأساسي';
+          statusColor = 'var(--text-sub)';
+        } else if(count === 0){
+          statusMsg = 'مغلق/غير متاح';
+          statusColor = 'var(--text-sub)';
+        }
+      } else {
+        // الشهري ثابت لا يتأثر بالعدد
+        badgeClass = 'pill-blue-R';
+        statusMsg = 'سعر شهري ثابت';
+        statusColor = 'var(--text-sub)';
+      }
+
+      const finalDailyPrice = item.prices[finalTier];
+      const displayedPrice = getDisplayedPriceR(finalDailyPrice, item, pricingMode);
+
+      const priceKey = uid + '|' + pricingMode;
+      const pricePulseClass =
+        previousPricesR[priceKey] !== undefined && previousPricesR[priceKey] !== Math.round(displayedPrice)
+          ? 'price-pulse-R' : '';
+      newPricesR[priceKey] = Math.round(displayedPrice);
+
+      const inputValue = (count === 0) ? '' : count;
+      const monthlyStyle = isMonthlyMode ? 'background:#e8f0ff; color:#1a3f8b;' : '';
+
+      html += `
+        <tr>
+          <td style="font-weight:700; color:var(--text-main);">
+            ${item.name}
+          </td>
+          <td style="text-align:center;">
+            <input
+              type="text"
+              class="table-input-R"
+              value="${inputValue}"
+              oninput="handleCountInputR(event, '${uid}')"
+              onblur="if(this.value===''){ this.value='0'; handleCountInputR(event, '${uid}'); }"
+            >
+          </td>
+          <td>
+            <div class="price-pill-R ${badgeClass} ${pricePulseClass}" style="${monthlyStyle}">
+              ${Math.round(displayedPrice)}
+              <span style="font-size:0.7em; font-weight:400; margin-right:3px;">ر.س</span>
+              ${isMonthlyMode ? '<div style="font-size:0.75rem; margin-top:2px;">/ شهر</div>' : ''}
+            </div>
+          </td>
+          <td style="font-size:0.85rem; color:${statusColor}; font-weight:700;">
+                <i class="fas fa-info-circle"></i> ${statusMsg}
+          </td>
+        </tr>
+      `;
+    });
+
+    document.getElementById('tableBodyR').innerHTML = html;
+    previousPricesR = newPricesR;
+    generateAIHintR(branch, data, occupancy);
+  }
+}
+
+function handleCountInputR(e, id){
+  const cleaned = (e.target.value || '').replace(/[^0-9]/g,'');
+  e.target.value = cleaned;
+  setCountR(id, cleaned);
+}
+
+function setCountR(id, val){
+  unitCountsR[id] = parseInt(val,10) || 0;
+  updateAllR();
+}
+
+function updateChartR(val){
+  const ctx = document.getElementById('occupancyChartR').getContext('2d');
+  if(chartInstanceR) chartInstanceR.destroy();
+
+  let colorHex = '';
+  if(val > 85)      colorHex = 'var(--pr-accent-3)';
+  else if(val > 70) colorHex = 'var(--pr-accent-2)';
+  else if(val > 60) colorHex = 'var(--pr-warning)';
+  else              colorHex = 'var(--pr-danger)';
+
+  const cardElement = document.getElementById('occupancyChartR').closest('.card-R');
+  cardElement.className = 'card-R';
+  if(val > 85) cardElement.classList.add('celebratory-glow-R','party-box-R');
+
+  chartInstanceR = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Used','Free'],
+      datasets: [{
+        data: [val, 100 - val],
+        backgroundColor: [colorHex, '#dce1e8'],
+        borderColor: 'white',
+        borderWidth: 2,
+        borderRadius: 20
+      }]
+    },
+    options: {
+      cutout: '80%',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{enabled:false} },
+      animation: { duration: 400 }
+    }
+  });
+}
+
+// تنقل TAB / ENTER لحاسبة الاستقبال
+document.addEventListener('keydown', function(e){
+    const activeView = document.getElementById('view-booking');
+    if (!activeView || !activeView.classList.contains('active')) return;
+    
+    const target = e.target;
+    if(target.tagName !== 'INPUT') return;
+    
+    const isReceptionInput = target.classList.contains('table-input-R') || target.classList.contains('strong-input-R');
+    
+    if(isReceptionInput) {
+        const isEnter = (e.key === 'Enter' || e.keyCode === 13);
+        const isTab   = (e.key === 'Tab');
+        if(!isEnter && !isTab) return;
+
+        e.preventDefault();
+
+        if(target.classList.contains('strong-input-R')){
+            const allInputs = Array.from(document.querySelectorAll('#receptionPricing .strong-input-R, #receptionPricing .table-input-R'));
+            const index = allInputs.indexOf(target);
+            if(index > -1 && index < allInputs.length - 1){
+                allInputs[index+1].focus();
+            }
+            return;
+        }
+
+        if(target.classList.contains('table-input-R')){
+            const currentRow = target.closest('tr');
+            if(!currentRow) return;
+            const nextRow = currentRow.nextElementSibling;
+            if(nextRow){
+                const nextInput = nextRow.querySelector('.table-input-R');
+                if(nextInput) nextInput.focus();
+            }
+        }
+    }
+});
+
+function printReceptionPricing() {
+    // هذه الدالة تم دمجها سابقاً وهي جاهزة للعمل
+    const tableBody = document.getElementById('tableBodyR');
+    const title = document.getElementById('branchSelectR').value === 'cornish' ? 'قائمة أسعار الاستقبال (الكورنيش)' : 'قائمة أسعار الاستقبال (الأندلس)';
+    const tier = document.getElementById('currentTierLabelR').innerText;
+    const occupancy = document.getElementById('occupancyInputR').value || '0';
+    const mode = document.getElementById('pricingModeR').options[document.getElementById('pricingModeR').selectedIndex].text;
+
+    let tableHTML = `<table class="prof-table">
+        <thead>
+            <tr style="background:#eee; font-weight:bold;">
+                <th style="border:2px solid #000; padding:12px; text-align:right;">الوحدة</th>
+                <th style="border:2px solid #000; padding:12px;">العدد المتاح</th>
+                <th style="border:2px solid #000; padding:12px;">السعر المقترح</th>
+                <th style="border:2px solid #000; padding:12px;">تحليل الحالة</th>
+            </tr>
+        </thead>
+        <tbody>`;
+    
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach(row => {
+        const name = row.cells[0].innerText;
+        const count = row.cells[1].querySelector('input').value || '0';
+        const price = row.cells[2].innerText.replace(/\s+/g, ' ').trim();
+        const status = row.cells[3].innerText.replace('ℹ️', '').trim();
+        tableHTML += `<tr>
+            <td style="border:2px solid #000; padding:12px; font-weight:bold; text-align:right;">${name}</td>
+            <td style="border:2px solid #000; padding:12px;">${count}</td>
+            <td style="border:2px solid #000; padding:12px; background:#f9f9f9; font-weight:bold;">${price}</td>
+            <td style="border:2px solid #000; padding:12px;">${status}</td>
+        </tr>`;
+    });
+    tableHTML += `</tbody></table>`;
+    
+    document.getElementById('printArea').innerHTML = `
+        <div class="prof-report-container">
+            <div class="prof-header">
+                <h1>${title}</h1>
+                <p>وضع التسعير: ${mode} | نسبة الإشغال: ${occupancy}% | الفئة: ${tier}</p>
+            </div>
+            ${tableHTML}
+            <div class="prof-footer"><div>توقيع المسؤول<br><br>.........................</div><div> المدير العام <br><br>.........................</div></div>
+        </div>
+    `;
+    window.print();
+}
+
+
 window.onload = function(){ 
+    // 1. Original Admin Pricing (calc)
     for(let i=1;i<=5;i++) calc('c',i); for(let i=1;i<=9;i++) calc('a',i); 
-    enhanceInputs(); buildSeasonsTable(); boxGreet(); loadBoxData(); 
+    
+    // 2. New Reception Pricing (calcR)
+    document.getElementById('branchSelectR').value = 'cornish'; 
+    document.getElementById('occupancyInputR').value = 0;
+    updateAllR('initialLoad');
+    
+    // 3. Other Initialization
+    enhanceInputs(); 
+    buildSeasonsTable(); 
+    boxGreet(); 
+    loadBoxData(); 
 };
 </script>
+
+</body>
+</html>
