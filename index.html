@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>المنظومة الموحدة – Elite Update</title>
+<title>المنظومة الموحدة – Elite Final Update</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="system-signature" content="AYMAN-SAFE-PROTECTED-2025"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
 
 * { box-sizing: border-box; outline: none; }
 
-/* إخفاء أسهم الأرقام في المتصفحات */
+/* إخفاء أسهم الأرقام */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
@@ -78,13 +78,8 @@ table.std-table td { padding: 8px; text-align: center; font-weight: 700; color: 
 table.std-table tbody tr:nth-child(even) { background-color: var(--row-alt); }
 table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 
-/* Manual Mode Grid Update */
-#manualModeWrapper .manual-grid {
-    display: grid; 
-    grid-template-columns: 1fr 2px 1fr; 
-    gap: 15px; 
-    align-items: start;
-}
+/* Manual Mode Grid */
+#manualModeWrapper .manual-grid { display: grid; grid-template-columns: 1fr 2px 1fr; gap: 15px; align-items: start; }
 .vertical-sep { background: #ddd; height: 100%; width: 2px; }
 @media (max-width: 900px) {
     #manualModeWrapper .manual-grid { grid-template-columns: 1fr; }
@@ -92,24 +87,14 @@ table.std-table tbody tr:nth-child(odd) { background-color: #fff; }
 }
 
 /* Inputs */
-.data-input, .calc-input {
-    width: 100%; max-width: 80px; text-align: center; border: 1px solid #999; 
-    border-radius: 4px; padding: 6px; font-weight: 700; color: #000; background: #fff; font-size: 0.95rem;
-}
+.data-input, .calc-input { width: 100%; max-width: 80px; text-align: center; border: 1px solid #999; border-radius: 4px; padding: 6px; font-weight: 700; color: #000; background: #fff; font-size: 0.95rem; }
 .calc-readonly { background: #E9EDF7; pointer-events: none; border: none; }
 .rate-input { width: 50px; }
 
 /* Buttons */
-.btn-action {
-  background: var(--primary-dark); color: #fff; border: none; padding: 15px;
-  border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%;
-  transition: 0.2s; margin-top: 10px;
-}
+.btn-action { background: var(--primary-dark); color: #fff; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; }
 .btn-action:hover { background: #000; }
-.btn-download {
-    background: #fff; border: 2px solid var(--primary-dark); color: var(--primary-dark);
-    padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 15px;
-}
+.btn-download { background: #fff; border: 2px solid var(--primary-dark); color: var(--primary-dark); padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 15px; }
 .btn-download:hover { background: var(--primary-dark); color: #fff; }
 
 .badge { padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; display: inline-block; font-weight: 700; }
@@ -167,9 +152,9 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 .calc-btn { padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; transition: 0.2s; }
 .calc-btn:hover { background: rgba(255,255,255,0.2); }
 .calc-btn.op { background: var(--box-blue); color: #000; }
-.calc-btn.eq { background: var(--box-gold); color: #000; } /* تعديل حجم الزر ليناسب الزر الجديد */
+.calc-btn.eq { background: var(--box-gold); color: #000; }
 .calc-btn.clr { background: #ef4444; color: #fff; }
-.calc-btn.transfer { background: #10b981; color: #000; grid-column: span 2; } /* زر الترحيل الجديد */
+.calc-btn.transfer { background: #10b981; color: #000; grid-column: span 2; }
 
 #lblCashSum { color: #000 !important; font-weight: 900; background: #fff; padding: 2px 6px; border-radius: 4px; }
 .btn-box { border: none; border-radius: 10px; padding: 8px 16px; font-weight: 800; cursor: pointer; transition: 0.2s; color: #fff; }
@@ -180,135 +165,61 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 #txtShiftNotes { width: 100%; max-width: 400px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; padding: 10px; margin-top: 10px; font-family: inherit; }
 .undo-container { display: inline-block; margin-right: 10px; }
 
-/* تاريخ العمليات للحاسبة */
-.calc-history {
-  margin-top: 8px;
-  max-height: 120px;
-  overflow-y: auto;
-  font-size: 12px;
-  line-height: 1.5;
-  background: rgba(15,23,42,0.6);
-  border-radius: 10px;
-  padding: 6px 8px;
-  border: 1px solid rgba(148,163,184,0.4);
-}
+.calc-history { margin-top: 8px; max-height: 120px; overflow-y: auto; font-size: 12px; line-height: 1.5; background: rgba(15,23,42,0.6); border-radius: 10px; padding: 6px 8px; border: 1px solid rgba(148,163,184,0.4); }
 .calc-history-entry { opacity: 0.9; }
 
-/* --- PRINT STYLES (CUSTOM) --- */
+/* --- PRINT STYLES (CUSTOM & PROF) --- */
 #printArea { display: none; } 
 @media print {
     @page { size: A4 portrait; margin: 5mm; }
     body { background: #fff !important; padding: 0; margin: 0; zoom: 100%; height: auto; overflow: visible; }
     body > * { display: none !important; }
-    #printArea { display: block !important; position: absolute; top: 0; left: 0; width: 100%; background: #fff; color: #000; padding: 20px; }
-    #printArea table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
-    #printArea th, #printArea td { border: 1px solid #000; padding: 10px; text-align: center; color: #000; }
-    #printArea th { background: #f0f0f0 !important; font-weight: bold; }
+    #printArea { display: block !important; position: absolute; top: 0; left: 0; width: 100%; background: #fff; color: #000; padding: 10px; }
     
-    /* Signature Footer only for Pricing/Box, hidden in Compare if requested */
-    .print-footer { margin-top: 40px; text-align: left; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; display: flex; justify-content: space-between; }
-    .no-print { display: none !important; }
+    /* Professional Report Style */
+    .prof-report-container { width: 100%; margin: 0 auto; border: 3px solid #000; padding: 15px; box-sizing: border-box; }
+    .prof-header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 15px; }
+    .prof-header h1 { font-size: 28px; margin: 0; font-weight: 900; text-decoration: underline; }
+    .prof-header p { margin: 5px 0 0 0; font-size: 16px; }
+    
+    table.prof-table { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 20px; }
+    table.prof-table th, table.prof-table td { border: 2px solid #000; padding: 12px 8px; text-align: center; font-weight: bold; color: #000; }
+    table.prof-table th { background: #eee !important; font-size: 18px; }
+    
+    .prof-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; page-break-inside: avoid; }
+    .prof-box { border: 2px solid #000; padding: 15px; }
+    .prof-box h3 { margin-top: 0; border-bottom: 1px solid #000; padding-bottom: 5px; }
+    
+    .prof-footer { margin-top: 50px; display: flex; justify-content: space-between; padding-top: 20px; border-top: 3px solid #000; }
+    .prof-footer div { width: 45%; text-align: center; font-weight: 900; font-size: 18px; }
+    
+    /* Hide default simple print style */
+    .simple-print { display: none; }
 }
 
-/* =========================================================
-   iOS Toast & Modal
-   ========================================================== */
-#toastContainer {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10000;
-}
-.toast-ios {
-  min-width: 260px;
-  max-width: 340px;
-  background: rgba(15,23,42,0.95);
-  color: #e5e7eb;
-  border-radius: 18px;
-  padding: 10px 14px;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  box-shadow: 0 18px 45px rgba(0,0,0,0.55);
-  backdrop-filter: blur(14px);
-  font-size: 14px;
-  animation: toastSlide 0.25s ease-out;
-}
+/* iOS Toast & Modal */
+#toastContainer { position: fixed; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 10000; }
+.toast-ios { min-width: 260px; max-width: 340px; background: rgba(15,23,42,0.95); color: #e5e7eb; border-radius: 18px; padding: 10px 14px; display: flex; align-items: flex-start; gap: 8px; box-shadow: 0 18px 45px rgba(0,0,0,0.55); backdrop-filter: blur(14px); font-size: 14px; animation: toastSlide 0.25s ease-out; }
 .toast-ios-success { border: 1px solid rgba(34,197,94,0.7); }
 .toast-ios-error { border: 1px solid rgba(248,113,113,0.7); }
 .toast-ios-info { border: 1px solid rgba(59,130,246,0.7); }
 .toast-ios-icon { font-size: 18px; margin-top: 1px; }
 .toast-ios-text { flex: 1; }
-.toast-ios-close {
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 4px;
-}
-@keyframes toastSlide {
-  from { opacity: 0; transform: translateY(-10px) translateX(10px); }
-  to   { opacity: 1; transform: translateY(0) translateX(0); }
-}
+.toast-ios-close { border: none; background: transparent; color: #9ca3af; cursor: pointer; font-size: 16px; padding: 0 4px; }
+@keyframes toastSlide { from { opacity: 0; transform: translateY(-10px) translateX(10px); } to { opacity: 1; transform: translateY(0) translateX(0); } }
 
 /* Modal */
-.ios-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15,23,42,0.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  backdrop-filter: blur(4px);
-}
-.ios-modal-box {
-  background: rgba(15,23,42,0.98);
-  color: #e5e7eb;
-  padding: 20px;
-  border-radius: 24px;
-  width: min(420px, 90vw);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
-}
-.ios-modal-title {
-  font-weight: 800;
-  margin-bottom: 6px;
-  font-size: 16px;
-}
-.ios-modal-body {
-  font-size: 14px;
-  margin-bottom: 18px;
-  line-height: 1.6;
-}
-.ios-modal-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-.btn-modal {
-  border: none;
-  border-radius: 999px;
-  padding: 8px 18px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 13px;
-}
-.btn-modal-secondary {
-  background: rgba(148,163,184,0.22);
-  color: #e5e7eb;
-}
-.btn-modal-primary {
-  background: #22c55e;
-  color: #022c22;
-}
-.choice-btn {
-    width: 100%; margin-bottom: 8px; text-align: right; padding: 12px; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-weight: bold;
-}
+.ios-modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.55); display: none; align-items: center; justify-content: center; z-index: 10001; backdrop-filter: blur(4px); }
+.ios-modal-box { background: rgba(15,23,42,0.98); color: #e5e7eb; padding: 20px; border-radius: 24px; width: min(420px, 90vw); box-shadow: 0 24px 60px rgba(0,0,0,0.7); }
+.ios-modal-title { font-weight: 800; margin-bottom: 6px; font-size: 16px; }
+.ios-modal-body { font-size: 14px; margin-bottom: 18px; line-height: 1.6; }
+.ios-modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.btn-modal { border: none; border-radius: 999px; padding: 8px 18px; font-weight: 600; cursor: pointer; font-size: 13px; }
+.btn-modal-secondary { background: rgba(148,163,184,0.22); color: #e5e7eb; }
+.btn-modal-primary { background: #22c55e; color: #022c22; }
+.choice-btn { width: 100%; margin-bottom: 8px; text-align: right; padding: 12px; background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-weight: bold; }
 .choice-btn:hover { background: rgba(255,255,255,0.2); }
+#modalNoteInput { width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #555; background: rgba(0,0,0,0.3); color: #fff; font-family: inherit; }
 </style>
 </head>
 <body>
@@ -323,7 +234,6 @@ table.box-table td[contenteditable]:focus { border-color: var(--box-blue); outli
 </div>
 
 <div class="frame-wrapper">
-
   <div id="view-compare" class="section-view active">
     <div class="card">
       <h1>المدقق الشفاف</h1>
@@ -583,12 +493,8 @@ function showChoiceModal(title, message, choices) {
     const overlay = document.getElementById('modalOverlay');
     if (!overlay) return;
     document.getElementById('modalTitle').innerText = title;
-    document.getElementById('modalBody').innerText = message;
-    
-    // Using the body area for choices to list them vertically
     const body = document.getElementById('modalBody');
     body.innerHTML = `<div style="margin-bottom:10px;">${message}</div>`;
-    
     choices.forEach(c => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
@@ -596,7 +502,6 @@ function showChoiceModal(title, message, choices) {
         btn.onclick = () => { hideModal(); c.action(); };
         body.appendChild(btn);
     });
-
     const actions = document.getElementById('modalActions');
     actions.innerHTML = '';
     const cancelBtn = document.createElement('button');
@@ -604,12 +509,9 @@ function showChoiceModal(title, message, choices) {
     cancelBtn.innerText = 'إلغاء';
     cancelBtn.onclick = hideModal;
     actions.appendChild(cancelBtn);
-    
     overlay.style.display = 'flex';
 }
 
-
-/* رقم بدون 00 */
 function formatNumber(val) {
   const num = parseFloat(val);
   if (!isFinite(num) || Math.abs(num) < 1e-9) return '0';
@@ -620,7 +522,7 @@ function formatNumber(val) {
   return s;
 }
 
-/* AUDIT & PRICING LOGIC */
+/* LOGIC (Combined Audit, Pricing, Seasons, Cashbox) */
 let currentMode = 'upload';
 const CANONICAL_TYPES = ["شقة بغرفتي نوم", "شقة مع إطلالة على البحر", "ستوديو امامي", "غرفة كينج مفرد", "غرفة تؤم خلفية", "VIP"];
 const CANCEL_FLAGS = ["cancel", "cancelled", "cancelled_by_guest", "ملغي", "كنسل"];
@@ -634,7 +536,7 @@ function switchMode(mode) {
     const btnManual = document.getElementById('toggleManual');
     const output = document.getElementById('output');
     if(mode === 'upload') { uploadWrap.style.display = 'block'; manualWrap.style.display = 'none'; btnUpload.classList.add('active'); btnManual.classList.remove('active'); } 
-    else { uploadWrap.style.display = 'block'; manualWrap.style.display = 'block'; uploadWrap.style.display = 'none'; btnUpload.classList.remove('active'); btnManual.classList.add('active'); if(document.getElementById('nazeel-inputs').children.length === 0) initializeFixedInputTables(); }
+    else { uploadWrap.style.display = 'none'; manualWrap.style.display = 'block'; btnUpload.classList.remove('active'); btnManual.classList.add('active'); if(document.getElementById('nazeel-inputs').children.length === 0) initializeFixedInputTables(); }
     output.style.display = 'none'; document.getElementById('errorArea').style.display = 'none';
 }
 function unifiedAnalysis() { if (currentMode === 'upload') runAudit(); else analyzeManualData(); }
@@ -676,11 +578,7 @@ function getSmartRecommendation(diff) { if (diff === 1) return '✅ اقترح �
 function runAudit() { const errDiv = document.getElementById("errorArea"); errDiv.style.display = "none"; const fB = document.getElementById("fileBooking").files[0]; const fN = document.getElementById("fileNazeel").files[0]; if(!fB || !fN) { errDiv.textContent = "⚠️ الرجاء رفع الملفين أولاً"; errDiv.style.display = "block"; return; }
 
   const isPdfN = fN && (fN.type === 'application/pdf' || /\.pdf$/i.test(fN.name));
-  if (isPdfN) {
-    errDiv.textContent = "ملف نزيل بصيغة PDF لا يمكن تحليله مباشرة. فضلاً صدّر نفس التقرير من نزيل بصيغة Excel (XLS / XLSX) ثم أعد الرفع.";
-    errDiv.style.display = "block";
-    return;
-  }
+  if (isPdfN) { errDiv.textContent = "ملف نزيل بصيغة PDF لا يمكن تحليله مباشرة. فضلاً صدّر نفس التقرير من نزيل بصيغة Excel (XLS / XLSX) ثم أعد الرفع."; errDiv.style.display = "block"; return; }
 
   const rB = new FileReader();
   rB.onload = e => { try { const wb = XLSX.read(e.target.result, {type:'array'}); const statsB = processBooking(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1})); const rN = new FileReader(); rN.onload = e2 => { try { const wb2 = XLSX.read(e2.target.result, {type:'array'}); const statsN = processNazeel(XLSX.utils.sheet_to_json(wb2.Sheets[wb2.SheetNames[0]], {header:1})); window.nazeelLastRunData = statsN; window.bookingLastRunData = statsB; draw(statsB, statsN); } catch(x) { errDiv.textContent = "خطأ في ملف نزيل: " + x.message; errDiv.style.display = "block"; } }; rN.readAsArrayBuffer(fN); } catch(x) { errDiv.innerHTML = "خطأ في ملف بوكينج:<br>" + x.message; errDiv.style.display = "block"; } }; rB.readAsArrayBuffer(fB); }
@@ -713,27 +611,29 @@ const seasonEvents = [
 function parseDMY(str) { const parts = str.split("/"); return new Date(parseInt(parts[2],10), parseInt(parts[1],10)-1, parseInt(parts[0],10)); }
 function buildSeasonsTable() { const today = new Date(); today.setHours(0,0,0,0); const sorted = seasonEvents.slice().sort((a,b) => parseDMY(a.greg) - parseDMY(b.greg)); const tbody = document.getElementById('seasonsBody'); if (!tbody) return; tbody.innerHTML = ""; let foundNext = false; for (const ev of sorted) { const evDate = parseDMY(ev.greg); const diffTime = evDate - today; const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); const isNext = !foundNext && diffDays >= 0 && diffDays <= 60; const tr = document.createElement('tr'); if (isNext) { tr.className = 'highlight-next-season'; foundNext = true; } const tdType = document.createElement('td'); const badge = document.createElement('span'); badge.className = 'badge ' + (ev.type === 'موسم' ? 'badge-season' : 'badge-rukood'); badge.textContent = ev.type === 'موسم' ? 'موسم / إجازة' : 'دراسة / دوام'; tdType.appendChild(badge); const tdTitle = document.createElement('td'); tdTitle.textContent = ev.title + (isNext ? " (قريباً 🔥)" : ""); const tdHijri = document.createElement('td'); tdHijri.textContent = ev.hijri; const tdGreg = document.createElement('td'); tdGreg.textContent = ev.greg; tr.appendChild(tdType); tr.appendChild(tdTitle); tr.appendChild(tdHijri); tr.appendChild(tdGreg); tbody.appendChild(tr); } }
 
-/* CASHBOX LOGIC V7.1 - Refined */
+/* CASHBOX LOGIC V8 - Final Mods */
 let allBoxData = [];
 const BOX_KEY = 'cashboxData';
 let undoTimer = null;
 let currentPage = 1;
 const ITEMS_PER_PAGE = 5;
 let lastZeroToastTime = 0;
+let lastVarianceToastTime = 0;
 
 function loadBoxData() {
     const raw = localStorage.getItem(BOX_KEY);
     if(!raw) { allBoxData = []; createNewRowObj(); } 
     else { allBoxData = JSON.parse(raw); if(allBoxData.length === 0) createNewRowObj(); }
-    allBoxData.forEach(r => { if(typeof r.employee === 'undefined') r.employee = localStorage.getItem('cashboxEmployee') || ""; });
     if(allBoxData.length > 0 && allBoxData[allBoxData.length-1].closed) { createNewRowObj(); }
     renderBoxTable();
 }
+
 function createNewRowObj() {
-    const savedEmp = localStorage.getItem('cashboxEmployee') || "";
-    allBoxData.push({ id: allBoxData.length + 1, employee: savedEmp, reserve: 0, exp: 0, time: "--:--", cash: 0, tempExp: 0, network: 0, transfer: 0, prog: 0, note: "", closed: false });
+    // MOD 1: Employee name empty (was auto-filled)
+    allBoxData.push({ id: allBoxData.length + 1, employee: "", reserve: 0, exp: 0, time: "--:--", cash: 0, tempExp: 0, network: 0, transfer: 0, prog: 0, note: "", closed: false });
     saveData();
 }
+
 function renderBoxTable() {
     const tbody = document.getElementById('tbodyBox'); tbody.innerHTML = '';
     const viewData = [...allBoxData].reverse();
@@ -751,11 +651,10 @@ function renderBoxTable() {
         const varColor = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
 
         const ev = `contenteditable onfocus="handleCellFocus(this)" onblur="handleCellBlur(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
-        const empEv = `contenteditable onfocus="if(this.innerText==='اكتب اسمك')this.innerText='';" onblur="updateRow(${row.id}, this)" oninput="updateRow(${row.id}, this)"`;
+        // MOD 1: No numbers allowed in name
+        const empEv = `contenteditable onfocus="if(this.innerText==='اكتب اسمك')this.innerText='';" onblur="updateRow(${row.id}, this)" oninput="validateNameInput(this); updateRow(${row.id}, this)"`;
 
         const employeeDisp = row.employee && row.employee !== "" ? row.employee : (row.closed ? "" : "اكتب اسمك");
-        
-        // Helper for cell rendering to attach calc-flag
         const cashAttr = row.isCalcCash ? 'data-from-calc="true"' : '';
 
         const chk = row.closed ? `<input type="checkbox" class="print-chk" value="${row.id}"> ${row.id}` : `<span style="opacity:0.6;">${row.id}</span>`;
@@ -784,6 +683,7 @@ function renderBoxTable() {
     renderPagination(totalPages); 
     if (viewData[0]) updateCards(viewData[0]);
 }
+
 function showNote(id) {
     const row = allBoxData.find(r => r.id === id);
     const txt = row && row.note ? row.note : 'لا توجد ملاحظات مسجلة لهذا الصف.';
@@ -811,13 +711,13 @@ function handleCellFocus(el) {
     el.dataset.oldVal = el.innerText;
     if(el.dataset.field === 'cash' && el.dataset.fromCalc === 'true') {
         showConfirm('هذه القيمة تم جلبها من الحاسبة. هل تود تغيير المبلغ يدوياً؟', function(){
-            el.dataset.fromCalc = 'false'; // Remove flag confirmed
+            el.dataset.fromCalc = 'false'; 
             const rowId = el.parentElement.dataset.id;
             const row = allBoxData.find(r => r.id == rowId);
             if(row) { row.isCalcCash = false; saveData(); }
             el.focus();
         });
-        el.blur(); // Blur temporarily until confirmed
+        el.blur(); 
         return;
     }
     el.innerText = '';
@@ -828,13 +728,28 @@ function handleCellBlur(id, el) {
     updateRow(id, el);
 }
 
+// MOD 1: Helper to block numbers in name
+function validateNameInput(el) {
+    const val = el.innerText;
+    if(/[0-9]/.test(val)) {
+        el.innerText = val.replace(/[0-9]/g, '');
+        // Move cursor to end
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+}
+
 function updateRow(id, el) {
     const row = allBoxData.find(r => r.id === id); if(!row) return;
     const field = el.dataset.field; 
     if(field === 'employee') {
         row.employee = el.innerText.trim() === 'اكتب اسمك' ? '' : el.innerText.trim();
         if (row.employee) {
-            localStorage.setItem('cashboxEmployee', row.employee);
+            localStorage.setItem('cashboxEmployee', row.employee); // Save only to cache, not applied to new rows per request
             boxGreet();
         }
         saveData();
@@ -846,15 +761,24 @@ function updateRow(id, el) {
     const v = (parseFloat(row.cash)||0) + (parseFloat(row.network)||0) + (parseFloat(row.transfer)||0) + (parseFloat(row.exp)||0) + (parseFloat(row.tempExp)||0) + (parseFloat(row.reserve)||0) - (parseFloat(row.prog)||0);
     el.parentElement.cells[10].innerText = formatNumber(v); 
     el.parentElement.cells[10].style.color = v === 0 ? '#4ade80' : (v < 0 ? '#f87171' : '#facc15');
-    if (v === 0) notifyZeroVariance(row.employee);
+    
+    // MOD 4: Specific Variance Notifications
+    notifyVariance(v);
 }
 
-function notifyZeroVariance(empName) {
+// MOD 4: Variance Notifications (+, -, 0)
+function notifyVariance(v) {
     const now = Date.now();
-    if (now - lastZeroToastTime < 5000) return;
-    lastZeroToastTime = now;
-    const extra = empName && empName !== 'اكتب اسمك' ? ` يا ${empName}` : '';
-    showToast(`🎉 أداء ممتاز${extra}! الانحراف صفر.`, 'success');
+    if (now - lastVarianceToastTime < 3500) return; // Throttle
+    lastVarianceToastTime = now;
+
+    if (v === 0) {
+        showToast(`🎉 أداء ممتاز (متطابق)! الانحراف صفر.`, 'success');
+    } else if (v > 0) {
+        showToast(`⚠️ تنبيه: يوجد زيادة (فائض) في الصندوق بمقدار ${formatNumber(v)}`, 'info');
+    } else {
+        showToast(`⚠️ تنبيه: يوجد عجز في الصندوق بمقدار ${formatNumber(Math.abs(v))}`, 'error');
+    }
 }
 
 function updateCards(row) {
@@ -870,56 +794,90 @@ function updateCards(row) {
 function closeShift() {
     const rowsDOM = document.querySelectorAll('#tbodyBox tr');
     if(rowsDOM.length === 0) return;
-    const activeTR = rowsDOM[0]; // The first one (latest)
-    if (activeTR.classList.contains('closed-row')) return; // Already closed
+    const activeTR = rowsDOM[0]; 
+    if (activeTR.classList.contains('closed-row')) return; 
     
     const rowId = parseInt(activeTR.dataset.id);
     const row = allBoxData.find(r => r.id === rowId);
     if (!row) return;
 
-    // Validation 1: Employee Name
     const empName = row.employee ? row.employee.trim() : "";
-    // Regex: At least one letter (Arabic or English)
     if(!empName || !/[a-zA-Z\u0600-\u06FF]/.test(empName)) {
         showToast("⚠️ يجب كتابة اسم الموظف (أحرف) قبل الإغلاق.", "error");
         return;
     }
-
-    // Validation 2: Program Revenue
     const progVal = parseFloat(row.prog);
     if(!progVal || progVal <= 0) { 
         showToast("⚠️ يجب إدخال إيراد البرنامج قبل الإغلاق.", "error");
         return; 
     }
 
-    showConfirm('هل تريد إغلاق الصندوق؟', function() {
-        const noteTxt = document.getElementById('txtShiftNotes').value; 
-        row.note = noteTxt; 
+    // MOD 2: If notes empty, add input to modal
+    let currentNote = document.getElementById('txtShiftNotes').value;
+    const isNoteEmpty = !currentNote || currentNote.trim() === "";
+
+    const overlay = document.getElementById('modalOverlay');
+    document.getElementById('modalTitle').innerText = 'تأكيد العملية';
+    
+    let bodyHtml = 'هل تريد إغلاق الصندوق؟';
+    if (isNoteEmpty) {
+        bodyHtml += '<br><div style="margin-top:10px; font-size:12px; color:#bbb;">ملاحظات سريعة على التقفيلة:</div><textarea id="modalNoteInput"></textarea>';
+    }
+    document.getElementById('modalBody').innerHTML = bodyHtml;
+
+    const actions = document.getElementById('modalActions');
+    actions.innerHTML = '';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn-modal btn-modal-secondary';
+    cancelBtn.innerText = 'رجوع';
+    cancelBtn.onclick = hideModal;
+
+    const okBtn = document.createElement('button');
+    okBtn.className = 'btn-modal btn-modal-primary';
+    okBtn.innerText = 'تأكيد';
+    okBtn.onclick = function() {
+        // Save note if entered in modal
+        if(isNoteEmpty) {
+            const modalNote = document.getElementById('modalNoteInput').value;
+            row.note = modalNote;
+        } else {
+            row.note = currentNote;
+        }
         document.getElementById('txtShiftNotes').value = "";
-        row.closed = true; 
-        row.isUndoActive = true;
-        const now = new Date(); 
-        row.time = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
-        saveData(); 
-        createNewRowObj(); 
-        renderBoxTable();
         
-        let timeLeft = 30; 
-        undoTimer = setInterval(() => { 
-            timeLeft--; 
-            const timerSpan = document.getElementById('undoTimer'); 
-            if(timerSpan) timerSpan.innerText = timeLeft; 
-            if(timeLeft <= 0) finalizeClose(row.id); 
-        }, 1000);
-        
-        try{ document.getElementById('sndAction').play(); }catch(e){}
-    });
+        hideModal();
+        performClose(row);
+    };
+    actions.appendChild(cancelBtn);
+    actions.appendChild(okBtn);
+    overlay.style.display = 'flex';
 }
+
+function performClose(row) {
+    row.closed = true; 
+    row.isUndoActive = true;
+    const now = new Date(); 
+    row.time = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
+    saveData(); 
+    createNewRowObj(); 
+    renderBoxTable();
+    
+    let timeLeft = 30; 
+    undoTimer = setInterval(() => { 
+        timeLeft--; 
+        const timerSpan = document.getElementById('undoTimer'); 
+        if(timerSpan) timerSpan.innerText = timeLeft; 
+        if(timeLeft <= 0) finalizeClose(row.id); 
+    }, 1000);
+    
+    try{ document.getElementById('sndAction').play(); }catch(e){}
+}
+
 function finalizeClose(id) { clearInterval(undoTimer); const row = allBoxData.find(r => r.id === id); if(row) { row.isUndoActive = false; saveData(); renderBoxTable(); } }
 
 function undoClose(id) {
     clearInterval(undoTimer);
-    allBoxData.pop(); // Remove the new blank row created on close
+    allBoxData.pop(); 
     const row = allBoxData.find(r => r.id === id); 
     if(row) { 
         row.closed = false; 
@@ -931,7 +889,6 @@ function undoClose(id) {
 }
 function saveData() { localStorage.setItem(BOX_KEY, JSON.stringify(allBoxData)); }
 
-/* CALCULATOR LOGIC */
 let calcHistory = [];
 function addCalcHistory(exp, result) {
     const cleanExp = (exp || "").toString().replace(/\s+/g,'');
@@ -942,50 +899,31 @@ function addCalcHistory(exp, result) {
 }
 
 function validateCalcInput(el) {
-    // Allow standard operators + - * / . and numbers
     const val = el.value;
-    // If last char is not valid, remove it
-    if (!/^[0-9\+\-\*\/\.\(\)\s]*$/.test(val)) {
-        el.value = val.slice(0, -1);
-    }
+    if (!/^[0-9\+\-\*\/\.\(\)\s]*$/.test(val)) { el.value = val.slice(0, -1); }
 }
 
 function cApp(v) {
     const disp = document.getElementById('cDisp');
-    if(v==='C') { 
-        disp.value = ""; 
-        calcHistory = [];
-        document.getElementById('calcHistory').innerHTML = "";
-    } 
+    if(v==='C') { disp.value = ""; calcHistory = []; document.getElementById('calcHistory').innerHTML = ""; } 
     else if(v==='=') { 
         try { 
-            const safeExp = disp.value.replace(/[^0-9\+\-\*\/\.\(\)]/g, ''); // Sanitization
+            const safeExp = disp.value.replace(/[^0-9\+\-\*\/\.\(\)]/g, '');
             if(!safeExp) return;
             const res = eval(safeExp); 
-            if (!isNaN(res)) {
-                addCalcHistory(disp.value, formatNumber(res));
-                disp.value = parseFloat(res.toFixed(2)); 
-            } else {
-                disp.value = "Error";
-            }
+            if (!isNaN(res)) { addCalcHistory(disp.value, formatNumber(res)); disp.value = parseFloat(res.toFixed(2)); } else { disp.value = "Error"; }
         } catch { disp.value = "Error"; } 
-    } else { 
-        disp.value += v; 
-    } 
+    } else { disp.value += v; } 
 }
 
-// Main Calc Transfer Logic
 function transferCalcResult() {
     const disp = document.getElementById('cDisp');
     const val = disp.value;
     if(!val || isNaN(parseFloat(val))) { showToast("لا توجد قيمة صالحة للترحيل", "error"); return; }
-
     const activeRowIndex = allBoxData.length - 1;
     const activeRow = allBoxData[activeRowIndex];
     if (activeRow.closed) { showToast("لا يوجد صندوق مفتوح للترحيل", "error"); return; }
-
     const resultVal = formatNumber(val);
-
     showChoiceModal('ترحيل النتيجة', `اختر الخانة التي تريد ترحيل المبلغ (${resultVal}) إليها:`, [
         { label: '💳 شبكة', action: () => updateAndSave(activeRow, 'network', resultVal) },
         { label: '🏦 تحويل', action: () => updateAndSave(activeRow, 'transfer', resultVal) },
@@ -1002,13 +940,9 @@ function updateAndSave(row, field, val) {
     showToast(`تم ترحيل ${val} إلى ${field}`, 'success');
 }
 
-/* CASH CALC LOGIC */
 function validateCashInput(el) {
-    // Regex to allow only numbers (English & Arabic) and dots
     const regex = /[^0-9\u0660-\u0669\.]/g;
-    if (regex.test(el.innerText)) {
-        el.innerText = el.innerText.replace(regex, '');
-    }
+    if (regex.test(el.innerText)) { el.innerText = el.innerText.replace(regex, ''); }
     recalcCash();
 }
 
@@ -1017,7 +951,6 @@ function recalcCash() {
     const rows = document.querySelectorAll('#tblCashCalc tr');
     rows.forEach(r => { 
         let txtQty = r.cells[0].innerText;
-        // Convert Arabic numerals if needed
         txtQty = txtQty.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
         const qty = parseFloat(txtQty) || 0; 
         const val = parseFloat(r.cells[1].innerText) || 0; 
@@ -1029,60 +962,29 @@ function recalcCash() {
 function transferToCash() { 
     const sum = document.getElementById('lblCashSum').innerText; 
     if(parseFloat(sum) === 0) { showToast("المجموع صفر، لا يمكن الترحيل.", "info"); return; }
-
     const activeRowIndex = allBoxData.length - 1;
     const row = allBoxData[activeRowIndex];
-
-    if (!row || row.closed) { 
-        showToast("لا يوجد صف مفتوح للترحيل.", "info");
-        return;
-    }
-
-    // Update logic
+    if (!row || row.closed) { showToast("لا يوجد صف مفتوح للترحيل.", "info"); return; }
     row.cash = sum;
-    row.isCalcCash = true; // Mark as came from calculator
+    row.isCalcCash = true; 
     saveData();
     renderBoxTable();
-    
-    // Reset Cash Calculator inputs
     document.querySelectorAll('#tblCashCalc td[contenteditable]').forEach(td => td.innerText = '');
     document.getElementById('lblCashSum').innerText = '0';
-
     showToast("تم ترحيل المجموع للكاش وتصفير الحاسبة.", "success");
 }
 
 function exportBoxExcel() { 
     const closed = allBoxData.filter(r => r.closed);
-    if (closed.length === 0) {
-        showToast("لا توجد تقفيلات مغلقة للتصدير.", "info");
-        return;
-    }
+    if (closed.length === 0) { showToast("لا توجد تقفيلات مغلقة للتصدير.", "info"); return; }
     const wb = XLSX.utils.book_new();
-    const data = [];
-    data.push(["م", "الموظف", "الاحتياطي", "مصروف رسمي", "الوقت", "كاش", "مصروف مؤقت", "شبكة", "تحويل", "ايراد البرنامج", "الانحراف", "ملاحظات"]);
+    const data = [["م", "الموظف", "الاحتياطي", "مصروف رسمي", "الوقت", "كاش", "مصروف مؤقت", "شبكة", "تحويل", "ايراد البرنامج", "الانحراف", "ملاحظات"]];
     closed.forEach(r => {
         const v = (parseFloat(r.cash)||0) + (parseFloat(r.network)||0) + (parseFloat(r.transfer)||0) + (parseFloat(r.exp)||0) + (parseFloat(r.tempExp)||0) + (parseFloat(r.reserve)||0) - (parseFloat(r.prog)||0);
-        data.push([
-            r.id,
-            r.employee || "",
-            formatNumber(r.reserve),
-            formatNumber(r.exp),
-            r.time,
-            formatNumber(r.cash),
-            formatNumber(r.tempExp),
-            formatNumber(r.network),
-            formatNumber(r.transfer),
-            formatNumber(r.prog),
-            formatNumber(v),
-            r.note || ""
-        ]);
+        data.push([r.id, r.employee || "", formatNumber(r.reserve), formatNumber(r.exp), r.time, formatNumber(r.cash), formatNumber(r.tempExp), formatNumber(r.network), formatNumber(r.transfer), formatNumber(r.prog), formatNumber(v), r.note || ""]);
     });
     const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [
-        {wch: 4}, {wch:14}, {wch:10}, {wch:11},
-        {wch:18}, {wch:10}, {wch:11}, {wch:10},
-        {wch:10}, {wch:14}, {wch:10}, {wch:24}
-    ];
+    ws['!cols'] = [{wch: 4}, {wch:14}, {wch:10}, {wch:11}, {wch:18}, {wch:10}, {wch:11}, {wch:10}, {wch:10}, {wch:14}, {wch:10}, {wch:24}];
     XLSX.utils.book_append_sheet(wb, ws, "Shifts");
     XLSX.writeFile(wb, "Cashbox_Shifts.xlsx"); 
 }
@@ -1093,112 +995,150 @@ function boxGreet(){
     document.getElementById('boxGreet').innerText = emp ? `${base} يا ${emp}` : base; 
 }
 
-// Keyboard support for calculator (Numbers, Enter as =)
 document.addEventListener('keydown', function(e){
     const activeView = document.getElementById('view-cashbox');
     if (!activeView || !activeView.classList.contains('active')) return;
     const target = e.target;
-    // If user is typing in a table cell or note, do not capture calc keys
     if (target.tagName === 'TEXTAREA' || target.isContentEditable) return;
-    
-    // Special case: Input field of Calc needs to allow native behavior unless it's Enter
-    if (target.id === 'cDisp') {
-        if (e.key === 'Enter') {
-            cApp('=');
-            e.preventDefault();
-        }
-        return;
-    }
-
+    if (target.id === 'cDisp') { if (e.key === 'Enter') { cApp('='); e.preventDefault(); } return; }
     const key = e.key;
     const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
-
-    if (arabicDigits.indexOf(key) >= 0) {
-        const num = arabicDigits.indexOf(key).toString();
-        cApp(num);
-    } else if (/[0-9]/.test(key)) {
-        cApp(key);
-    } else if (['+','-','*','/','.'].includes(key)) {
-        cApp(key);
-    } else if (key === 'Enter' || key === '=') {
-        cApp('=');
-        e.preventDefault();
-    } else if (key === 'Backspace') {
-        // Remove last char
-        const d = document.getElementById('cDisp');
-        d.value = d.value.slice(0,-1);
-        e.preventDefault();
-    }
+    if (arabicDigits.indexOf(key) >= 0) { cApp(arabicDigits.indexOf(key).toString()); } 
+    else if (/[0-9]/.test(key)) { cApp(key); } 
+    else if (['+','-','*','/','.'].includes(key)) { cApp(key); } 
+    else if (key === 'Enter' || key === '=') { cApp('='); e.preventDefault(); } 
+    else if (key === 'Backspace') { const d = document.getElementById('cDisp'); d.value = d.value.slice(0,-1); e.preventDefault(); }
 });
 
-// PRINT FUNCTIONS
+// MOD 3: Professional Print for Last Shift
 function printLastShift() {
     const closedRows = allBoxData.filter(r => r.closed);
-    if(closedRows.length === 0) { 
-        showToast("لا توجد تقفيلات مغلقة للطباعة.", "info");
-        return; 
-    }
-    const lastRow = closedRows[closedRows.length-1];
-    generatePrintTable([lastRow]); window.print();
+    if(closedRows.length === 0) { showToast("لا توجد تقفيلات مغلقة للطباعة.", "info"); return; }
+    const r = closedRows[closedRows.length-1];
+    
+    // Calc values
+    const cash = parseFloat(r.cash)||0;
+    const reserve = parseFloat(r.reserve)||0;
+    const totalCash = cash + reserve;
+    
+    const net = parseFloat(r.network)||0;
+    const transfer = parseFloat(r.transfer)||0;
+    const totalBank = net + transfer;
+    
+    const exp = parseFloat(r.exp)||0;
+    const tempExp = parseFloat(r.tempExp)||0;
+    const totalExp = exp + tempExp;
+    
+    const prog = parseFloat(r.prog)||0;
+    const actualTotal = totalCash + totalBank + totalExp;
+    const variance = actualTotal - prog;
+
+    const html = `
+    <div class="prof-report-container">
+        <div class="prof-header">
+            <h1>تقرير إغلاق الصندوق (رقم ${r.id})</h1>
+            <p>الموظف المسؤول: ${r.employee}</p>
+            <p>تاريخ ووقت الإغلاق: ${r.time}</p>
+        </div>
+
+        <table class="prof-table">
+            <thead>
+                <tr>
+                    <th colspan="2">النقدية (Cash)</th>
+                    <th colspan="2">البنك (Bank)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>الكاش في الدرج</td>
+                    <td>${formatNumber(cash)}</td>
+                    <td>شبكة</td>
+                    <td>${formatNumber(net)}</td>
+                </tr>
+                <tr>
+                    <td>الاحتياطي</td>
+                    <td>${formatNumber(reserve)}</td>
+                    <td>تحويل بنكي</td>
+                    <td>${formatNumber(transfer)}</td>
+                </tr>
+                <tr style="background:#f9f9f9">
+                    <td>إجمالي النقدية</td>
+                    <td>${formatNumber(totalCash)}</td>
+                    <td>إجمالي البنك</td>
+                    <td>${formatNumber(totalBank)}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="prof-table">
+            <thead>
+                <tr>
+                    <th colspan="2">المصروفات (Expenses)</th>
+                    <th colspan="2">المطابقة (Reconciliation)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>مصروف رسمي</td>
+                    <td>${formatNumber(exp)}</td>
+                    <td>إيراد البرنامج</td>
+                    <td>${formatNumber(prog)}</td>
+                </tr>
+                <tr>
+                    <td>مصروف مؤقت</td>
+                    <td>${formatNumber(tempExp)}</td>
+                    <td>الإجمالي الفعلي المحصل</td>
+                    <td>${formatNumber(actualTotal)}</td>
+                </tr>
+                <tr style="background:${variance === 0 ? '#e6fffa' : '#fff5f5'}">
+                    <td>إجمالي المصروفات</td>
+                    <td>${formatNumber(totalExp)}</td>
+                    <td>العجز / الزيادة</td>
+                    <td>${formatNumber(variance)}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="prof-box">
+            <h3>📝 الملاحظات:</h3>
+            <div style="min-height:60px; font-size:14px;">${r.note || "لا توجد ملاحظات."}</div>
+        </div>
+
+        <div class="prof-footer">
+            <div>توقيع الموظف<br><br>.........................</div>
+                   </div>
+    </div>
+    `;
+    
+    document.getElementById('printArea').innerHTML = html;
+    window.print();
 }
+
 function printSelectedShifts() {
     const checkboxes = document.querySelectorAll('.print-chk:checked');
-    if(checkboxes.length === 0) { 
-        showToast("حدد صفوفاً مغلقة أولاً.", "info");
-        return; 
-    }
+    if(checkboxes.length === 0) { showToast("حدد صفوفاً مغلقة أولاً.", "info"); return; }
     const ids = Array.from(checkboxes).map(c => parseInt(c.value));
     const selectedRows = allBoxData.filter(r => ids.includes(r.id));
     generatePrintTable(selectedRows); window.print();
 }
 function printCompare() {
-    // Clone table to remove signature for this specific print view
     const tbl = document.getElementById('tableCompare').cloneNode(true);
-    document.getElementById('printArea').innerHTML = `<h2>تقرير المطابقة</h2>` + tbl.outerHTML; // No Signature Footer
+    document.getElementById('printArea').innerHTML = `<h2>تقرير المطابقة</h2>` + tbl.outerHTML; 
     window.print();
 }
-
 function printPricing(sectionId) {
     const tbody = document.getElementById('body_' + sectionId);
     const title = sectionId === 'corniche' ? 'قائمة أسعار الكورنيش' : 'قائمة أسعار الأندلس';
-    
-    let tableHTML = `
-    <table style="width:100%; border-collapse:collapse; text-align:center;">
-        <thead>
-            <tr style="background:#eee; font-weight:bold;">
-                <th style="border:1px solid #000; padding:10px;">الوحدة</th>
-                <th style="border:1px solid #000; padding:10px;">السعر الأساسي</th>
-                <th style="border:1px solid #000; padding:10px;">الزيادة %</th>
-                <th style="border:1px solid #000; padding:10px;">سعر بوكينج</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
-    
+    let tableHTML = `<table style="width:100%; border-collapse:collapse; text-align:center;"><thead><tr style="background:#eee; font-weight:bold;"><th style="border:1px solid #000; padding:10px;">الوحدة</th><th style="border:1px solid #000; padding:10px;">السعر الأساسي</th><th style="border:1px solid #000; padding:10px;">الزيادة %</th><th style="border:1px solid #000; padding:10px;">سعر بوكينج</th></tr></thead><tbody>`;
     const rows = tbody.querySelectorAll('tr');
     rows.forEach(row => {
         const cols = row.querySelectorAll('td');
-        const name = cols[0].innerText;
-        const base = cols[1].querySelector('input').value;
-        const rate = cols[2].querySelector('input').value;
-        const booking = cols[3].querySelector('input').value;
-        
-        tableHTML += `
-            <tr>
-                <td style="border:1px solid #000; padding:10px; font-weight:bold;">${name}</td>
-                <td style="border:1px solid #000; padding:10px;">${base}</td>
-                <td style="border:1px solid #000; padding:10px;">${rate}</td>
-                <td style="border:1px solid #000; padding:10px; background:#f9f9f9; font-weight:bold;">${booking}</td>
-            </tr>
-        `;
+        tableHTML += `<tr><td style="border:1px solid #000; padding:10px; font-weight:bold;">${cols[0].innerText}</td><td style="border:1px solid #000; padding:10px;">${cols[1].querySelector('input').value}</td><td style="border:1px solid #000; padding:10px;">${cols[2].querySelector('input').value}</td><td style="border:1px solid #000; padding:10px; background:#f9f9f9; font-weight:bold;">${cols[3].querySelector('input').value}</td></tr>`;
     });
-    
     tableHTML += `</tbody></table>`;
-    
-    document.getElementById('printArea').innerHTML = `<h2>${title}</h2>${tableHTML}`;
+    document.getElementById('printArea').innerHTML = `<h2>${title}</h2>${tableHTML}<div class="prof-footer"><div>توقيع المسؤول: ...........................</div></div>`;
     window.print();
 }
-
 function generatePrintTable(rows) {
     let html = `<h2>تقرير التقفيلات</h2><table><thead><tr><th>م</th><th>الموظف</th><th>الاحتياطي</th><th>مصروف رسمي</th><th>الوقت</th><th>كاش</th><th>مصروف مؤقت</th><th>شبكة</th><th>تحويل</th><th>ايراد البرنامج</th><th>الانحراف</th><th>ملاحظات</th></tr></thead><tbody>`;
     rows.forEach(r => {
@@ -1210,12 +1150,8 @@ function generatePrintTable(rows) {
 }
 
 window.onload = function(){ 
-    for(let i=1;i<=5;i++) calc('c',i); 
-    for(let i=1;i<=9;i++) calc('a',i); 
-    enhanceInputs(); 
-    buildSeasonsTable(); 
-    boxGreet(); 
-    loadBoxData(); 
+    for(let i=1;i<=5;i++) calc('c',i); for(let i=1;i<=9;i++) calc('a',i); 
+    enhanceInputs(); buildSeasonsTable(); boxGreet(); loadBoxData(); 
 };
 </script>
 </body>
